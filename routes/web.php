@@ -49,3 +49,45 @@ Route::get('/vote/{category:slug}', [VoteController::class, 'show'])->name('vote
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/vote/{category:slug}/{company}', [VoteController::class, 'store'])->name('vote.store');
 });
+
+// Sitemap
+Route::get('/sitemap.xml', function () {
+    $categories = \App\Models\Category::where('is_active', true)->get();
+
+    $content = '<?xml version="1.0" encoding="UTF-8"?>';
+    $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+    // Página inicial
+    $content .= '<url>';
+    $content .= '<loc>https://melhores.valedoxingu.com.br</loc>';
+    $content .= '<changefreq>daily</changefreq>';
+    $content .= '<priority>1.0</priority>';
+    $content .= '</url>';
+
+    // Página de votação
+    $content .= '<url>';
+    $content .= '<loc>https://melhores.valedoxingu.com.br/vote</loc>';
+    $content .= '<changefreq>daily</changefreq>';
+    $content .= '<priority>0.9</priority>';
+    $content .= '</url>';
+
+    // Página de vencedores
+    $content .= '<url>';
+    $content .= '<loc>https://melhores.valedoxingu.com.br/vencedores</loc>';
+    $content .= '<changefreq>weekly</changefreq>';
+    $content .= '<priority>0.8</priority>';
+    $content .= '</url>';
+
+    // Categorias
+    foreach ($categories as $category) {
+        $content .= '<url>';
+        $content .= '<loc>https://melhores.valedoxingu.com.br/vote/' . $category->slug . '</loc>';
+        $content .= '<changefreq>daily</changefreq>';
+        $content .= '<priority>0.7</priority>';
+        $content .= '</url>';
+    }
+
+    $content .= '</urlset>';
+
+    return response($content, 200)->header('Content-Type', 'application/xml');
+});

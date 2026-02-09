@@ -42,8 +42,8 @@ jobs:
             # Ativar modo de manutenção
             docker compose exec -T app php artisan down --retry=60 || true
 
-            # Pull das imagens e rebuild
-            docker compose build --no-cache
+            # Atualizar containers (sem rebuild - muito mais rápido)
+            docker compose pull || true
             docker compose up -d --remove-orphans
 
             # Aguardar containers ficarem prontos

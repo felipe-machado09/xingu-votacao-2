@@ -3,8 +3,8 @@
 @section('title', 'Início - Plataforma de Votação')
 
 @push('head')
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
-    <link rel="shortcut icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
 @endpush
 

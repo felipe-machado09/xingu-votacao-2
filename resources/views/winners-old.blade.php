@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vencedores - Melhores do Ano 2025</title>
-    
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ route('winners') }}">
     <meta property="og:title" content="Vencedores - Melhores do Ano 2025">
     <meta property="og:description" content="Conheça os vencedores do Melhores do Ano 2025">
     <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
@@ -19,11 +21,11 @@
             to { opacity: 1; }
         }
         @keyframes slideUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(30px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -133,8 +135,8 @@
                                 <!-- Logo/Image Section -->
                                 <div class="bg-gradient-to-br from-yellow-100 to-orange-100 p-12 flex items-center justify-center">
                                     @if($categoryWinner->company->logo_path)
-                                        <img src="{{ asset('storage/' . $categoryWinner->company->logo_path) }}" 
-                                             alt="{{ $categoryWinner->company->legal_name }}" 
+                                        <img src="{{ asset('storage/' . $categoryWinner->company->logo_path) }}"
+                                             alt="{{ $categoryWinner->company->legal_name }}"
                                              class="max-h-64 max-w-full object-contain">
                                     @else
                                         <div class="text-9xl font-bold text-yellow-600">
@@ -211,7 +213,7 @@
             const url = '{{ route('winners') }}';
             const title = 'Vencedores - Melhores do Ano 2025';
             const text = 'Confira os vencedores do Melhores do Ano 2025!';
-            
+
             if (navigator.share) {
                 navigator.share({
                     title: title,

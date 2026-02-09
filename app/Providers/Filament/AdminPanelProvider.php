@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandLogo(asset('img/logo.webp'))
+            ->darkModeBrandLogo(asset('img/Logomarca Melhores do Ano Branca.webp'))
             ->brandLogoHeight('7rem')
             ->favicon(asset('logo_icon.ico'))
             ->loginRouteSlug('login')

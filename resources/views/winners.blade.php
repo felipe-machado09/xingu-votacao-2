@@ -11,9 +11,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vencedores - Melhores do Ano {{ $year }}</title>
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo_icon.webp') }}">
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
-    <link rel="shortcut icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
 
     <meta property="og:type" content="website">
@@ -83,7 +82,7 @@
     <section class="bg-gradient-to-r from-red-600 to-red-700 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center animate-fade-in">
-                <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logo" class="h-32 mx-auto mb-8">
+                <img src="{{ asset('img/Logomarca Melhores do Ano Branca.webp') }}" alt="Logo" class="h-32 mx-auto mb-8">
                 <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Melhores empresas de Altamira em {{ $year }}</h1>
                 <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed">
                     Após um processo de votação popular, transparente e gratuito, a população de Altamira escolheu as empresas que mais se destacaram em seus segmentos ao longo de {{ $year }}.

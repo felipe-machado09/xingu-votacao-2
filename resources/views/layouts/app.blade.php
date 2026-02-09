@@ -11,9 +11,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Plataforma de Votação')</title>
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo_icon.webp') }}">
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
-    <link rel="shortcut icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
     @stack('head')
     @yield('meta')

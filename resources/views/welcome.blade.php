@@ -10,11 +10,61 @@
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melhores do Ano 2025 - Vale do Xingu</title>
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo_icon.webp') }}">
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
-    <link rel="shortcut icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <title>Melhores do Ano 2025 - Vale do Xingu | Vote nas melhores empresas</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região e ajude a escolher os vencedores de 2025. Concorra a prêmios exclusivos!">
+    <meta name="keywords" content="melhores do ano, vale do xingu, votação, prêmio, empresas, altamira, pará, amazônia">
+    <meta name="author" content="Vale do Xingu">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://melhores.valedoxingu.com.br">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://melhores.valedoxingu.com.br">
+    <meta property="og:title" content="Melhores do Ano 2025 - Vale do Xingu">
+    <meta property="og:description" content="Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região e concorra a prêmios exclusivos!">
+    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://melhores.valedoxingu.com.br">
+    <meta name="twitter:title" content="Melhores do Ano 2025 - Vale do Xingu">
+    <meta name="twitter:description" content="Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região e concorra a prêmios exclusivos!">
+    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Melhores do Ano 2025 - Vale do Xingu",
+        "description": "Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região.",
+        "url": "https://melhores.valedoxingu.com.br",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+        "location": {
+            "@type": "VirtualLocation",
+            "url": "https://melhores.valedoxingu.com.br"
+        },
+        "organizer": {
+            "@type": "Organization",
+            "name": "Vale do Xingu",
+            "url": "https://valedoxingu.com.br"
+        },
+        "image": "{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}"
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>

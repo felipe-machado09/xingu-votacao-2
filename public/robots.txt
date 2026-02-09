@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://melhores.valedoxingu.com.br/sitemap.xml
+
+# Bloquear áreas administrativas
+Disallow: /admin
+Disallow: /filament

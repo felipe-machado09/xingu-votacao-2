@@ -11,6 +11,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $company->legal_name }} - Melhores do Ano 2025</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">

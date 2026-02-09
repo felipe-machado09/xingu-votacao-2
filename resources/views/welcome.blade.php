@@ -650,6 +650,31 @@
                 </h2>
             </div>
             <div class="grid md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+                @php
+                    $displaySponsors = collect();
+                    if($sponsors->count() > 0) {
+                        // Repetir patrocinadores até completar 6
+                        while($displaySponsors->count() < 6) {
+                            foreach($sponsors as $sponsor) {
+                                $displaySponsors->push($sponsor);
+                                if($displaySponsors->count() >= 6) break;
+                            }
+                        }
+                    }
+                @endphp
+                @forelse($displaySponsors as $index => $sponsor)
+                <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-110 scroll-scale" data-delay="{{ $index * 100 }}">
+                    @if($sponsor->logo_path)
+                    <a href="{{ $sponsor->website }}" target="_blank" rel="noopener noreferrer" class="block">
+                        <img src="{{ asset('storage/' . $sponsor->logo_path) }}" alt="{{ $sponsor->name }}" class="w-24 h-24 object-contain rounded">
+                    </a>
+                    @else
+                    <div class="w-24 h-24 bg-gray-200 rounded flex items-center justify-center">
+                        <span class="text-gray-500 text-xs text-center">{{ $sponsor->name }}</span>
+                    </div>
+                    @endif
+                </div>
+                @empty
                 @for($i = 0; $i < 6; $i++)
                 <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-110 scroll-scale" data-delay="{{ $i * 100 }}">
                     <div class="w-24 h-24 bg-gray-200 rounded flex items-center justify-center">
@@ -657,6 +682,7 @@
                     </div>
                 </div>
                 @endfor
+                @endforelse
             </div>
         </div>
     </section>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Award;
 use App\Models\Category;
 use App\Models\LandingPageSection;
+use App\Models\Sponsor;
 use App\Models\Winner;
 
 class HomeController extends Controller
@@ -25,11 +26,15 @@ class HomeController extends Controller
 
         $awards = Award::where('is_active', true)->get();
 
+        $sponsors = Sponsor::where('is_active', true)
+            ->orderBy('order')
+            ->get();
+
         $votingEndDate = Category::where('is_active', true)
             ->whereNotNull('voting_ends_at')
             ->orderBy('voting_ends_at', 'desc')
             ->value('voting_ends_at');
 
-        return view('welcome', compact('sections', 'winners', 'votingEndDate', 'categories', 'awards'));
+        return view('welcome', compact('sections', 'winners', 'votingEndDate', 'categories', 'awards', 'sponsors'));
     }
 }

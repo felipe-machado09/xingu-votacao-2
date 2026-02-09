@@ -18,7 +18,17 @@ class SponsorResource extends Resource
 {
     protected static ?string $model = Sponsor::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-building-storefront';
+
+    protected static ?string $navigationLabel = 'Patrocinadores';
+
+    protected static ?string $modelLabel = 'Patrocinador';
+
+    protected static ?string $pluralModelLabel = 'Patrocinadores';
+
+    protected static string | \UnitEnum | null $navigationGroup = 'Conteúdo';
+
+    protected static ?int $navigationSort = 12;
 
     public static function form(Schema $schema): Schema
     {

@@ -45,19 +45,19 @@
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "Event",
+        "@@context": "https://schema.org",
+        "@@type": "Event",
         "name": "Melhores do Ano 2025 - Vale do Xingu",
         "description": "Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região.",
         "url": "https://melhores.valedoxingu.com.br",
         "eventStatus": "https://schema.org/EventScheduled",
         "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
         "location": {
-            "@type": "VirtualLocation",
+            "@@type": "VirtualLocation",
             "url": "https://melhores.valedoxingu.com.br"
         },
         "organizer": {
-            "@type": "Organization",
+            "@@type": "Organization",
             "name": "Vale do Xingu",
             "url": "https://valedoxingu.com.br"
         },
@@ -870,5 +870,6 @@
             });
         @endif
     </script>
+
 </body>
 </html>

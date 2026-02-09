@@ -1,0 +1,79 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    command: php-fpm
+    volumes:
+      - composer_cache:/tmp/composer
+      - ./:/var/www/html
+    environment:
+      APP_NAME: ${APP_NAME:-Xingu Votos}
+      APP_ENV: ${APP_ENV:-production}
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_KEY: ${APP_KEY}
+      APP_URL: ${APP_URL:-http://localhost}
+      DB_CONNECTION: ${DB_CONNECTION:-mariadb}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE:-xingu_votos}
+      DB_USERNAME: ${DB_USERNAME:-xingu_votos}
+      DB_PASSWORD: ${DB_PASSWORD:-xingu_votos}
+      QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
+      CACHE_STORE: ${CACHE_STORE:-database}
+      SESSION_DRIVER: ${SESSION_DRIVER:-database}
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-80}:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./:/var/www/html
+    depends_on:
+      - app
+
+  db:
+    image: mariadb:11.3
+    restart: unless-stopped
+    command: --local-infile=1
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-xingu_votos}
+      MYSQL_USER: ${DB_USERNAME:-xingu_votos}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-xingu_votos}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  supervisor:
+    build:
+      context: .
+      dockerfile: docker/supervisor/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+      - composer_cache:/tmp/composer
+    environment:
+      APP_NAME: ${APP_NAME:-Xingu Votos}
+      APP_ENV: ${APP_ENV:-production}
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_KEY: ${APP_KEY}
+      APP_URL: ${APP_URL:-http://localhost}
+      DB_CONNECTION: ${DB_CONNECTION:-mariadb}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE:-xingu_votos}
+      DB_USERNAME: ${DB_USERNAME:-xingu_votos}
+      DB_PASSWORD: ${DB_PASSWORD:-xingu_votos}
+      QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
+      CACHE_STORE: ${CACHE_STORE:-database}
+      SESSION_DRIVER: ${SESSION_DRIVER:-database}
+    depends_on:
+      - db
+      - app
+
+volumes:
+  db_data:
+  composer_cache:

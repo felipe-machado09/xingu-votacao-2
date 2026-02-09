@@ -76,7 +76,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
-                    ->roleResource(\App\Filament\Resources\RoleResource::class),
+                    ->navigationGroup('Configurações'),
             ])
             ->authMiddleware([
                 Authenticate::class,

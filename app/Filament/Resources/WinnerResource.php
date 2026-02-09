@@ -48,7 +48,7 @@ class WinnerResource extends Resource
                     ->directory('winners')
                     ->disk('public')
                     ->imageEditor()
-                    ->maxSize(2048),
+                    ->maxSize(20480),
                 Forms\Components\Textarea::make('description')
                     ->label('Descrição')
                     ->rows(3)

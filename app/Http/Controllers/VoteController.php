@@ -69,7 +69,7 @@ class VoteController extends Controller
     public function company(Request $request, Company $company)
     {
         $company->load('categories', 'votes.category');
-        
+
         $audienceId = session('audience_id');
         $audience = $audienceId ? Audience::find($audienceId) : null;
 

@@ -53,7 +53,7 @@ class WinnersController extends Controller
         $totalVotes = Vote::whereYear('created_at', $year)->count();
         $totalCompanies = Company::count();
         $totalCategories = Category::where('is_active', true)->count();
-        
+
         // Anos disponíveis
         $availableYears = CategoryWinner::selectRaw('DISTINCT year')
             ->orderBy('year', 'desc')

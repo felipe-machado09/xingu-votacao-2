@@ -8,7 +8,7 @@
                             <span>🏆</span>
                             <span>Top 10 - {{ $this->getSelectedCategory()?->name }}</span>
                         </div>
-                        <button 
+                        <button
                             wire:click="closeResults"
                             class="text-gray-400 hover:text-gray-600 transition"
                         >
@@ -18,7 +18,7 @@
                         </button>
                     </div>
                 </x-slot>
-                
+
                 <div class="space-y-4">
                     @if($this->getCurrentWinner())
                         <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border-2 border-yellow-400">
@@ -55,7 +55,7 @@
                                             {{ $company['votes'] }} {{ $company['votes'] === 1 ? 'voto' : 'votos' }}
                                         </span>
                                         @if(!$this->getCurrentWinner() || $this->getCurrentWinner()->company_id !== $company['company_id'])
-                                            <button 
+                                            <button
                                                 wire:click="setWinner({{ $company['company_id'] }})"
                                                 class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-500 text-white hover:bg-yellow-600 transition"
                                             >
@@ -86,11 +86,11 @@
             <x-slot name="heading">
                 Categorias
             </x-slot>
-            
+
             <div class="mb-4">
                 <p class="text-sm text-gray-600">Clique em "Ver Top 10" para visualizar o ranking de cada categoria e definir vencedores.</p>
             </div>
-            
+
             {{ $this->table }}
         </x-filament::section>
     </div>

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMQC4WVT');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categorias - Melhores do Ano 2025</title>
@@ -15,11 +22,11 @@
             to { opacity: 1; }
         }
         @keyframes slideUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(30px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -33,6 +40,10 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-50 via-white to-red-50 min-h-screen">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,13 +86,13 @@
                             @if($sponsor->logo_path)
                                 @if($sponsor->website)
                                     <a href="{{ $sponsor->website }}" target="_blank" rel="noopener" class="block">
-                                        <img src="{{ asset('storage/' . $sponsor->logo_path) }}" 
-                                             alt="{{ $sponsor->name }}" 
+                                        <img src="{{ asset('storage/' . $sponsor->logo_path) }}"
+                                             alt="{{ $sponsor->name }}"
                                              class="max-h-20 max-w-md object-contain hover:scale-105 transition-transform">
                                     </a>
                                 @else
-                                    <img src="{{ asset('storage/' . $sponsor->logo_path) }}" 
-                                         alt="{{ $sponsor->name }}" 
+                                    <img src="{{ asset('storage/' . $sponsor->logo_path) }}"
+                                         alt="{{ $sponsor->name }}"
                                          class="max-h-20 max-w-md object-contain">
                                 @endif
                             @else
@@ -94,7 +105,7 @@
             @if($sponsors->count() > 1)
             <div class="flex justify-center gap-2 mt-4">
                 @foreach($sponsors as $index => $sponsor)
-                    <button onclick="goToSlide({{ $index }})" 
+                    <button onclick="goToSlide({{ $index }})"
                             class="sponsor-dot w-2 h-2 rounded-full bg-gray-400 hover:bg-gray-600 transition"
                             data-index="{{ $index }}"></button>
                 @endforeach
@@ -157,8 +168,8 @@
                         @endif
                     </div>
                     <div class="hidden md:block">
-                        <img src="{{ asset('img/Eletromésticos.webp') }}" 
-                             alt="Prêmios" 
+                        <img src="{{ asset('img/Eletromésticos.webp') }}"
+                             alt="Prêmios"
                              class="w-full h-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform">
                         <p class="text-center text-xs text-white/70 mt-2 italic">*Imagens ilustrativas</p>
                     </div>
@@ -176,21 +187,21 @@
         @php
             $totalCategories = $categories->count();
             $userVotes = $audience ? count($votedCategoryIds) : 0;
-            
+
             // Agrupar prêmios por tier
             $awardsByTier = $awards->where('is_active', true)
                 ->filter(fn($a) => $a->hasRemainingQuantity())
                 ->groupBy('tier')
                 ->sortKeys();
         @endphp
-        
+
         <div class="mb-12">
             <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl shadow-xl p-6 md:p-8">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">🎁 Concorra aos Prêmios!</h2>
                     <p class="text-base md:text-lg text-gray-700">Quanto mais você vota, mais prêmios você pode ganhar!</p>
                 </div>
-                
+
                 @if($audience)
                     <div class="mb-8 text-center">
                         <div class="inline-flex items-center bg-white rounded-xl px-8 py-4 shadow-lg">
@@ -202,7 +213,7 @@
                                 <p class="text-3xl font-bold text-gray-900">{{ $userVotes }} <span class="text-xl text-gray-500">/ {{ $totalCategories }}</span></p>
                             </div>
                         </div>
-                        
+
                         @if($userVotes >= $totalCategories)
                             <p class="mt-4 text-xl text-green-700 font-bold">🏆 Parabéns! Você concorre a TODOS os prêmios!</p>
                         @elseif($userVotes >= 15)
@@ -216,7 +227,7 @@
                         @endif
                     </div>
                 @endif
-                
+
                 <!-- Tier 1: 5 votos -->
                 @if(isset($awardsByTier[1]))
                 <div class="mb-8 @if($audience && $userVotes < 5) opacity-60 @endif">
@@ -257,7 +268,7 @@
                     </div>
                 </div>
                 @endif
-                
+
                 <!-- Tier 2: 15 votos -->
                 @if(isset($awardsByTier[2]))
                 <div class="mb-8 @if($audience && $userVotes < 15) opacity-60 @endif">
@@ -298,7 +309,7 @@
                     </div>
                 </div>
                 @endif
-                
+
                 <!-- Tier 3: Todos os votos -->
                 @if(isset($awardsByTier[3]))
                 <div class="@if($audience && $userVotes < $totalCategories) opacity-60 @endif">
@@ -352,7 +363,7 @@
                     <div>
                         <p class="text-yellow-800 font-semibold">Você precisa estar logado para votar</p>
                         <p class="text-yellow-700 text-sm mt-1">
-                            <a href="{{ route('register') }}" class="font-semibold underline hover:text-yellow-900">Cadastre-se</a> ou 
+                            <a href="{{ route('register') }}" class="font-semibold underline hover:text-yellow-900">Cadastre-se</a> ou
                             <a href="{{ route('login') }}" class="font-semibold underline hover:text-yellow-900">Entre</a> para continuar.
                         </p>
                     </div>
@@ -383,11 +394,11 @@
                                 </span>
                             @endif
                         </div>
-                        
+
                         @if($category->description)
                             <p class="text-gray-600 mb-4 line-clamp-2">{{ $category->description }}</p>
                         @endif
-                        
+
                         <div class="flex items-center text-sm text-gray-500 mb-6">
                             <svg class="w-5 h-5 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H9m10 0v-5.372a2.25 2.25 0 00-.488-1.398l-4.5-5.25a2.25 2.25 0 00-1.024-.786H10.5a2.25 2.25 0 00-2.25 2.25v5.372"></path>
@@ -395,7 +406,7 @@
                             <span class="font-semibold">{{ $category->companies->count() }}</span>
                             <span class="ml-1">empresas participantes</span>
                         </div>
-                        
+
                         @if(in_array($category->id, $votedCategoryIds))
                             <a href="{{ route('vote.show', $category) }}" class="block w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-xl text-center font-semibold hover:bg-gray-200 transition">
                                 Ver Resultado

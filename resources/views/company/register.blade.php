@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMQC4WVT');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Empresa - Melhores do Ano 2025</title>
@@ -70,6 +77,10 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-50 via-white to-red-50 min-h-screen">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -169,9 +180,9 @@
                             <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Nome da Empresa <span class="text-red-600">*</span>
                             </label>
-                            <input type="text" 
-                                   id="name" 
-                                   name="name" 
+                            <input type="text"
+                                   id="name"
+                                   name="name"
                                    value="{{ old('name') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('name') error-field @enderror"
                                    required>
@@ -185,9 +196,9 @@
                             <label for="cnpj" class="block text-sm font-semibold text-gray-700 mb-2">
                                 CNPJ <span class="text-red-600">*</span>
                             </label>
-                            <input type="text" 
-                                   id="cnpj" 
-                                   name="cnpj" 
+                            <input type="text"
+                                   id="cnpj"
+                                   name="cnpj"
                                    value="{{ old('cnpj') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('cnpj') error-field @enderror"
                                    placeholder="00.000.000/0000-00"
@@ -207,9 +218,9 @@
                             <label for="telefone" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Telefone <span class="text-red-600">*</span>
                             </label>
-                            <input type="text" 
-                                   id="telefone" 
-                                   name="telefone" 
+                            <input type="text"
+                                   id="telefone"
+                                   name="telefone"
                                    value="{{ old('telefone') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('telefone') error-field @enderror"
                                    placeholder="(00) 00000-0000"
@@ -225,9 +236,9 @@
                             <label for="whatsapp_number" class="block text-sm font-semibold text-gray-700 mb-2">
                                 WhatsApp (Opcional)
                             </label>
-                            <input type="text" 
-                                   id="whatsapp_number" 
-                                   name="whatsapp_number" 
+                            <input type="text"
+                                   id="whatsapp_number"
+                                   name="whatsapp_number"
                                    value="{{ old('whatsapp_number') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                    placeholder="(00) 00000-0000"
@@ -239,9 +250,9 @@
                             <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
                                 E-mail <span class="text-red-600">*</span>
                             </label>
-                            <input type="email" 
-                                   id="email" 
-                                   name="email" 
+                            <input type="email"
+                                   id="email"
+                                   name="email"
                                    value="{{ old('email') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('email') error-field @enderror"
                                    required>
@@ -276,9 +287,9 @@
                                 CEP <span class="text-red-600">*</span>
                             </label>
                             <div class="relative">
-                                <input type="text" 
-                                       id="address_zipcode" 
-                                       name="address_zipcode" 
+                                <input type="text"
+                                       id="address_zipcode"
+                                       name="address_zipcode"
                                        value="{{ old('address_zipcode') }}"
                                        class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('address_zipcode') error-field @enderror"
                                        placeholder="00000-000"
@@ -305,9 +316,9 @@
                             <label for="address_street" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Rua/Avenida <span class="text-red-600">*</span>
                             </label>
-                            <input type="text" 
-                                   id="address_street" 
-                                   name="address_street" 
+                            <input type="text"
+                                   id="address_street"
+                                   name="address_street"
                                    value="{{ old('address_street') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('address_street') error-field @enderror"
                                    required>
@@ -322,9 +333,9 @@
                                 <label for="address_number" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Número <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" 
-                                       id="address_number" 
-                                       name="address_number" 
+                                <input type="text"
+                                       id="address_number"
+                                       name="address_number"
                                        value="{{ old('address_number') }}"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('address_number') error-field @enderror"
                                        required>
@@ -338,9 +349,9 @@
                                 <label for="address_complement" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Complemento
                                 </label>
-                                <input type="text" 
-                                       id="address_complement" 
-                                       name="address_complement" 
+                                <input type="text"
+                                       id="address_complement"
+                                       name="address_complement"
                                        value="{{ old('address_complement') }}"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                                        placeholder="Apto, Bloco, etc.">
@@ -352,9 +363,9 @@
                             <label for="address_neighborhood" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Bairro <span class="text-red-600">*</span>
                             </label>
-                            <input type="text" 
-                                   id="address_neighborhood" 
-                                   name="address_neighborhood" 
+                            <input type="text"
+                                   id="address_neighborhood"
+                                   name="address_neighborhood"
                                    value="{{ old('address_neighborhood') }}"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('address_neighborhood') error-field @enderror"
                                    required>
@@ -369,9 +380,9 @@
                                 <label for="address_city" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Cidade <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" 
-                                       id="address_city" 
-                                       name="address_city" 
+                                <input type="text"
+                                       id="address_city"
+                                       name="address_city"
                                        value="{{ old('address_city', 'Altamira') }}"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('address_city') error-field @enderror"
                                        required>
@@ -385,9 +396,9 @@
                                 <label for="address_state" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Estado <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" 
-                                       id="address_state" 
-                                       name="address_state" 
+                                <input type="text"
+                                       id="address_state"
+                                       name="address_state"
                                        value="{{ old('address_state', 'PA') }}"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('address_state') error-field @enderror"
                                        placeholder="PA"
@@ -423,9 +434,9 @@
                             <label for="logo_path" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Logo da Empresa
                             </label>
-                            <input type="file" 
-                                   id="logo_path" 
-                                   name="logo_path" 
+                            <input type="file"
+                                   id="logo_path"
+                                   name="logo_path"
                                    accept="image/*"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('logo_path') error-field @enderror">
                             <p class="mt-2 text-sm text-gray-500">Formatos aceitos: JPEG, PNG, JPG, GIF. Tamanho máximo: 2MB</p>
@@ -439,8 +450,8 @@
                             <label for="categoria_id" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Categoria de Votação <span class="text-red-600">*</span>
                             </label>
-                            <select id="categoria_id" 
-                                    name="categoria_id[]" 
+                            <select id="categoria_id"
+                                    name="categoria_id[]"
                                     multiple
                                     class="w-full @error('categoria_id') error-field @enderror"
                                     required>
@@ -486,13 +497,13 @@
                                 </label>
                                 <!-- Toggle Button -->
                                 <div class="ml-4">
-                                    <input type="checkbox" 
-                                           id="lgpd" 
-                                           name="lgpd" 
+                                    <input type="checkbox"
+                                           id="lgpd"
+                                           name="lgpd"
                                            value="1"
                                            class="hidden"
                                            required>
-                                    <button type="button" 
+                                    <button type="button"
                                             id="lgpd-toggle"
                                             onclick="toggleLGPD()"
                                             class="relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 bg-gray-300 @error('lgpd') border-2 border-red-500 @enderror">
@@ -538,20 +549,20 @@
         // Validação e máscara de CNPJ
         const cnpjInput = document.getElementById('cnpj');
         let cnpjValidationTimeout;
-        
+
         cnpjInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length <= 14) {
                 value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
                 e.target.value = value;
             }
-            
+
             // Limpar timeout anterior
             clearTimeout(cnpjValidationTimeout);
-            
+
             // Remover mensagens de erro ao digitar
             clearFieldError(e.target);
-            
+
             // Validar apenas quando o usuário parar de digitar (debounce)
             cnpjValidationTimeout = setTimeout(() => {
                 if (e.target.value.replace(/\D/g, '').length === 14) {
@@ -559,98 +570,98 @@
                 }
             }, 500);
         });
-        
+
         cnpjInput.addEventListener('blur', function(e) {
             clearTimeout(cnpjValidationTimeout);
             validateCNPJ(e.target);
         });
-        
+
         function validateCNPJ(input) {
             const cnpj = input.value.replace(/\D/g, '');
             const parent = input.parentElement;
-            
+
             // Não validar se já houver erro do Laravel
             const laravelError = parent.querySelector('.error-message:not(.dynamic-error)');
             if (laravelError) {
                 return;
             }
-            
+
             // Limpar erros anteriores
             clearFieldError(input);
             input.classList.remove('error-field');
-            
+
             if (cnpj.length === 0) {
                 return;
             }
-            
+
             if (cnpj.length !== 14) {
                 showFieldError(input, 'O CNPJ deve ter 14 dígitos.', 'cnpj-error');
                 return;
             }
-            
+
             // Verificar se todos os dígitos são iguais
             if (/^(\d)\1{13}$/.test(cnpj)) {
                 showFieldError(input, 'O CNPJ informado é inválido.', 'cnpj-error');
                 return;
             }
-            
+
             // Validar dígitos verificadores
             if (!isValidCNPJ(cnpj)) {
                 showFieldError(input, 'O CNPJ informado é inválido. Verifique os dígitos verificadores.', 'cnpj-error');
             }
         }
-        
+
         function clearFieldError(input) {
             // Remover apenas mensagens de erro dinâmicas (JavaScript), não as do Laravel
             const parent = input.parentElement;
             const errorMessages = parent.querySelectorAll('.error-message.dynamic-error');
             errorMessages.forEach(msg => msg.remove());
-            
+
             // Remover classe de erro apenas se não houver erro do Laravel
             const laravelError = parent.querySelector('.error-message:not(.dynamic-error)');
             if (!laravelError) {
                 input.classList.remove('error-field');
             }
         }
-        
+
         function isValidCNPJ(cnpj) {
             // Calcular primeiro dígito verificador
             let length = 12;
             let sum = 0;
             let pos = 5;
-            
+
             for (let i = 0; i < length; i++) {
                 sum += parseInt(cnpj[i]) * pos;
                 pos = (pos == 2) ? 9 : pos - 1;
             }
-            
+
             let result = sum % 11;
             let digit1 = (result < 2) ? 0 : 11 - result;
-            
+
             if (parseInt(cnpj[12]) != digit1) {
                 return false;
             }
-            
+
             // Calcular segundo dígito verificador
             length = 13;
             sum = 0;
             pos = 6;
-            
+
             for (let i = 0; i < length; i++) {
                 sum += parseInt(cnpj[i]) * pos;
                 pos = (pos == 2) ? 9 : pos - 1;
             }
-            
+
             result = sum % 11;
             let digit2 = (result < 2) ? 0 : 11 - result;
-            
+
             return parseInt(cnpj[13]) == digit2;
         }
-        
+
         function showFieldError(input, message, errorClass = '') {
             // Garantir que não há mensagens anteriores
             clearFieldError(input);
-            
+
             input.classList.add('error-field');
             const errorDiv = document.createElement('p');
             errorDiv.className = 'error-message dynamic-error mt-1 ' + errorClass;
@@ -669,43 +680,43 @@
                 input.value = value;
             }
         }
-        
+
         function validatePhone(input) {
             const phone = input.value.replace(/\D/g, '');
             const parent = input.parentElement;
-            
+
             // Não validar se já houver erro do Laravel
             const laravelError = parent.querySelector('.error-message:not(.dynamic-error)');
             if (laravelError) {
                 return;
             }
-            
+
             // Limpar erros anteriores
             clearFieldError(input);
             input.classList.remove('error-field');
-            
+
             if (phone.length === 0) {
                 return;
             }
-            
+
             if (phone.length !== 11) {
                 showFieldError(input, 'O telefone deve ter 11 dígitos (DDD + número com 9 dígitos).', 'phone-error');
                 return;
             }
-            
+
             // Verificar se todos os dígitos são iguais
             if (/^(\d)\1{10}$/.test(phone)) {
                 showFieldError(input, 'O telefone informado é inválido.', 'phone-error');
                 return;
             }
-            
+
             // Verificar DDD
             const ddd = parseInt(phone.substring(0, 2));
             if (ddd < 11 || ddd > 99) {
                 showFieldError(input, 'O DDD informado é inválido.', 'phone-error');
                 return;
             }
-            
+
             // Verificar primeiro dígito do número (deve ser entre 2 e 9)
             const firstDigit = parseInt(phone[2]);
             if (firstDigit < 2 || firstDigit > 9) {
@@ -715,16 +726,16 @@
 
         const telefoneInput = document.getElementById('telefone');
         let telefoneValidationTimeout;
-        
+
         telefoneInput.addEventListener('input', function(e) {
             maskPhone(e.target);
-            
+
             // Limpar timeout anterior
             clearTimeout(telefoneValidationTimeout);
-            
+
             // Remover mensagens de erro ao digitar
             clearFieldError(e.target);
-            
+
             // Validar apenas quando o usuário parar de digitar (debounce)
             telefoneValidationTimeout = setTimeout(() => {
                 if (e.target.value.replace(/\D/g, '').length === 11) {
@@ -732,7 +743,7 @@
                 }
             }, 500);
         });
-        
+
         telefoneInput.addEventListener('blur', function(e) {
             clearTimeout(telefoneValidationTimeout);
             validatePhone(e.target);
@@ -740,17 +751,17 @@
 
         const whatsappInput = document.getElementById('whatsapp_number');
         let whatsappValidationTimeout;
-        
+
         if (whatsappInput) {
             whatsappInput.addEventListener('input', function(e) {
                 maskPhone(e.target);
-                
+
                 // Limpar timeout anterior
                 clearTimeout(whatsappValidationTimeout);
-                
+
                 // Remover mensagens de erro ao digitar
                 clearFieldError(e.target);
-                
+
                 // Validar apenas quando o usuário parar de digitar (debounce)
                 if (e.target.value.length > 0) {
                     whatsappValidationTimeout = setTimeout(() => {
@@ -760,7 +771,7 @@
                     }, 500);
                 }
             });
-            
+
             whatsappInput.addEventListener('blur', function(e) {
                 clearTimeout(whatsappValidationTimeout);
                 if (e.target.value.length > 0) {
@@ -777,7 +788,7 @@
                 value = value.replace(/^(\d{5})(\d{3})$/, '$1-$2');
                 e.target.value = value;
             }
-            
+
             // Limpar estados quando o usuário editar
             if (value.length < 8) {
                 document.getElementById('cep-loading').classList.add('hidden');
@@ -790,7 +801,7 @@
         // Integração com ViaCEP
         cepInput.addEventListener('blur', function(e) {
             const cep = e.target.value.replace(/\D/g, '');
-            
+
             // Só busca se tiver 8 dígitos
             if (cep.length === 8) {
                 buscarCEP(cep);
@@ -804,42 +815,42 @@
             const success = document.getElementById('cep-success');
             const error = document.getElementById('cep-error');
             const message = document.getElementById('cep-message');
-            
+
             // Limpar estados anteriores
             loading.classList.remove('hidden');
             success.classList.add('hidden');
             error.classList.add('hidden');
             message.classList.add('hidden');
-            
+
             // Fazer requisição ao ViaCEP
             fetch(`https://viacep.com.br/ws/${cep}/json/`)
                 .then(response => response.json())
                 .then(data => {
                     loading.classList.add('hidden');
-                    
+
                     if (data.erro) {
                         mostrarErroCEP('CEP não encontrado. Por favor, preencha os dados manualmente.');
                         return;
                     }
-                    
+
                     // Preencher campos automaticamente
                     document.getElementById('address_street').value = data.logradouro || '';
                     document.getElementById('address_neighborhood').value = data.bairro || '';
                     document.getElementById('address_city').value = data.localidade || '';
                     document.getElementById('address_state').value = data.uf || '';
-                    
+
                     // Mostrar sucesso
                     success.classList.remove('hidden');
                     message.classList.remove('hidden');
                     message.classList.remove('text-red-600');
                     message.classList.add('text-green-600');
                     message.textContent = '✓ Endereço preenchido automaticamente! Você pode editar se necessário.';
-                    
+
                     // Remover mensagem após 5 segundos
                     setTimeout(() => {
                         message.classList.add('hidden');
                     }, 5000);
-                    
+
                     // Focar no campo número
                     document.getElementById('address_number').focus();
                 })
@@ -854,14 +865,14 @@
             const success = document.getElementById('cep-success');
             const error = document.getElementById('cep-error');
             const message = document.getElementById('cep-message');
-            
+
             success.classList.add('hidden');
             error.classList.remove('hidden');
             message.classList.remove('hidden');
             message.classList.remove('text-green-600');
             message.classList.add('text-red-600');
             message.textContent = '⚠ ' + mensagem;
-            
+
             // Remover mensagem após 5 segundos
             setTimeout(() => {
                 message.classList.add('hidden');
@@ -890,7 +901,7 @@
                 // Remove todas as classes de estado
                 indicator.classList.remove('active', 'completed', 'bg-gray-200', 'bg-red-600', 'bg-green-500');
                 indicator.style.background = '';
-                
+
                 if (stepNum < currentStep) {
                     indicator.classList.add('completed');
                     indicator.style.background = '#10b981';
@@ -919,7 +930,7 @@
             document.querySelectorAll('.step-content').forEach(content => {
                 content.classList.remove('active');
             });
-            
+
             const stepContent = document.querySelector(`.step-content[data-step="${step}"]`);
             if (stepContent) {
                 stepContent.classList.add('active');
@@ -948,7 +959,7 @@
         function validateStep(step) {
             let isValid = true;
             const stepContent = document.querySelector(`.step-content[data-step="${step}"]`);
-            
+
             if (!stepContent) return true;
 
             const requiredFields = stepContent.querySelectorAll('[required]');
@@ -989,15 +1000,15 @@
                 document.getElementById('summary-name').textContent = document.getElementById('name').value || '-';
                 document.getElementById('summary-cnpj').textContent = document.getElementById('cnpj').value || '-';
                 document.getElementById('summary-email').textContent = document.getElementById('email').value || '-';
-                
+
                 const street = document.getElementById('address_street').value || '';
                 const number = document.getElementById('address_number').value || '';
                 const neighborhood = document.getElementById('address_neighborhood').value || '';
                 const city = document.getElementById('address_city').value || '';
                 const state = document.getElementById('address_state').value || '';
-                document.getElementById('summary-address').textContent = 
+                document.getElementById('summary-address').textContent =
                     `${street}, ${number} - ${neighborhood}, ${city}/${state}` || '-';
-                
+
                 const selectedCategories = $('#categoria_id').select2('data');
                 const categoryNames = selectedCategories.map(cat => cat.text).join(', ');
                 document.getElementById('summary-categories').textContent = categoryNames || '-';
@@ -1009,9 +1020,9 @@
             const checkbox = document.getElementById('lgpd');
             const toggle = document.getElementById('lgpd-toggle');
             const thumb = document.getElementById('lgpd-thumb');
-            
+
             checkbox.checked = !checkbox.checked;
-            
+
             if (checkbox.checked) {
                 toggle.classList.remove('bg-gray-300');
                 toggle.classList.add('bg-red-600');
@@ -1023,7 +1034,7 @@
                 thumb.classList.remove('translate-x-7');
                 thumb.classList.add('translate-x-1');
             }
-            
+
             // Remover erro se houver
             toggle.classList.remove('border-2', 'border-red-500');
         }

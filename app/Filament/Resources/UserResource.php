@@ -40,14 +40,14 @@ class UserResource extends Resource
                             ->label('Nome')
                             ->required()
                             ->maxLength(255),
-                        
+
                         Forms\Components\TextInput::make('email')
                             ->label('E-mail')
                             ->email()
                             ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
-                        
+
                         Forms\Components\TextInput::make('password')
                             ->label('Senha')
                             ->password()
@@ -77,26 +77,26 @@ class UserResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                
+
                 Tables\Columns\TextColumn::make('email')
                     ->label('E-mail')
                     ->searchable()
                     ->sortable()
                     ->copyable()
                     ->icon('heroicon-m-envelope'),
-                
+
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label('Funções')
                     ->badge()
                     ->color('info')
                     ->searchable(),
-                
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Atualizado em')
                     ->dateTime('d/m/Y H:i')

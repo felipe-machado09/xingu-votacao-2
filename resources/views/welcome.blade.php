@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMQC4WVT');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melhores do Ano 2025 - Vale do Xingu</title>
@@ -23,11 +30,11 @@
             to { opacity: 1; }
         }
         @keyframes slideUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(30px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -81,7 +88,7 @@
         .animate-fade-in-delay {
             animation: fadeIn 1s ease-out 0.6s both;
         }
-        
+
         /* Scroll animations */
         .scroll-animate {
             opacity: 0;
@@ -132,6 +139,10 @@
     </style>
 </head>
 <body class="bg-white">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -201,24 +212,24 @@
             <div class="absolute top-0 left-0 w-96 h-96 bg-red-500 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
             <div class="absolute bottom-0 right-0 w-96 h-96 bg-red-500 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
         </div>
-        
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
                 <!-- Logo -->
                 <div class="mb-10 animate-fade-in">
                     <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-32 md:h-40 mx-auto drop-shadow-lg">
                 </div>
-                
+
                 <!-- Headline -->
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight animate-slide-up">
                     <span class="block">{{ $sections['hero']->title ?? 'A votação dos Melhores do Ano 2025 de Altamira já começou!' }}</span>
                 </h1>
-                
+
                 <!-- Subtitle -->
                 <p class="text-xl md:text-2xl lg:text-3xl text-gray-700 mb-10 max-w-3xl mx-auto font-medium leading-relaxed animate-slide-up-delay">
                     {{ $sections['hero']->content ?? 'Aqui, prêmio não se compra. Se decide no voto.' }}
                 </p>
-                
+
                 <!-- CTA Buttons -->
                 <div class="animate-slide-up-delay-2 flex flex-col sm:flex-row gap-4 items-center justify-center">
                     <a href="{{ route('register') }}" class="inline-block bg-gradient-to-r from-red-600 to-red-700 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-red-500/50 relative overflow-hidden group">
@@ -231,7 +242,7 @@
                         <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     </a>
                 </div>
-                
+
                 <!-- Trust indicators -->
                 <div class="mt-12 flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600 animate-fade-in-delay">
                     <div class="flex items-center">
@@ -306,25 +317,25 @@
                             }
                         @endphp
                         <div class="relative rounded-2xl overflow-hidden shadow-2xl" style="padding-bottom: 56.25%;">
-                            <iframe 
-                                src="{{ $videoUrl }}" 
-                                class="absolute top-0 left-0 w-full h-full rounded-2xl" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                referrerpolicy="strict-origin-when-cross-origin" 
+                            <iframe
+                                src="{{ $videoUrl }}"
+                                class="absolute top-0 left-0 w-full h-full rounded-2xl"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
                                 allowfullscreen>
                             </iframe>
                         </div>
                     @else
                         <div class="relative rounded-2xl overflow-hidden shadow-2xl" style="padding-bottom: 56.25%;">
-                            <iframe 
-                                width="560" 
-                                height="315" 
-                                src="https://www.youtube.com/embed/sUz34ymF3tI?si=CWGTEXuaPRSXOTLm" 
-                                title="YouTube video player" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                referrerpolicy="strict-origin-when-cross-origin" 
+                            <iframe
+                                width="560"
+                                height="315"
+                                src="https://www.youtube.com/embed/sUz34ymF3tI?si=CWGTEXuaPRSXOTLm"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
                                 allowfullscreen
                                 class="absolute top-0 left-0 w-full h-full rounded-2xl">
                             </iframe>
@@ -348,7 +359,7 @@
                     <p class="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
                         Vote em pelo menos 5 empresas no Melhores do Ano 2025 e participe dos sorteios promovidos pela Vale do Xingu.
                     </p>
-                    
+
                     <div class="space-y-4 mb-8">
                         <div class="flex items-start">
                             <svg class="w-6 h-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -391,12 +402,12 @@
                 <div class="scroll-slide-right order-1 md:order-2">
                     <div class="relative">
                         <div class="bg-white rounded-2xl shadow-2xl p-8 transform hover:scale-105 transition-transform duration-300">
-                            <img src="{{ asset('img/Eletromésticos.webp') }}" 
-                                 alt="Prêmios - Eletrodomésticos" 
+                            <img src="{{ asset('img/Eletromésticos.webp') }}"
+                                 alt="Prêmios - Eletrodomésticos"
                                  class="w-full h-auto rounded-xl">
                             <p class="text-center text-sm text-gray-500 mt-4 italic">*Imagens ilustrativas.</p>
                         </div>
-                        
+
                         <!-- Decorative elements -->
                         <div class="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full opacity-20 blur-2xl"></div>
                         <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-red-400 rounded-full opacity-20 blur-2xl"></div>
@@ -422,11 +433,11 @@
                         <div class="flex items-start justify-between mb-4">
                             <h3 class="text-2xl font-bold text-gray-900 flex-1">{{ $category->name }}</h3>
                         </div>
-                        
+
                         @if($category->description)
                             <p class="text-gray-600 mb-4 line-clamp-2 text-sm">{{ $category->description }}</p>
                         @endif
-                        
+
                         <div class="flex items-center text-sm text-gray-500 mb-6">
                             <svg class="w-5 h-5 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H9m10 0v-5.372a2.25 2.25 0 00-.488-1.398l-4.5-5.25a2.25 2.25 0 00-1.024-.786H10.5a2.25 2.25 0 00-2.25 2.25v5.372"></path>
@@ -434,7 +445,7 @@
                             <span class="font-semibold">{{ $category->companies->count() }}</span>
                             <span class="ml-1">empresas participantes</span>
                         </div>
-                        
+
                         <a href="{{ route('vote.show', $category) }}" class="block w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl text-center font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg">
                             Ver e Votar
                         </a>
@@ -468,7 +479,7 @@
                     {{ $sections['stats']->content ?? 'Resultado Melhores do Ano 2024' }}
                 </p>
             </div>
-            
+
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 <div class="bg-white/15 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="0">
                     <div class="mb-4 transform transition-transform hover:scale-110">
@@ -479,7 +490,7 @@
                     <div class="text-5xl font-extrabold mb-3 text-white">+18 mil</div>
                     <div class="text-lg font-semibold text-red-100">votos auditados</div>
                 </div>
-                
+
                 <div class="bg-white/15 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="100">
                     <div class="mb-4 transform transition-transform hover:scale-110">
                         <svg class="w-16 h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -489,7 +500,7 @@
                     <div class="text-5xl font-extrabold mb-3 text-white">+200</div>
                     <div class="text-lg font-semibold text-red-100">empresas participantes</div>
                 </div>
-                
+
                 <div class="bg-white/15 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="200">
                     <div class="mb-4 transform transition-transform hover:scale-110">
                         <svg class="w-16 h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -499,7 +510,7 @@
                     <div class="text-5xl font-extrabold mb-3 text-white">+50</div>
                     <div class="text-lg font-semibold text-red-100">segmentos votados</div>
                 </div>
-                
+
                 <div class="bg-white/15 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="300">
                     <div class="mb-4 transform transition-transform hover:scale-110">
                         <svg class="w-16 h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -510,7 +521,7 @@
                     <div class="text-base text-white/90">ao vivo no SBT Altamira</div>
                 </div>
             </div>
-            
+
             <div class="text-center mt-16 scroll-slide-up">
                 <a href="{{ route('register') }}" class="inline-block bg-white text-red-600 px-10 py-5 rounded-xl text-xl font-bold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl">
                     Vote agora
@@ -530,7 +541,7 @@
                     {{ $sections['winners']->content ?? 'Aqui, o resultado é público, auditável e legítimo.' }}
                 </p>
             </div>
-            
+
             @if($winners->count() > 0)
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 @foreach($winners as $index => $winner)
@@ -649,7 +660,7 @@
                         O prêmio que reconhece os melhores de Altamira através do voto popular.
                     </p>
                 </div>
-                
+
                 <!-- Informações -->
                 <div>
                     <h3 class="font-bold text-lg mb-6 text-gray-900">Informações Legais</h3>
@@ -662,7 +673,7 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- Links -->
                 <div>
                     <h3 class="font-bold text-lg mb-6 text-gray-900">Documentos</h3>
@@ -687,7 +698,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Redes Sociais -->
                 <div>
                     <h3 class="font-bold text-lg mb-6 text-gray-900">Siga-nos</h3>
@@ -710,7 +721,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-200 pt-8">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                     <p class="text-sm text-gray-600 text-center md:text-left">
@@ -729,7 +740,7 @@
             const answer = document.getElementById('answer-' + index);
             const icon = document.getElementById('icon-' + index);
             const isHidden = answer.classList.contains('hidden');
-            
+
             if (isHidden) {
                 answer.classList.remove('hidden');
                 icon.classList.add('rotate-180');
@@ -768,12 +779,12 @@
         // Scroll animations
         function animateOnScroll() {
             const elements = document.querySelectorAll('.scroll-animate, .scroll-slide-up, .scroll-slide-left, .scroll-slide-right, .scroll-scale');
-            
+
             elements.forEach(element => {
                 const elementTop = element.getBoundingClientRect().top;
                 const elementVisible = 150;
                 const delay = element.dataset.delay ? parseInt(element.dataset.delay) : 0;
-                
+
                 if (elementTop < window.innerHeight - elementVisible) {
                     setTimeout(() => {
                         element.classList.add('animated');

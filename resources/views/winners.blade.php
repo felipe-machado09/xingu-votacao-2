@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMQC4WVT');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vencedores - Melhores do Ano {{ $year }}</title>
@@ -8,13 +15,13 @@
     <link rel="icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
     <link rel="shortcut icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
-    
+
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ route('winners') }}">
     <meta property="og:title" content="Vencedores - Melhores do Ano {{ $year }}">
     <meta property="og:description" content="Conheça os vencedores do Melhores do Ano {{ $year }}">
     <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
@@ -22,11 +29,11 @@
             to { opacity: 1; }
         }
         @keyframes slideUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(30px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -40,9 +47,13 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-yellow-50 via-white to-yellow-50 min-h-screen">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Countdown -->
     <x-countdown />
-    
+
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,7 +133,7 @@
     <section class="bg-gray-50 py-8 border-y border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Empresas vencedoras por categoria</h2>
-            
+
             <form method="GET" action="{{ route('winners') }}" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Year Filter -->
@@ -153,10 +164,10 @@
                     <!-- Search Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Pesquisar empresa</label>
-                        <input type="text" 
-                               name="search" 
-                               value="{{ $search }}" 
-                               placeholder="Digite o nome da empresa..." 
+                        <input type="text"
+                               name="search"
+                               value="{{ $search }}"
+                               placeholder="Digite o nome da empresa..."
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
                     </div>
                 </div>
@@ -165,11 +176,11 @@
                     <button type="submit" class="bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-700 transition-colors">
                         🔍 Buscar
                     </button>
-                    
+
                     <div class="flex gap-2">
                         <span class="text-sm text-gray-600 mr-3">Acesso rápido:</span>
                         @foreach($availableYears->take(3) as $quickYear)
-                            <a href="{{ route('winners', ['year' => $quickYear]) }}" 
+                            <a href="{{ route('winners', ['year' => $quickYear]) }}"
                                class="px-4 py-2 {{ $year == $quickYear ? 'bg-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100' }} border border-gray-300 rounded-lg font-semibold transition-colors">
                                 {{ $quickYear }}
                             </a>
@@ -213,8 +224,8 @@
                             <!-- Logo -->
                             @if($categoryWinner->company->logo_path)
                                 <div class="h-32 flex items-center justify-center mb-4 bg-gray-50 rounded-lg p-4">
-                                    <img src="{{ asset('storage/' . $categoryWinner->company->logo_path) }}" 
-                                         alt="{{ $categoryWinner->company->legal_name }}" 
+                                    <img src="{{ asset('storage/' . $categoryWinner->company->logo_path) }}"
+                                         alt="{{ $categoryWinner->company->legal_name }}"
                                          class="max-h-full max-w-full object-contain">
                                 </div>
                             @endif
@@ -263,7 +274,7 @@
                     A entrega dos troféus às empresas vencedoras do Melhores do Ano {{ $year }} foi realizada ao vivo no SBT Altamira, com cobertura jornalística.
                 </p>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition">
                     <div class="aspect-video bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center">
@@ -301,20 +312,20 @@
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Patrocinadores</h2>
                 <p class="text-lg text-gray-600">Obrigado pelo apoio!</p>
             </div>
-            
+
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
                 @foreach($sponsors as $sponsor)
                     <div class="flex items-center justify-center p-6 bg-gray-50 rounded-lg hover:shadow-lg transition">
                         @if($sponsor->logo_path)
                             @if($sponsor->website)
                                 <a href="{{ $sponsor->website }}" target="_blank" rel="noopener" class="block">
-                                    <img src="{{ asset('storage/' . $sponsor->logo_path) }}" 
-                                         alt="{{ $sponsor->name }}" 
+                                    <img src="{{ asset('storage/' . $sponsor->logo_path) }}"
+                                         alt="{{ $sponsor->name }}"
                                          class="max-h-20 max-w-full object-contain grayscale hover:grayscale-0 transition">
                                 </a>
                             @else
-                                <img src="{{ asset('storage/' . $sponsor->logo_path) }}" 
-                                     alt="{{ $sponsor->name }}" 
+                                <img src="{{ asset('storage/' . $sponsor->logo_path) }}"
+                                     alt="{{ $sponsor->name }}"
                                      class="max-h-20 max-w-full object-contain grayscale hover:grayscale-0 transition">
                             @endif
                         @else
@@ -364,7 +375,7 @@
             const url = '{{ route('winners') }}';
             const title = 'Vencedores - Melhores do Ano {{ $year }}';
             const text = 'Confira os vencedores do Melhores do Ano {{ $year }}!';
-            
+
             if (navigator.share) {
                 navigator.share({ title: title, text: text, url: url });
             } else {

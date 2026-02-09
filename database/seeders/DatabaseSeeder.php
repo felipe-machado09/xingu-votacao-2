@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
 
         $categories = Category::all();
         $companies = Company::factory(20)->create();
-        
+
         foreach ($companies as $company) {
             $company->categories()->attach(
                 $categories->random(rand(1, 3))->pluck('id')

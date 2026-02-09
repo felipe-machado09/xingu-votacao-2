@@ -77,13 +77,13 @@ class WeeklyDraw extends Page implements HasForms, HasTable
                 ->latest('drawn_at')
                 ->first();
 
-            $cutoffDate = $lastCompletedDraw 
-                ? $lastCompletedDraw->drawn_at 
+            $cutoffDate = $lastCompletedDraw
+                ? $lastCompletedDraw->drawn_at
                 : now()->subDays(7);
 
             // Buscar IDs de audiências elegíveis com base no min_votes do prêmio
             $minVotesRequired = $award->min_votes ?? 5;
-            
+
             // Para tier 3 (todos os votos), precisamos verificar se votou em TODAS as categorias
             if ($award->tier == 3) {
                 $totalCategories = \App\Models\Category::count();
@@ -138,7 +138,7 @@ class WeeklyDraw extends Page implements HasForms, HasTable
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Notification::make()
                 ->title('Falha no sorteio: ' . $e->getMessage())
                 ->danger()

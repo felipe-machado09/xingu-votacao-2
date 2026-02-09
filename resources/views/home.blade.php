@@ -27,7 +27,7 @@
                 <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">🎁 Prêmios para Participantes</h2>
                 <p class="text-lg text-gray-700">Vote em no mínimo 5 empresas e concorra aos prêmios!</p>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($awards as $award)
                     @if($award->is_active && $award->hasRemainingQuantity())
@@ -54,7 +54,7 @@
                     @endif
                 @endforeach
             </div>
-            
+
             <div class="mt-8 bg-yellow-100 border-l-4 border-yellow-500 p-6 rounded-lg">
                 <div class="flex items-start">
                     <svg class="w-6 h-6 text-yellow-600 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

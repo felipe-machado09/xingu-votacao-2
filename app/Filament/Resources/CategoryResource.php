@@ -36,7 +36,7 @@ class CategoryResource extends Resource
                     ->label('Nome')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => 
+                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) =>
                         $operation === 'create' ? $set('slug', Str::slug($state)) : null
                     )
                     ->maxLength(255),

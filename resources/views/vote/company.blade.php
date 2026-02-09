@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMQC4WVT');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $company->legal_name }} - Melhores do Ano 2025</title>
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ route('vote.company', $company) }}">
@@ -13,7 +20,7 @@
     @if($company->logo_path)
         <meta property="og:image" content="{{ asset('storage/' . $company->logo_path) }}">
     @endif
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ route('vote.company', $company) }}">
@@ -22,7 +29,7 @@
     @if($company->logo_path)
         <meta name="twitter:image" content="{{ asset('storage/' . $company->logo_path) }}">
     @endif
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -31,11 +38,11 @@
             to { opacity: 1; }
         }
         @keyframes slideUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(40px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -70,6 +77,10 @@
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
     <header class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -222,7 +233,7 @@
                                 </div>
                             @endif
                         </div>
-                        
+
                         <!-- Imagem da Fachada -->
                         <div class="relative group overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                             @if($company->facade_image_path)
@@ -240,7 +251,7 @@
                                 </div>
                             @endif
                         </div>
-                        
+
                         <!-- Imagem da Equipe -->
                         <div class="relative group overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                             @if($company->team_image_path)
@@ -272,7 +283,7 @@
                             {{ $company->categories->count() }} {{ $company->categories->count() == 1 ? 'categoria' : 'categorias' }}
                         </span>
                     </div>
-                    
+
                     @if($company->categories->count() > 0)
                         <div class="grid md:grid-cols-2 gap-4">
                             @foreach($company->categories as $category)
@@ -361,13 +372,13 @@
             // Instagram não permite compartilhamento direto via web
             // Vamos copiar o link e abrir o Instagram
             const instagramText = `📢 ${text}\n\n${url}\n\n#MelhoresDoAno2025 #VoteEmNós`;
-            
+
             // Tentar abrir o app do Instagram (mobile) ou copiar para área de transferência
             if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                 // Mobile: tentar abrir o app do Instagram
                 const instagramUrl = `instagram://camera`;
                 window.location.href = instagramUrl;
-                
+
                 // Fallback: copiar para área de transferência
                 setTimeout(() => {
                     copyToClipboard(instagramText);
@@ -403,12 +414,12 @@
                 info: 'bg-blue-600',
                 warning: 'bg-yellow-600'
             };
-            
+
             const notification = document.createElement('div');
             notification.className = `fixed top-24 right-4 ${colors[type] || colors.success} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2 animate-slide-up`;
             notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i><span>${message}</span>`;
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.style.opacity = '0';
                 notification.style.transform = 'translateX(100%)';

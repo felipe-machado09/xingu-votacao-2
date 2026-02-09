@@ -18,7 +18,7 @@ Route::get('/vencedores', [WinnersController::class, 'index'])->name('winners');
 Route::middleware('throttle:5,1')->group(function () {
     Route::get('/register', [RegisterController::class, 'show'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);
-    
+
     Route::get('/login', [LoginController::class, 'show'])->name('login');
     Route::post('/login', [LoginController::class, 'store']);
 });

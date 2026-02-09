@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMQC4WVT');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login de Empresa - Melhores do Ano 2025</title>
@@ -27,6 +34,10 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-50 via-white to-red-50 min-h-screen">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -94,9 +105,9 @@
                         <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
                             E-mail da Empresa <span class="text-red-600">*</span>
                         </label>
-                        <input type="email" 
-                               id="email" 
-                               name="email" 
+                        <input type="email"
+                               id="email"
+                               name="email"
                                value="{{ old('email') }}"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('email') border-red-500 @enderror"
                                placeholder="empresa@exemplo.com"
@@ -107,7 +118,7 @@
                         @enderror
                     </div>
 
-                    <button type="submit" 
+                    <button type="submit"
                             class="w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-xl text-lg font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg">
                         <i class="fas fa-paper-plane mr-2"></i>
                         Enviar Código
@@ -126,45 +137,45 @@
                             Digite o código de 6 dígitos enviado para seu e-mail
                         </label>
                         <div class="flex justify-center gap-3 mb-4">
-                            <input type="text" 
-                                   id="code-1" 
-                                   class="code-input" 
-                                   maxlength="1" 
+                            <input type="text"
+                                   id="code-1"
+                                   class="code-input"
+                                   maxlength="1"
                                    pattern="[0-9]"
                                    inputmode="numeric"
                                    autocomplete="off">
-                            <input type="text" 
-                                   id="code-2" 
-                                   class="code-input" 
-                                   maxlength="1" 
+                            <input type="text"
+                                   id="code-2"
+                                   class="code-input"
+                                   maxlength="1"
                                    pattern="[0-9]"
                                    inputmode="numeric"
                                    autocomplete="off">
-                            <input type="text" 
-                                   id="code-3" 
-                                   class="code-input" 
-                                   maxlength="1" 
+                            <input type="text"
+                                   id="code-3"
+                                   class="code-input"
+                                   maxlength="1"
                                    pattern="[0-9]"
                                    inputmode="numeric"
                                    autocomplete="off">
-                            <input type="text" 
-                                   id="code-4" 
-                                   class="code-input" 
-                                   maxlength="1" 
+                            <input type="text"
+                                   id="code-4"
+                                   class="code-input"
+                                   maxlength="1"
                                    pattern="[0-9]"
                                    inputmode="numeric"
                                    autocomplete="off">
-                            <input type="text" 
-                                   id="code-5" 
-                                   class="code-input" 
-                                   maxlength="1" 
+                            <input type="text"
+                                   id="code-5"
+                                   class="code-input"
+                                   maxlength="1"
                                    pattern="[0-9]"
                                    inputmode="numeric"
                                    autocomplete="off">
-                            <input type="text" 
-                                   id="code-6" 
-                                   class="code-input" 
-                                   maxlength="1" 
+                            <input type="text"
+                                   id="code-6"
+                                   class="code-input"
+                                   maxlength="1"
                                    pattern="[0-9]"
                                    inputmode="numeric"
                                    autocomplete="off">
@@ -174,7 +185,7 @@
                             <p class="text-red-600 text-sm text-center mt-2">{{ $message }}</p>
                         @enderror
                         <p class="text-sm text-gray-500 text-center mt-4">
-                            Não recebeu o código? 
+                            Não recebeu o código?
                             <button type="button" onclick="resendCode()" class="text-red-600 hover:text-red-700 font-semibold underline">
                                 Reenviar
                             </button>
@@ -182,12 +193,12 @@
                     </div>
 
                     <div class="flex gap-4">
-                        <button type="button" 
+                        <button type="button"
                                 onclick="backToEmail()"
                                 class="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition-all duration-300">
                             <i class="fas fa-arrow-left mr-2"></i> Voltar
                         </button>
-                        <button type="submit" 
+                        <button type="submit"
                                 class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg">
                             <i class="fas fa-check mr-2"></i> Verificar
                         </button>
@@ -200,7 +211,7 @@
     <script>
         // Auto-focus e navegação entre campos de código
         const codeInputs = ['code-1', 'code-2', 'code-3', 'code-4', 'code-5', 'code-6'];
-        
+
         codeInputs.forEach((id, index) => {
             const input = document.getElementById(id);
             if (input) {
@@ -210,13 +221,13 @@
                     }
                     updateFullCode();
                 });
-                
+
                 input.addEventListener('keydown', function(e) {
                     if (e.key === 'Backspace' && !e.target.value && index > 0) {
                         document.getElementById(codeInputs[index - 1]).focus();
                     }
                 });
-                
+
                 input.addEventListener('paste', function(e) {
                     e.preventDefault();
                     const pasted = e.clipboardData.getData('text').replace(/\D/g, '').substring(0, 6);
@@ -238,9 +249,9 @@
                 const input = document.getElementById(id);
                 return input ? input.value : '';
             }).join('');
-            
+
             document.getElementById('full-code').value = code;
-            
+
             // Marcar campos preenchidos
             codeInputs.forEach(id => {
                 const input = document.getElementById(id);
@@ -263,19 +274,19 @@
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '{{ route('company.login.send-code') }}';
-                
+
                 const csrf = document.createElement('input');
                 csrf.type = 'hidden';
                 csrf.name = '_token';
                 csrf.value = '{{ csrf_token() }}';
                 form.appendChild(csrf);
-                
+
                 const emailInput = document.createElement('input');
                 emailInput.type = 'hidden';
                 emailInput.name = 'email';
                 emailInput.value = email;
                 form.appendChild(emailInput);
-                
+
                 document.body.appendChild(form);
                 form.submit();
             }

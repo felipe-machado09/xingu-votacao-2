@@ -14,7 +14,7 @@ class TieredAwardsSeeder extends Seeder
     {
         // Limpar prêmios antigos (opcional - comente se não quiser apagar)
         // Award::truncate();
-        
+
         // Nível 1 - Prêmios Básicos (5 votos)
         Award::create([
             'name' => 'Vale-compras R$ 100',
@@ -24,7 +24,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 5,
             'is_active' => true,
         ]);
-        
+
         Award::create([
             'name' => 'Kit de Produtos',
             'description' => 'Kit com produtos das empresas participantes',
@@ -33,7 +33,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 5,
             'is_active' => true,
         ]);
-        
+
         Award::create([
             'name' => 'Brinde Exclusivo',
             'description' => 'Brinde exclusivo do evento Melhores do Ano',
@@ -42,7 +42,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 5,
             'is_active' => true,
         ]);
-        
+
         // Nível 2 - Prêmios Intermediários (15 votos)
         Award::create([
             'name' => 'Vale-compras R$ 300',
@@ -52,7 +52,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 15,
             'is_active' => true,
         ]);
-        
+
         Award::create([
             'name' => 'Eletrodoméstico',
             'description' => 'Liquidificador, sanduicheira ou outro eletrodoméstico',
@@ -61,7 +61,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 15,
             'is_active' => true,
         ]);
-        
+
         Award::create([
             'name' => 'Cesta Premium',
             'description' => 'Cesta premium com produtos selecionados',
@@ -70,7 +70,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 15,
             'is_active' => true,
         ]);
-        
+
         // Nível 3 - Prêmio Máximo (todos os votos)
         Award::create([
             'name' => 'TV 32 Polegadas',
@@ -80,7 +80,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 999, // Será verificado como "todas as categorias"
             'is_active' => true,
         ]);
-        
+
         Award::create([
             'name' => 'Vale-compras R$ 1.000',
             'description' => 'Vale-compras de R$ 1.000 em lojas parceiras',
@@ -89,7 +89,7 @@ class TieredAwardsSeeder extends Seeder
             'min_votes' => 999,
             'is_active' => true,
         ]);
-        
+
         Award::create([
             'name' => 'Notebook',
             'description' => 'Notebook novo para estudo ou trabalho',

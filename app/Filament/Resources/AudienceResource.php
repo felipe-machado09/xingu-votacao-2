@@ -71,7 +71,7 @@ class AudienceResource extends Resource
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Telefone')
                     ->searchable()
-                    ->formatStateUsing(fn (string $state): string => 
+                    ->formatStateUsing(fn (string $state): string =>
                         preg_replace('/^(\d{2})(\d{5})(\d{4})$/', '($1) $2-$3', $state)
                     )
                     ->badge()

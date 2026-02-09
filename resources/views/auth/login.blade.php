@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMQC4WVT');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar - Melhores do Ano 2025</title>    <link rel="icon" type="image/webp" href="{{ asset('img/logo_icon.webp') }}">    <script src="https://cdn.tailwindcss.com"></script>
@@ -10,11 +17,11 @@
             to { opacity: 1; }
         }
         @keyframes slideUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(30px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -28,6 +35,10 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-50 via-white to-red-50 min-h-screen">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,17 +85,17 @@
 
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
-                    
+
                     <div>
                         <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
                             E-mail
                         </label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            value="{{ old('email') }}" 
-                            required 
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            required
                             autofocus
                             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                             placeholder="seu@email.com"
@@ -94,8 +105,8 @@
                         @enderror
                     </div>
 
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         class="w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-4 rounded-xl text-lg font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl relative overflow-hidden group"
                     >
                         <span class="relative z-10 flex items-center justify-center">
@@ -110,7 +121,7 @@
 
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <p class="text-center text-sm text-gray-600">
-                        Não tem uma conta? 
+                        Não tem uma conta?
                         <a href="{{ route('register') }}" class="text-red-600 hover:text-red-700 font-semibold">Cadastre-se aqui</a>
                     </p>
                 </div>

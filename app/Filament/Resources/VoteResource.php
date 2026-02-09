@@ -4,16 +4,17 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VoteResource\Pages;
 use App\Models\Vote;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class VoteResource extends Resource
 {
     protected static ?string $model = Vote::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-hand-thumb-up';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-hand-thumb-up';
 
     protected static ?string $navigationLabel = 'Votos';
 
@@ -21,13 +22,13 @@ class VoteResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Votos';
 
-    protected static ?string $navigationGroup = 'Votação';
+    protected static string | \UnitEnum | null $navigationGroup = 'Votação';
 
     protected static ?int $navigationSort = 4;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 //
             ]);
@@ -61,12 +62,14 @@ class VoteResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
+                    ->label('Categoria')
                     ->relationship('category', 'name'),
                 Tables\Filters\SelectFilter::make('company')
+                    ->label('Empresa')
                     ->relationship('company', 'legal_name'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Actions\ViewAction::make(),
             ])
             ->bulkActions([])
             ->defaultSort('created_at', 'desc');

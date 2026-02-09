@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VoteRequest;
 use App\Models\Audience;
+use App\Models\Award;
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\Sponsor;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 
@@ -17,6 +19,8 @@ class VoteController extends Controller
         $audience = $audienceId ? Audience::find($audienceId) : null;
 
         $categories = Category::open()->with('companies')->get();
+        $awards = Award::where('is_active', true)->get();
+        $sponsors = Sponsor::active()->ordered()->get();
 
         if ($audience) {
             $votedCategoryIds = $audience->votes()->pluck('category_id')->toArray();
@@ -24,7 +28,7 @@ class VoteController extends Controller
             $votedCategoryIds = [];
         }
 
-        return view('vote.index', compact('categories', 'votedCategoryIds', 'audience'));
+        return view('vote.index', compact('categories', 'votedCategoryIds', 'audience', 'awards', 'sponsors'));
     }
 
     public function show(Request $request, Category $category)

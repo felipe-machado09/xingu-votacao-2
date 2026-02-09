@@ -5,16 +5,17 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AudienceResource\Pages;
 use App\Models\Audience;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class AudienceResource extends Resource
 {
     protected static ?string $model = Audience::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationLabel = 'Participantes';
 
@@ -22,13 +23,13 @@ class AudienceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Participantes';
 
-    protected static ?string $navigationGroup = 'Votação';
+    protected static string | \UnitEnum | null $navigationGroup = 'Votação';
 
     protected static ?int $navigationSort = 3;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nome')
@@ -96,14 +97,15 @@ class AudienceResource extends Resource
             ])
             ->filters([
                 Tables\Filters\Filter::make('verified')
+                    ->label('Verificado')
                     ->query(fn ($query) => $query->whereNotNull('email_verified_at')),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Actions\ViewAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

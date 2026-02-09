@@ -5,9 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Models\Category;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
@@ -15,7 +16,7 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationLabel = 'Categorias';
 
@@ -23,13 +24,13 @@ class CategoryResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Categorias';
 
-    protected static ?string $navigationGroup = 'Votação';
+    protected static string | \UnitEnum | null $navigationGroup = 'Votação';
 
     protected static ?int $navigationSort = 1;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nome')
@@ -50,17 +51,17 @@ class CategoryResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
-                    ->label('Descri\u00e7\u00e3o')
+                    ->label('Descrição')
                     ->rows(3),
                 Forms\Components\Toggle::make('is_active')
                     ->label('Ativo')
                     ->default(true),
                 Forms\Components\DateTimePicker::make('voting_starts_at')
-                    ->label('In\u00edcio da Vota\u00e7\u00e3o')
+                    ->label('Início da Votação')
                     ->displayFormat('d/m/Y H:i')
                     ->seconds(false),
                 Forms\Components\DateTimePicker::make('voting_ends_at')
-                    ->label('Fim da Vota\u00e7\u00e3o')
+                    ->label('Fim da Votação')
                     ->displayFormat('d/m/Y H:i')
                     ->seconds(false),
             ]);
@@ -100,7 +101,7 @@ class CategoryResource extends Resource
                     ->badge()
                     ->color('success'),
                 Tables\Columns\TextColumn::make('voting_starts_at')
-                    ->label('In\u00edcio')
+                    ->label('Início')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('voting_ends_at')
@@ -109,8 +110,10 @@ class CategoryResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_active'),
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Ativo'),
                 Tables\Filters\SelectFilter::make('category_group')
+                    ->label('Grupo')
                     ->label('Grupo de Categoria')
                     ->options(function () {
                         return Category::distinct()
@@ -120,12 +123,12 @@ class CategoryResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

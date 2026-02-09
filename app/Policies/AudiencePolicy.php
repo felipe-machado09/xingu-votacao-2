@@ -1,108 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
-use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Audience;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AudiencePolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return $user->can('view_any_audience');
+        return $authUser->can('ViewAny:Audience');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Audience $audience): bool
+    public function view(AuthUser $authUser, Audience $audience): bool
     {
-        return $user->can('view_audience');
+        return $authUser->can('View:Audience');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        return $user->can('create_audience');
+        return $authUser->can('Create:Audience');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Audience $audience): bool
+    public function update(AuthUser $authUser, Audience $audience): bool
     {
-        return $user->can('update_audience');
+        return $authUser->can('Update:Audience');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Audience $audience): bool
+    public function delete(AuthUser $authUser, Audience $audience): bool
     {
-        return $user->can('delete_audience');
+        return $authUser->can('Delete:Audience');
     }
 
-    /**
-     * Determine whether the user can bulk delete.
-     */
-    public function deleteAny(User $user): bool
+    public function restore(AuthUser $authUser, Audience $audience): bool
     {
-        return $user->can('delete_any_audience');
+        return $authUser->can('Restore:Audience');
     }
 
-    /**
-     * Determine whether the user can permanently delete.
-     */
-    public function forceDelete(User $user, Audience $audience): bool
+    public function forceDelete(AuthUser $authUser, Audience $audience): bool
     {
-        return $user->can('force_delete_audience');
+        return $authUser->can('ForceDelete:Audience');
     }
 
-    /**
-     * Determine whether the user can permanently bulk delete.
-     */
-    public function forceDeleteAny(User $user): bool
+    public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $user->can('force_delete_any_audience');
+        return $authUser->can('ForceDeleteAny:Audience');
     }
 
-    /**
-     * Determine whether the user can restore.
-     */
-    public function restore(User $user, Audience $audience): bool
+    public function restoreAny(AuthUser $authUser): bool
     {
-        return $user->can('restore_audience');
+        return $authUser->can('RestoreAny:Audience');
     }
 
-    /**
-     * Determine whether the user can bulk restore.
-     */
-    public function restoreAny(User $user): bool
+    public function replicate(AuthUser $authUser, Audience $audience): bool
     {
-        return $user->can('restore_any_audience');
+        return $authUser->can('Replicate:Audience');
     }
 
-    /**
-     * Determine whether the user can replicate.
-     */
-    public function replicate(User $user, Audience $audience): bool
+    public function reorder(AuthUser $authUser): bool
     {
-        return $user->can('replicate_audience');
+        return $authUser->can('Reorder:Audience');
     }
 
-    /**
-     * Determine whether the user can reorder.
-     */
-    public function reorder(User $user): bool
-    {
-        return $user->can('reorder_audience');
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Award;
 use App\Models\Category;
 use App\Models\LandingPageSection;
 use App\Models\Winner;
@@ -22,11 +23,13 @@ class HomeController extends Controller
         
         $categories = Category::open()->with('companies')->limit(6)->get();
         
+        $awards = Award::where('is_active', true)->get();
+        
         $votingEndDate = Category::where('is_active', true)
             ->whereNotNull('voting_ends_at')
             ->orderBy('voting_ends_at', 'desc')
             ->value('voting_ends_at');
         
-        return view('welcome', compact('sections', 'winners', 'votingEndDate', 'categories'));
+        return view('welcome', compact('sections', 'winners', 'votingEndDate', 'categories', 'awards'));
     }
 }

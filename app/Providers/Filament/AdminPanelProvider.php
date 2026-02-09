@@ -28,8 +28,26 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandLogo(asset('img/logo.webp'))
+            ->brandLogoHeight('7rem')
+            ->favicon(asset('logo_icon.ico'))
+            ->loginRouteSlug('login')
+            ->renderHook(
+                'panels::body.end',
+                fn (): string => '<style>
+                    .fi-simple-layout {
+                        background-image: url(/img/login_bg.jpeg);
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    }
+                    .fi-simple-header-heading {
+                        display: none !important;
+                    }
+                </style>'
+            )
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Red,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

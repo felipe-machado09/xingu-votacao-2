@@ -15,11 +15,15 @@ class Award extends Model
         'description',
         'image_path',
         'quantity',
+        'tier',
+        'min_votes',
         'is_active',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
+        'tier' => 'integer',
+        'min_votes' => 'integer',
         'is_active' => 'boolean',
     ];
 

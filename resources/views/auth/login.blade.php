@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrar - Melhores do Ano 2025</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Entrar - Melhores do Ano 2025</title>    <link rel="icon" type="image/webp" href="{{ asset('img/logo_icon.webp') }}">    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
             from { opacity: 0; }

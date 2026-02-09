@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class VotesOverTimeChart extends ChartWidget
 {
-    protected static ?string $heading = 'Evolução de Votos (Últimos 7 dias)';
+    protected ?string $heading = 'Evolução de Votos (Últimos 7 dias)';
 
     protected static ?int $sort = 4;
 

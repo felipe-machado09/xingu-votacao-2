@@ -20,15 +20,15 @@ class WeeklyDraw extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-gift';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-gift';
 
     protected static ?string $navigationLabel = 'Sorteio Semanal';
 
     protected static ?string $title = 'Sorteio Semanal';
 
-    protected static ?string $navigationGroup = 'Sorteios';
+    protected static string | \UnitEnum | null $navigationGroup = 'Sorteios';
 
-    protected static string $view = 'filament.pages.weekly-draw';
+    protected string $view = 'filament.pages.weekly-draw';
 
     protected static ?int $navigationSort = 2;
 
@@ -55,11 +55,13 @@ class WeeklyDraw extends Page implements HasForms, HasTable
         DB::beginTransaction();
 
         try {
+            // Buscar prêmio disponível (ordenado por tier, do menor para o maior)
             $award = Award::where('is_active', true)
                 ->whereHas('draws', function ($query) {
                     $query->where('status', 'completed');
                 }, '<', DB::raw('quantity'))
                 ->orWhereDoesntHave('draws')
+                ->orderBy('tier', 'asc')
                 ->first();
 
             if (!$award || !$award->hasRemainingQuantity()) {
@@ -79,14 +81,32 @@ class WeeklyDraw extends Page implements HasForms, HasTable
                 ? $lastCompletedDraw->drawn_at 
                 : now()->subDays(7);
 
-            $eligibleAudienceIds = Vote::where('created_at', '>=', $cutoffDate)
-                ->distinct('audience_id')
-                ->pluck('audience_id')
-                ->toArray();
+            // Buscar IDs de audiências elegíveis com base no min_votes do prêmio
+            $minVotesRequired = $award->min_votes ?? 5;
+            
+            // Para tier 3 (todos os votos), precisamos verificar se votou em TODAS as categorias
+            if ($award->tier == 3) {
+                $totalCategories = \App\Models\Category::count();
+                $eligibleAudienceIds = Vote::where('created_at', '>=', $cutoffDate)
+                    ->select('audience_id')
+                    ->groupBy('audience_id')
+                    ->havingRaw('COUNT(DISTINCT category_id) >= ?', [$totalCategories])
+                    ->pluck('audience_id')
+                    ->toArray();
+            } else {
+                // Para tier 1 e 2, verificar se tem o número mínimo de votos
+                $eligibleAudienceIds = Vote::where('created_at', '>=', $cutoffDate)
+                    ->select('audience_id')
+                    ->groupBy('audience_id')
+                    ->havingRaw('COUNT(DISTINCT category_id) >= ?', [$minVotesRequired])
+                    ->pluck('audience_id')
+                    ->toArray();
+            }
 
             if (empty($eligibleAudienceIds)) {
                 Notification::make()
                     ->title('Nenhum votante elegível encontrado')
+                    ->body("Este prêmio requer {$minVotesRequired} votos mínimos.")
                     ->warning()
                     ->send();
                 DB::rollBack();
@@ -103,6 +123,8 @@ class WeeklyDraw extends Page implements HasForms, HasTable
                 'meta' => [
                     'eligible_count' => count($eligibleAudienceIds),
                     'cutoff_date' => $cutoffDate->toDateTimeString(),
+                    'min_votes_required' => $minVotesRequired,
+                    'award_tier' => $award->tier,
                 ],
             ]);
 
@@ -110,6 +132,7 @@ class WeeklyDraw extends Page implements HasForms, HasTable
 
             Notification::make()
                 ->title('Sorteio realizado com sucesso!')
+                ->body("Prêmio Nível {$award->tier}: {$award->name}")
                 ->success()
                 ->send();
 

@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $category->name }} - Melhores do Ano 2025</title>
+    <link rel="icon" type="image/webp" href="{{ asset('img/logo_icon.webp') }}">
+    <link rel="icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <link rel="shortcut icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -18,6 +22,7 @@
     <meta name="twitter:description" content="{{ $category->description ?? 'Vote na sua empresa favorita nesta categoria' }}">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -42,6 +47,9 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-50 via-white to-red-50 min-h-screen">
+    <!-- Countdown -->
+    <x-countdown />
+    
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,6 +61,7 @@
                 </div>
                 <nav class="flex items-center space-x-6">
                     <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Categorias</a>
+                    <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                     @if($audience)
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
@@ -149,49 +158,38 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                 @foreach($category->companies as $index => $company)
                     <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden @if($highlightCompanyId == $company->id) ring-4 ring-red-500 @endif animate-slide-up" style="animation-delay: {{ $index * 0.1 }}s">
-                        <a href="{{ route('vote.company', $company) }}" class="block">
-                            @if($company->logo_path)
-                                <div class="h-48 bg-gray-50 flex items-center justify-center p-4">
-                                    <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->legal_name }}" class="max-h-full max-w-full object-contain">
-                                </div>
-                            @else
-                                <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                    <span class="text-gray-400 text-6xl font-bold">{{ substr($company->legal_name, 0, 1) }}</span>
-                                </div>
-                            @endif
-                        </a>
+                        @if($company->logo_path)
+                            <div class="h-48 bg-gray-50 flex items-center justify-center p-4">
+                                <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->legal_name }}" class="max-h-full max-w-full object-contain">
+                            </div>
+                        @else
+                            <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                <span class="text-gray-400 text-6xl font-bold">{{ substr($company->legal_name, 0, 1) }}</span>
+                            </div>
+                        @endif
                         
                         <div class="p-6">
-                            <a href="{{ route('vote.company', $company) }}" class="block mb-2">
-                                <h3 class="text-xl font-bold text-gray-900 hover:text-red-600 transition">{{ $company->legal_name }}</h3>
-                            </a>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $company->legal_name }}</h3>
                             
                             @if($company->responsible_name)
-                                <p class="text-sm text-gray-600 mb-1">{{ $company->responsible_name }}</p>
+                                <p class="text-sm text-gray-600 mb-4">{{ $company->responsible_name }}</p>
                             @endif
                             
-                            <div class="flex items-center justify-between mt-4">
-                                <a href="{{ route('vote.company', $company) }}" class="text-sm text-red-600 hover:text-red-700 font-semibold flex items-center">
-                                    Ver página
-                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                </a>
-                                
+                            <div class="flex items-center justify-center mt-4">
                                 @if($audience && !$userVote && $category->isOpen())
-                                    <form method="POST" action="{{ route('vote.store', [$category, $company]) }}" class="inline" onclick="event.stopPropagation();">
+                                    <form method="POST" action="{{ route('vote.store', [$category, $company]) }}" class="w-full">
                                         @csrf
-                                        <button type="submit" class="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold hover:from-red-700 hover:to-red-800 transition-all transform hover:scale-105">
-                                            Votar
+                                        <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl text-center font-bold hover:from-red-700 hover:to-red-800 transition-all transform hover:scale-105 shadow-lg">
+                                            🗳️ Votar nesta empresa
                                         </button>
                                     </form>
                                 @elseif($userVote && $userVote->company_id == $company->id)
-                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-sm font-semibold flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <div class="w-full bg-green-100 text-green-800 px-4 py-3 rounded-xl text-center font-semibold flex items-center justify-center">
+                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
                                         Seu voto
-                                    </span>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -238,5 +236,21 @@
             }
         }
     </script>
+    
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Voto Registrado!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#dc2626',
+            timer: 3000,
+            timerProgressBar: true,
+        });
+    </script>
+    @endif
+    
+    @stack('scripts')
 </body>
 </html>

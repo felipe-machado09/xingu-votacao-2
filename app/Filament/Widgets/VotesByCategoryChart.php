@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class VotesByCategoryChart extends ChartWidget
 {
-    protected static ?string $heading = 'Votos por Categoria';
+    protected ?string $heading = 'Votos por Categoria';
 
     protected static ?int $sort = 2;
 

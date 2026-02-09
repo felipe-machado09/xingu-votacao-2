@@ -6,16 +6,17 @@ use App\Filament\Resources\LandingPageSectionResource\Pages;
 use App\Filament\Resources\LandingPageSectionResource\RelationManagers;
 use App\Models\LandingPageSection;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class LandingPageSectionResource extends Resource
 {
     protected static ?string $model = LandingPageSection::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $navigationLabel = 'Seções da Landing';
 
@@ -23,13 +24,13 @@ class LandingPageSectionResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Seções';
 
-    protected static ?string $navigationGroup = 'Conteúdo';
+    protected static string | \UnitEnum | null $navigationGroup = 'Conteúdo';
 
     protected static ?int $navigationSort = 10;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('key')
                     ->label('Chave')
@@ -100,15 +101,16 @@ class LandingPageSectionResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Ativo')
                     ->label('Ativo'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('order');

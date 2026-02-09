@@ -6,16 +6,17 @@ use App\Filament\Resources\WinnerResource\Pages;
 use App\Filament\Resources\WinnerResource\RelationManagers;
 use App\Models\Winner;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class WinnerResource extends Resource
 {
     protected static ?string $model = Winner::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-trophy';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-trophy';
 
     protected static ?string $navigationLabel = 'Ganhadores';
 
@@ -23,13 +24,13 @@ class WinnerResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Ganhadores';
 
-    protected static ?string $navigationGroup = 'Conteúdo';
+    protected static string | \UnitEnum | null $navigationGroup = 'Conteúdo';
 
     protected static ?int $navigationSort = 11;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nome')
@@ -108,12 +109,12 @@ class WinnerResource extends Resource
                     ->label('Ativo'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('order');

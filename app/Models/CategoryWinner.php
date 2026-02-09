@@ -13,6 +13,7 @@ class CategoryWinner extends Model
     protected $fillable = [
         'category_id',
         'company_id',
+        'year',
         'chosen_at',
     ];
 

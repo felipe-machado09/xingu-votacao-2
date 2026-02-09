@@ -5,16 +5,18 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CompanyResource\Pages;
 use App\Models\Company;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Actions;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Table;
 
 class CompanyResource extends Resource
 {
     protected static ?string $model = Company::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $navigationLabel = 'Empresas';
 
@@ -22,29 +24,31 @@ class CompanyResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Empresas';
 
-    protected static ?string $navigationGroup = 'Votação';
+    protected static string | \UnitEnum | null $navigationGroup = 'Votação';
 
     protected static ?int $navigationSort = 2;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('legal_name')
-                    ->label('Raz\u00e3o Social')
+                    ->label('Razão Social')
                     ->required()
                     ->maxLength(255)
                     ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, Forms\Set $set) {
                         $set('slug', \Illuminate\Support\Str::slug($state));
-                    }),
+                    })
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('slug')
                     ->label('Slug (URL)')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255)
                     ->helperText('Usado na URL da página da empresa (ex: /empresa/halvorson-llc)')
-                    ->formatStateUsing(fn ($state) => $state ?? ''),
+                    ->formatStateUsing(fn ($state) => $state ?? '')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('cnpj')
                     ->label('CNPJ')
                     ->required()
@@ -52,19 +56,27 @@ class CompanyResource extends Resource
                     ->rules(['regex:/^\d{14}$/'])
                     ->maxLength(18)
                     ->mask('99.999.999/9999-99')
-                    ->placeholder('00.000.000/0000-00'),
+                    ->placeholder('00.000.000/0000-00')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('responsible_name')
-                    ->label('Nome do Respons\u00e1vel')
+                    ->label('Nome do Responsável')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('responsible_phone')
-                    ->label('Telefone do Respons\u00e1vel')
+                    ->label('Telefone do Responsável')
                     ->tel()
                     ->required()
                     ->mask('(99) 99999-9999')
                     ->placeholder('(00) 00000-0000')
                     ->maxLength(255),
-                Forms\Components\Section::make('Imagens da Empresa')
+                Forms\Components\Select::make('categories')
+                    ->label('Categorias')
+                    ->relationship('categories', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
+                Section::make('Imagens da Empresa')
                     ->schema([
                         Forms\Components\FileUpload::make('logo_path')
                             ->label('Logo')
@@ -99,14 +111,10 @@ class CompanyResource extends Resource
                             ->maxSize(2048)
                             ->helperText('Foto da equipe da empresa (opcional)'),
                     ])
-                    ->columns(2),
-                Forms\Components\Select::make('categories')
-                    ->label('Categorias')
-                    ->relationship('categories', 'name')
-                    ->multiple()
-                    ->preload()
-                    ->searchable(),
-            ]);
+                    ->columns(4)
+                    ->columnSpanFull(),
+            ])
+            ->columns(2);
     }
 
     public static function table(Table $table): Table
@@ -118,7 +126,7 @@ class CompanyResource extends Resource
                     ->disk('public')
                     ->circular(),
                 Tables\Columns\TextColumn::make('legal_name')
-                    ->label('Raz\u00e3o Social')
+                    ->label('Razão Social')
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
@@ -131,7 +139,7 @@ class CompanyResource extends Resource
                     ->badge()
                     ->color('gray'),
                 Tables\Columns\TextColumn::make('responsible_name')
-                    ->label('Respons\u00e1vel')
+                    ->label('Responsável')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('categories_count')
                     ->counts('categories')
@@ -148,12 +156,12 @@ class CompanyResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

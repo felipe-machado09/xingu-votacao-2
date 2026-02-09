@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melhores do Ano 2025 - Vale do Xingu</title>
+    <link rel="icon" type="image/webp" href="{{ asset('img/logo_icon.webp') }}">
+    <link rel="icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <link rel="shortcut icon" type="image/webp" href="{{ asset('img/logo.webp') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -142,13 +146,14 @@
                 <nav class="flex items-center space-x-6">
                     @if(session('audience_id'))
                         <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Votar</a>
+                        <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Sair</button>
                         </form>
                     @else
-                        <a href="{{ route('company.register') }}" class="text-gray-700 hover:text-red-600 font-medium">Sou Empresa</a>
-                        <a href="{{ route('company.login') }}" class="text-gray-700 hover:text-red-600 font-medium">Login Empresa</a>
+                        <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Categorias</a>
+                        <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 font-medium">Login</a>
                         <a href="{{ route('register') }}" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
                     @endif
@@ -224,12 +229,6 @@
                             </svg>
                         </span>
                         <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    </a>
-                    <a href="{{ route('company.register') }}" class="inline-block bg-white text-red-600 border-2 border-red-600 px-10 py-5 rounded-xl text-xl font-bold hover:bg-red-50 transition-all duration-300 transform hover:scale-105 shadow-xl relative overflow-hidden group">
-                        <span class="relative z-10 flex items-center justify-center">
-                            <i class="fas fa-building mr-2"></i>
-                            <span>Sou Empresa</span>
-                        </span>
                     </a>
                 </div>
                 
@@ -331,6 +330,77 @@
                             </iframe>
                         </div>
                     @endif
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prize Promotion Section -->
+    <section class="py-20 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="scroll-slide-left order-2 md:order-1">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                        Seu voto decide.<br>
+                        <span class="text-red-600">E ainda pode virar prêmio.</span>
+                    </h2>
+                    <p class="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
+                        Vote em pelo menos 5 empresas no Melhores do Ano 2025 e participe dos sorteios promovidos pela Vale do Xingu.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Vote gratuitamente</p>
+                                <p class="text-gray-600">Não custa nada participar e concorrer</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Participe automaticamente</p>
+                                <p class="text-gray-600">Ao votar em 5+ empresas, você já está concorrendo</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Prêmios incríveis</p>
+                                <p class="text-gray-600">Eletrodomésticos e muito mais!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('register') }}" class="inline-block bg-gradient-to-r from-red-600 to-red-700 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-red-500/50">
+                        Começar a votar agora
+                        <svg class="w-5 h-5 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Prize Images -->
+                <div class="scroll-slide-right order-1 md:order-2">
+                    <div class="relative">
+                        <div class="bg-white rounded-2xl shadow-2xl p-8 transform hover:scale-105 transition-transform duration-300">
+                            <img src="{{ asset('img/Eletromésticos.webp') }}" 
+                                 alt="Prêmios - Eletrodomésticos" 
+                                 class="w-full h-auto rounded-xl">
+                            <p class="text-center text-sm text-gray-500 mt-4 italic">*Imagens ilustrativas.</p>
+                        </div>
+                        
+                        <!-- Decorative elements -->
+                        <div class="absolute -top-4 -right-4 w-24 h-24 bg-yellow-400 rounded-full opacity-20 blur-2xl"></div>
+                        <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-red-400 rounded-full opacity-20 blur-2xl"></div>
+                    </div>
                 </div>
             </div>
         </div>

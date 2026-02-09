@@ -149,6 +149,7 @@ class CompanyFactory extends Factory
         return [
             'legal_name' => $legalName,
             'slug' => $slug,
+            'email' => fake()->unique()->safeEmail(),
             'cnpj' => $cnpj,
             'responsible_name' => fake()->name(),
             'responsible_phone' => $phone,

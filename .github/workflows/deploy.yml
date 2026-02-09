@@ -1,0 +1,129 @@
+name: Deploy to Hostinger VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Hostinger VPS
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Sync files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: ${{ secrets.HOSTINGER_PORT }}
+          source: "."
+          target: ${{ secrets.APP_PATH }}
+          overwrite: true
+          rm: false
+
+      - name: Deploy with Docker
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: ${{ secrets.HOSTINGER_PORT }}
+          script: |
+            cd ${{ secrets.APP_PATH }}
+
+            echo "🚀 Deploy iniciado em $(date)"
+
+            # Ativar modo de manutenção
+            docker compose exec -T app php artisan down --retry=60 || true
+
+            # Pull das imagens e rebuild
+            docker compose build --no-cache
+            docker compose up -d --remove-orphans
+
+            # Aguardar containers ficarem prontos
+            echo "⏳ Aguardando containers..."
+            sleep 15
+
+            # Rodar migrations
+            docker compose exec -T app php artisan migrate --force
+
+            # Limpar e otimizar cache
+            docker compose exec -T app php artisan config:cache
+            docker compose exec -T app php artisan route:cache
+            docker compose exec -T app php artisan view:cache
+            docker compose exec -T app php artisan storage:link || true
+
+            # Garantir permissões
+            docker compose exec -T app chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+            docker compose exec -T app chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+            # Reiniciar workers de fila
+            docker compose exec -T supervisor supervisorctl restart all || true
+
+            # Desativar modo de manutenção
+            docker compose exec -T app php artisan up
+
+            # Limpar imagens antigas
+            docker image prune -af --filter "until=24h" || true
+
+            echo "✅ Deploy concluído em $(date)"
+
+      - name: Notify Discord on success
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [{
+                "title": "✅ Deploy Realizado com Sucesso!",
+                "description": "O deploy do **Xingu Votos** foi concluído.",
+                "color": 5763719,
+                "fields": [
+                  {"name": "Branch", "value": "`${{ github.ref_name }}`", "inline": true},
+                  {"name": "Commit", "value": "`${{ github.sha }}`", "inline": true},
+                  {"name": "Autor", "value": "${{ github.actor }}", "inline": true}
+                ],
+                "footer": {"text": "GitHub Actions"},
+                "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+              }]
+            }' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Rollback on failure
+        if: failure()
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: ${{ secrets.HOSTINGER_PORT }}
+          script: |
+            cd ${{ secrets.APP_PATH }}
+            docker compose exec -T app php artisan up || true
+            echo "❌ Deploy falhou, aplicação restaurada"
+
+      - name: Notify Discord on failure
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [{
+                "title": "❌ Deploy Falhou!",
+                "description": "O deploy do **Xingu Votos** falhou.",
+                "color": 15548997,
+                "fields": [
+                  {"name": "Branch", "value": "`${{ github.ref_name }}`", "inline": true},
+                  {"name": "Commit", "value": "`${{ github.sha }}`", "inline": true},
+                  {"name": "Autor", "value": "${{ github.actor }}", "inline": true},
+                  {"name": "Logs", "value": "[Ver detalhes](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
+                ],
+                "footer": {"text": "GitHub Actions"},
+                "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+              }]
+            }' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}

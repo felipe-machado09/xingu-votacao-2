@@ -5,17 +5,27 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class ProductionSeeder extends Seeder
 {
     public function run(): void
     {
+        // Gerar todas as permissões do Filament Shield
+        $this->command->call('shield:generate', ['--all' => true]);
+        $this->command->info('✅ Permissões do Shield geradas');
+
         // Criar role de super_admin se não existir
         $superAdminRole = Role::firstOrCreate(
             ['name' => 'super_admin'],
             ['guard_name' => 'web']
         );
+
+        // Atribuir TODAS as permissões ao super_admin
+        $allPermissions = Permission::all();
+        $superAdminRole->syncPermissions($allPermissions);
+        $this->command->info('✅ Todas as permissões atribuídas ao super_admin');
 
         // Criar usuário admin
         $admin = User::firstOrCreate(

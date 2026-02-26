@@ -50,5 +50,12 @@ class ProductionSeeder extends Seeder
         ]);
 
         $this->command->info('✅ Seções da landing page criadas');
+
+        // Importar categorias e empresas dos CSVs
+        $this->call([
+            CsvDataSeeder::class,
+        ]);
+
+        $this->command->info('✅ Categorias e empresas importadas dos CSVs');
     }
 }

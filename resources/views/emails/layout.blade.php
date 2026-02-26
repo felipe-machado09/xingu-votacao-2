@@ -26,7 +26,7 @@
                     {{-- HEADER com Logo --}}
                     <tr>
                         <td align="center" style="padding: 40px 30px 20px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 16px 16px 0 0;">
-                            <img src="{{ asset('img/Logomarca Melhores do Ano Branca.webp') }}"
+                            <img src="{{ url('img/logo-melhores-do-ano-branca.png') }}"
                                  alt="Melhores do Ano 2025"
                                  width="220"
                                  style="display: block; max-width: 220px; height: auto;">

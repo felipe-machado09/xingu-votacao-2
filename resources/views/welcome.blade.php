@@ -874,18 +874,15 @@
         window.addEventListener('load', animateOnScroll);
         animateOnScroll(); // Run once on page load
 
-        // SweetAlert2 para sucesso no cadastro
+        // SweetAlert2 para mensagens de sucesso
         @if(session('success'))
             Swal.fire({
                 icon: 'success',
-                title: '🎉 Cadastro Realizado com Sucesso!',
+                title: '📧 E-mail Enviado!',
                 html: `
                     <div style="text-align: center;">
                         <p style="font-size: 16px; margin-bottom: 20px; color: #374151;">
                             {{ session('success') }}
-                        </p>
-                        <p style="font-size: 14px; color: #6b7280; margin-bottom: 20px;">
-                            Você já está logado e pode começar a usar a plataforma!
                         </p>
                     </div>
                 `,

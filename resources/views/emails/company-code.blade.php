@@ -1,34 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Código de Acesso</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-    <div style="text-align: center; margin-bottom: 30px;">
-        <img src="{{ url('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Melhores do Ano" style="max-height: 80px;">
-    </div>
-    
-    <h1 style="color: #dc2626; text-align: center; margin-bottom: 20px;">Código de Acesso</h1>
-    
-    <p>Olá, <strong>{{ $companyName }}</strong>!</p>
-    
-    <p>Seu código de acesso para entrar na plataforma é:</p>
-    
-    <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 20px; text-align: center; border-radius: 10px; margin: 30px 0;">
-        <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px;">{{ $code }}</div>
-    </div>
-    
-    <p style="color: #666; font-size: 14px;">Este código é válido por <strong>15 minutos</strong>.</p>
-    
-    <p style="color: #666; font-size: 14px; margin-top: 30px;">Se você não solicitou este código, ignore este e-mail.</p>
-    
-    <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-    
-    <p style="color: #999; font-size: 12px; text-align: center;">
-        Melhores do Ano 2025 - Vale do Xingu<br>
-        Este é um e-mail automático, por favor não responda.
+@extends('emails.layout')
+
+@section('title', 'Código de Acesso - Melhores do Ano 2025')
+
+@section('content')
+    {{-- Saudação --}}
+    <p style="margin: 0 0 6px; font-size: 14px; color: #8888a4; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+        Bem-vindo(a)
     </p>
-</body>
-</html>
+    <h1 style="margin: 0 0 24px; font-size: 26px; color: #eeeef5; font-weight: 700; line-height: 1.3;">
+        Olá, {{ $companyName }}!
+    </h1>
+
+    <p style="margin: 0 0 28px; font-size: 15px; color: #a0a0bc; line-height: 1.7;">
+        Você solicitou um código de acesso para entrar na plataforma
+        <strong style="color: #c9a84c;">Melhores do Ano 2025</strong>. Use o código abaixo:
+    </p>
+
+    {{-- Caixa do código --}}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center" style="padding: 28px 20px; background: linear-gradient(135deg, #c9a84c 0%, #e8cc6e 50%, #c9a84c 100%); border-radius: 12px;">
+                <p style="margin: 0 0 8px; font-size: 11px; color: #1a1a2e; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;">
+                    Seu código de acesso
+                </p>
+                <p style="margin: 0; font-size: 42px; font-weight: 800; letter-spacing: 10px; color: #1a1a2e; font-family: 'Courier New', monospace;">
+                    {{ $code }}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{-- Aviso de validade --}}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top: 24px;">
+        <tr>
+            <td style="padding: 14px 18px; background-color: rgba(201, 168, 76, 0.08); border-left: 3px solid #c9a84c; border-radius: 0 8px 8px 0;">
+                <p style="margin: 0; font-size: 13px; color: #c9a84c;">
+                    ⏱ Este código é válido por <strong>15 minutos</strong>.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{-- Aviso de segurança --}}
+    <p style="margin: 28px 0 0; font-size: 13px; color: #555570; line-height: 1.6;">
+        🔒 Se você não solicitou este código, ignore este e-mail. Sua conta permanece segura.
+    </p>
+@endsection

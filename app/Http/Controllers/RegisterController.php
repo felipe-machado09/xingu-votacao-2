@@ -28,7 +28,7 @@ class RegisterController extends Controller
 
         $this->sendMagicLink($audience);
 
-        return redirect()->route('home')->with('success', 'Verifique seu e-mail para o link de acesso.');
+        return redirect()->route('home')->with('success', 'Cadastro realizado com sucesso! Verifique seu e-mail para acessar o link de votação.');
     }
 
     protected function sendMagicLink(Audience $audience): void

@@ -898,20 +898,27 @@
 
         // SweetAlert2 para mensagens de sucesso
         @if(session('success'))
+            @php
+                $msg = session('success');
+                $isEmail = str_contains($msg, 'e-mail') || str_contains($msg, 'email');
+                $isLogout = str_contains($msg, 'desconectado');
+            @endphp
             Swal.fire({
                 icon: 'success',
-                title: '📧 E-mail Enviado!',
+                title: @if($isLogout) '👋 Até logo!' @elseif($isEmail) '📧 E-mail Enviado!' @else '✅ Sucesso!' @endif,
                 html: `
                     <div style="text-align: center;">
                         <p style="font-size: 16px; margin-bottom: 20px; color: #374151;">
-                            {{ session('success') }}
+                            {{ $msg }}
                         </p>
                     </div>
                 `,
                 confirmButtonText: 'Entendi',
                 confirmButtonColor: '#dc2626',
-                allowOutsideClick: false,
-                allowEscapeKey: false
+                timer: {{ $isLogout ? '3000' : 'null' }},
+                timerProgressBar: {{ $isLogout ? 'true' : 'false' }},
+                allowOutsideClick: {{ $isLogout ? 'true' : 'false' }},
+                allowEscapeKey: {{ $isLogout ? 'true' : 'false' }}
             });
         @endif
     </script>

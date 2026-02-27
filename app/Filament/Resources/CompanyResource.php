@@ -53,10 +53,11 @@ class CompanyResource extends Resource
                     ->label('CNPJ')
                     ->required()
                     ->unique(ignoreRecord: true)
-                    ->rules(['regex:/^\d{14}$/'])
                     ->maxLength(18)
                     ->mask('99.999.999/9999-99')
                     ->placeholder('00.000.000/0000-00')
+                    ->dehydrateStateUsing(fn ($state) => preg_replace('/\D/', '', $state))
+                    ->rules([new \App\Rules\ValidCNPJ()])
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('responsible_name')
                     ->label('Nome do Responsável')

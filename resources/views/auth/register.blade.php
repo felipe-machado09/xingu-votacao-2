@@ -79,7 +79,7 @@
     <!-- Main Content -->
     <main class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full animate-fade-in">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 animate-slide-up">
+            <div class="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 md:p-10 animate-slide-up overflow-hidden">
                 <!-- Logo -->
                 <div class="text-center mb-8">
                     <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 mx-auto mb-6">
@@ -154,7 +154,7 @@
                                 name="birth_date"
                                 value="{{ old('birth_date') }}"
                                 required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                                class="w-full min-w-0 max-w-full px-3 sm:px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all box-border"
                             >
                             @error('birth_date')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>

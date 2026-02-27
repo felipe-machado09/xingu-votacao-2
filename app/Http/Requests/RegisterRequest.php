@@ -15,7 +15,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:audiences,email'],
             'birth_date' => ['required', 'date', 'before:today'],
             'phone' => ['required', 'string', 'max:20'],
         ];
@@ -27,6 +27,7 @@ class RegisterRequest extends FormRequest
             'name.required' => 'O nome é obrigatório.',
             'email.required' => 'O e-mail é obrigatório.',
             'email.email' => 'Digite um e-mail válido.',
+            'email.unique' => 'Este e-mail já está cadastrado. Faça login para votar.',
             'birth_date.required' => 'A data de nascimento é obrigatória.',
             'birth_date.before' => 'A data de nascimento deve ser anterior a hoje.',
             'phone.required' => 'O telefone é obrigatório.',

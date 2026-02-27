@@ -183,6 +183,7 @@
                             name="phone"
                             value="{{ old('phone') }}"
                             required
+                            maxlength="15"
                             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                             placeholder="(00) 00000-0000"
                         >
@@ -236,5 +237,24 @@
             </div>
         </div>
     </main>
+
+    <script>
+        // Máscara de telefone (00) 00000-0000
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.substring(0, 11);
+
+            if (value.length > 6) {
+                value = '(' + value.substring(0, 2) + ') ' + value.substring(2, 7) + '-' + value.substring(7);
+            } else if (value.length > 2) {
+                value = '(' + value.substring(0, 2) + ') ' + value.substring(2);
+            } else if (value.length > 0) {
+                value = '(' + value;
+            }
+
+            e.target.value = value;
+        });
+    </script>
 </body>
 </html>

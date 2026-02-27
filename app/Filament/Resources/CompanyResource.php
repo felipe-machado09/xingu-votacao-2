@@ -157,6 +157,11 @@ class CompanyResource extends Resource
                 //
             ])
             ->actions([
+                Actions\Action::make('report')
+                    ->label('Relatório')
+                    ->icon('heroicon-o-chart-bar')
+                    ->color('info')
+                    ->url(fn (Company $record): string => static::getUrl('report', ['record' => $record])),
                 Actions\EditAction::make(),
                 Actions\DeleteAction::make(),
             ])
@@ -178,6 +183,7 @@ class CompanyResource extends Resource
             'index' => Pages\ListCompanies::route('/'),
             'create' => Pages\CreateCompany::route('/create'),
             'edit' => Pages\EditCompany::route('/{record}/edit'),
+            'report' => Pages\CompanyReport::route('/{record}/report'),
         ];
     }
 }

@@ -13,11 +13,20 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        User::create([
+        $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
+            'password' => '123456',
         ]);
+
+        // Generate Shield permissions and assign super_admin
+        $this->command->call('shield:generate', ['--all' => true]);
+
+        $role = \Spatie\Permission\Models\Role::firstOrCreate(
+            ['name' => 'super_admin', 'guard_name' => 'web']
+        );
+        $role->syncPermissions(\Spatie\Permission\Models\Permission::all());
+        $user->assignRole('super_admin');
 
         $this->call([
             CsvDataSeeder::class,

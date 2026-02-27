@@ -29,9 +29,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900">Plataforma de Votação</a>
+                    <a href="{{ route('home') }}" class="text-lg sm:text-xl font-bold text-gray-900">Plataforma de Votação</a>
                 </div>
-                <div class="flex items-center space-x-4">
+                <!-- Mobile menu button -->
+                <button onclick="document.getElementById('app-mobile-menu').classList.toggle('hidden')" class="md:hidden flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <div class="hidden md:flex items-center space-x-4">
                     @if(session('audience_id'))
                         <span class="text-gray-700">{{ session('audience_name') }}</span>
                         <a href="{{ route('vote.index') }}" class="text-blue-600 hover:text-blue-800">Votar</a>
@@ -44,6 +48,22 @@
                         <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800">Entrar</a>
                     @endif
                 </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="app-mobile-menu" class="hidden md:hidden border-t border-gray-200">
+            <div class="px-4 py-3 space-y-2">
+                @if(session('audience_id'))
+                    <span class="block py-2 text-gray-700 font-medium">{{ session('audience_name') }}</span>
+                    <a href="{{ route('vote.index') }}" class="block py-2 text-blue-600 hover:text-blue-800">Votar</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left py-2 text-gray-600 hover:text-gray-800">Sair</button>
+                    </form>
+                @else
+                    <a href="{{ route('register') }}" class="block py-2 text-blue-600 hover:text-blue-800">Cadastrar</a>
+                    <a href="{{ route('login') }}" class="block py-2 text-blue-600 hover:text-blue-800">Entrar</a>
+                @endif
             </div>
         </div>
     </nav>

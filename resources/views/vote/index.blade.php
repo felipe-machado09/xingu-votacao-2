@@ -14,6 +14,24 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ route('vote.index') }}">
+    <meta property="og:title" content="Vote nas Melhores Empresas - Melhores do Ano 2025">
+    <meta property="og:description" content="Escolha suas empresas favoritas do Vale do Xingu! Vote agora e concorra a prêmios exclusivos.">
+    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vote nas Melhores Empresas - Melhores do Ano 2025">
+    <meta name="twitter:description" content="Escolha suas empresas favoritas do Vale do Xingu! Vote agora e concorra a prêmios exclusivos.">
+    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
@@ -43,16 +61,23 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQC4WVT"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    <!-- Countdown -->
+    <x-countdown />
+
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
-                <nav class="flex items-center space-x-6">
+                <!-- Mobile menu button -->
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <nav class="hidden md:flex items-center space-x-6">
                     @if($audience)
                         <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Votar</a>
                         <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
@@ -67,6 +92,24 @@
                         <a href="{{ route('register') }}" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
                     @endif
                 </nav>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+            <div class="px-4 py-3 space-y-2">
+                @if($audience)
+                    <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Votar</a>
+                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left py-2 text-gray-700 hover:text-red-600 font-medium">Sair</button>
+                    </form>
+                @else
+                    <a href="{{ route('home') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Início</a>
+                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
+                    <a href="{{ route('login') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="block py-2 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
+                @endif
             </div>
         </div>
     </header>
@@ -116,42 +159,16 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <!-- Contagem Regressiva -->
-        <div class="mb-8">
-            <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl shadow-2xl p-6 md:p-8 text-white text-center">
-                <h2 class="text-xl md:text-2xl font-bold mb-4">⏰ Votação Encerra em:</h2>
-                <div id="countdown" class="flex justify-center gap-3 md:gap-6 flex-wrap">
-                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 min-w-[80px]">
-                        <div class="text-3xl md:text-4xl font-bold" id="days">00</div>
-                        <div class="text-xs md:text-sm mt-1 opacity-90">Dias</div>
-                    </div>
-                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 min-w-[80px]">
-                        <div class="text-3xl md:text-4xl font-bold" id="hours">00</div>
-                        <div class="text-xs md:text-sm mt-1 opacity-90">Horas</div>
-                    </div>
-                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 min-w-[80px]">
-                        <div class="text-3xl md:text-4xl font-bold" id="minutes">00</div>
-                        <div class="text-xs md:text-sm mt-1 opacity-90">Minutos</div>
-                    </div>
-                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 min-w-[80px]">
-                        <div class="text-3xl md:text-4xl font-bold" id="seconds">00</div>
-                        <div class="text-xs md:text-sm mt-1 opacity-90">Segundos</div>
-                    </div>
-                </div>
-                <p class="mt-4 text-sm md:text-base opacity-90">15 de Março de 2026 - 23:59:59</p>
-            </div>
-        </div>
-
         <!-- Prize Highlight Banner -->
         <div class="mb-8">
             <div class="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 rounded-2xl shadow-2xl overflow-hidden">
                 <div class="grid md:grid-cols-2 gap-6 p-6 md:p-8 items-center">
                     <div class="text-white">
-                        <h2 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
+                        <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
                             Seu voto decide.<br>
                             E ainda pode virar prêmio! 🎁
                         </h2>
-                        <p class="text-lg md:text-xl mb-4 text-white/90">
+                        <p class="text-sm sm:text-lg md:text-xl mb-4 text-white/90">
                             Vote em pelo menos 5 empresas e concorra a prêmios incríveis da Vale do Xingu.
                         </p>
                         @if($audience && isset($votedCategoryIds))
@@ -177,7 +194,7 @@
         </div>
 
         <div class="text-center mb-12 animate-fade-in">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Vote nas Categorias</h1>
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Vote nas Categorias</h1>
             <p class="text-xl text-gray-600">Escolha uma categoria e vote na sua empresa favorita</p>
         </div>
 
@@ -230,7 +247,7 @@
                 <!-- Tier 1: 5 votos -->
                 @if(isset($awardsByTier[1]))
                 <div class="mb-8 @if($audience && $userVotes < 5) opacity-60 @endif">
-                    <div class="flex items-center justify-between mb-4 bg-blue-100 rounded-xl px-6 py-3">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 bg-blue-100 rounded-xl px-4 sm:px-6 py-3">
                         <div>
                             <h3 class="text-xl font-bold text-blue-900">🥉 Nível 1 - Prêmios Básicos</h3>
                             <p class="text-sm text-blue-700">Vote em <strong>5 empresas</strong> para concorrer</p>
@@ -271,7 +288,7 @@
                 <!-- Tier 2: 15 votos -->
                 @if(isset($awardsByTier[2]))
                 <div class="mb-8 @if($audience && $userVotes < 15) opacity-60 @endif">
-                    <div class="flex items-center justify-between mb-4 bg-orange-100 rounded-xl px-6 py-3">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 bg-orange-100 rounded-xl px-4 sm:px-6 py-3">
                         <div>
                             <h3 class="text-xl font-bold text-orange-900">🥈 Nível 2 - Prêmios Intermediários</h3>
                             <p class="text-sm text-orange-700">Vote em <strong>15 empresas</strong> para concorrer</p>
@@ -312,7 +329,7 @@
                 <!-- Tier 3: Todos os votos -->
                 @if(isset($awardsByTier[3]))
                 <div class="@if($audience && $userVotes < $totalCategories) opacity-60 @endif">
-                    <div class="flex items-center justify-between mb-4 bg-gradient-to-r from-yellow-100 via-yellow-200 to-yellow-100 rounded-xl px-6 py-3 shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 bg-gradient-to-r from-yellow-100 via-yellow-200 to-yellow-100 rounded-xl px-4 sm:px-6 py-3 shadow-lg">
                         <div>
                             <h3 class="text-xl font-bold text-yellow-900">🥇 Nível 3 - Prêmio Máximo</h3>
                             <p class="text-sm text-yellow-700">Vote em <strong>TODAS as categorias</strong> para concorrer</p>
@@ -422,32 +439,39 @@
         @endif
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Melhores do Ano 2025</h3>
+                    <p class="text-gray-400 text-sm">
+                        Votação popular, transparente e gratuita das melhores empresas de Altamira.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Início</a></li>
+                        <li><a href="{{ route('vote.index') }}" class="hover:text-white transition">Votação</a></li>
+                        <li><a href="{{ route('winners') }}" class="hover:text-white transition">Vencedores</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contato</h3>
+                    <p class="text-gray-400 text-sm">
+                        Altamira - PA<br>
+                        Vale do Xingu
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; {{ date('Y') }} Melhores do Ano - Vale do Xingu. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // Contagem Regressiva
-        function updateCountdown() {
-            const endDate = new Date('2026-03-15T23:59:59').getTime();
-            const now = new Date().getTime();
-            const distance = endDate - now;
-
-            if (distance < 0) {
-                document.getElementById('countdown').innerHTML = '<div class="text-2xl font-bold">Votação Encerrada!</div>';
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-
         // Carousel de Patrocinadores
         @if(isset($sponsors) && $sponsors->count() > 1)
         let currentSlide = 0;
@@ -482,5 +506,6 @@
         setInterval(nextSlide, 5000);
         @endif
     </script>
+    @stack('scripts')
 </body>
 </html>

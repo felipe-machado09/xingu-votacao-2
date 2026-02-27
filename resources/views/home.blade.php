@@ -15,7 +15,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">Bem-vindo à Plataforma de Votação</h1>
+        <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-4">Bem-vindo à Plataforma de Votação</h1>
         <p class="text-xl text-gray-600">Vote nas suas empresas favoritas em cada categoria</p>
     </div>
 
@@ -24,7 +24,7 @@
     <div class="mb-12">
         <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl shadow-xl p-8">
             <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">🎁 Prêmios para Participantes</h2>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">🎁 Prêmios para Participantes</h2>
                 <p class="text-lg text-gray-700">Vote em no mínimo 5 empresas e concorra aos prêmios!</p>
             </div>
 

@@ -13,6 +13,23 @@
     <title>Cadastro de Empresa - Melhores do Ano 2025</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cadastre sua Empresa - Melhores do Ano 2025">
+    <meta property="og:description" content="Cadastre sua empresa no Melhores do Ano 2025 e participe da maior premiação do Vale do Xingu!">
+    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cadastre sua Empresa - Melhores do Ano 2025">
+    <meta name="twitter:description" content="Cadastre sua empresa no Melhores do Ano 2025 e participe da maior premiação do Vale do Xingu!">
+    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -86,15 +103,15 @@
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
-                <nav class="flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium">Início</a>
-                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 font-medium">Login</a>
+                <nav class="flex items-center space-x-3 sm:space-x-6">
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium text-sm sm:text-base">Início</a>
+                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 font-medium text-sm sm:text-base">Login</a>
                 </nav>
             </div>
         </div>
@@ -102,9 +119,9 @@
 
     <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-8 md:p-12">
             <div class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Cadastro de Empresa</h1>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Cadastro de Empresa</h1>
                 <p class="text-gray-600">Preencha os dados abaixo para participar do Melhores do Ano 2025</p>
             </div>
 
@@ -130,7 +147,7 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center flex-1">
-                        <div class="step-indicator active flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg shadow-md" data-step="1">
+                        <div class="step-indicator active flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 rounded-full font-bold text-sm sm:text-lg shadow-md" data-step="1">
                             <span class="step-number">1</span>
                         </div>
                         <div class="flex-1 h-2 mx-2 bg-gray-200 rounded-full overflow-hidden">
@@ -138,7 +155,7 @@
                         </div>
                     </div>
                     <div class="flex items-center flex-1">
-                        <div class="step-indicator flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg shadow-md" data-step="2">
+                        <div class="step-indicator flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 rounded-full font-bold text-sm sm:text-lg shadow-md" data-step="2">
                             <span class="step-number">2</span>
                         </div>
                         <div class="flex-1 h-2 mx-2 bg-gray-200 rounded-full overflow-hidden">
@@ -146,18 +163,18 @@
                         </div>
                     </div>
                     <div class="flex items-center flex-1">
-                        <div class="step-indicator flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg shadow-md" data-step="3">
+                        <div class="step-indicator flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 rounded-full font-bold text-sm sm:text-lg shadow-md" data-step="3">
                             <span class="step-number">3</span>
                         </div>
                         <div class="flex-1 h-2 mx-2 bg-gray-200 rounded-full overflow-hidden">
                             <div class="step-progress h-full bg-red-600 rounded-full transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
-                    <div class="step-indicator flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg shadow-md" data-step="4">
+                    <div class="step-indicator flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 rounded-full font-bold text-sm sm:text-lg shadow-md" data-step="4">
                         <span class="step-number">4</span>
                     </div>
                 </div>
-                <div class="flex justify-between mt-2 text-xs font-semibold text-gray-600">
+                <div class="flex justify-between mt-2 text-[10px] sm:text-xs font-semibold text-gray-600">
                     <span class="step-label" data-step="1">Dados Básicos</span>
                     <span class="step-label" data-step="2">Endereço</span>
                     <span class="step-label" data-step="3">Logo & Categorias</span>

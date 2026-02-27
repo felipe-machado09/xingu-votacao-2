@@ -21,11 +21,16 @@
     <meta property="og:title" content="{{ $category->name }} - Vote na sua empresa favorita">
     <meta property="og:description" content="{{ $category->description ?? 'Vote na sua empresa favorita nesta categoria' }}">
     <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $category->name }} - Vote na sua empresa favorita">
     <meta name="twitter:description" content="{{ $category->description ?? 'Vote na sua empresa favorita nesta categoria' }}">
+    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -63,13 +68,17 @@
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
-                <nav class="flex items-center space-x-6">
+                <!-- Mobile menu button -->
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <nav class="hidden md:flex items-center space-x-6">
                     <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Categorias</a>
                     <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                     @if($audience)
@@ -84,13 +93,29 @@
                 </nav>
             </div>
         </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+            <div class="px-4 py-3 space-y-2">
+                <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Categorias</a>
+                <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
+                @if($audience)
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left py-2 text-gray-700 hover:text-red-600 font-medium">Sair</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="block py-2 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
+                @endif
+            </div>
+        </div>
     </header>
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Category Header -->
         <div class="text-center mb-12 animate-fade-in">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">{{ $category->name }}</h1>
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">{{ $category->name }}</h1>
             @if($category->description)
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{ $category->description }}</p>
             @endif
@@ -219,6 +244,38 @@
         @endif
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Melhores do Ano 2025</h3>
+                    <p class="text-gray-400 text-sm">
+                        Votação popular, transparente e gratuita das melhores empresas de Altamira.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Início</a></li>
+                        <li><a href="{{ route('vote.index') }}" class="hover:text-white transition">Votação</a></li>
+                        <li><a href="{{ route('winners') }}" class="hover:text-white transition">Vencedores</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contato</h3>
+                    <p class="text-gray-400 text-sm">
+                        Altamira - PA<br>
+                        Vale do Xingu
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; {{ date('Y') }} Melhores do Ano - Vale do Xingu. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         function shareCategory() {
             const url = '{{ route('vote.show', $category) }}';
@@ -233,7 +290,15 @@
                 });
             } else {
                 navigator.clipboard.writeText(url).then(() => {
-                    alert('Link copiado para a área de transferência!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Link copiado!',
+                        text: 'O link da categoria foi copiado para a área de transferência.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc2626',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
                 }).catch(() => {
                     const textarea = document.createElement('textarea');
                     textarea.value = url;
@@ -241,7 +306,15 @@
                     textarea.select();
                     document.execCommand('copy');
                     document.body.removeChild(textarea);
-                    alert('Link copiado para a área de transferência!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Link copiado!',
+                        text: 'O link da categoria foi copiado para a área de transferência.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc2626',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
                 });
             }
         }

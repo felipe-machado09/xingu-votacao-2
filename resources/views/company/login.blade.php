@@ -13,17 +13,41 @@
     <title>Login de Empresa - Melhores do Ano 2025</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Área da Empresa - Melhores do Ano 2025">
+    <meta property="og:description" content="Acesse a área da sua empresa no Melhores do Ano 2025 - Vale do Xingu.">
+    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Área da Empresa - Melhores do Ano 2025">
+    <meta name="twitter:description" content="Acesse a área da sua empresa no Melhores do Ano 2025 - Vale do Xingu.">
+    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .code-input {
-            width: 60px;
-            height: 70px;
-            font-size: 32px;
+            width: 45px;
+            height: 55px;
+            font-size: 24px;
             text-align: center;
             border: 2px solid #d1d5db;
             border-radius: 0.5rem;
             font-weight: bold;
+        }
+        @media (min-width: 640px) {
+            .code-input {
+                width: 60px;
+                height: 70px;
+                font-size: 32px;
+            }
         }
         .code-input:focus {
             border-color: #dc2626;
@@ -43,15 +67,15 @@
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
-                <nav class="flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium">Início</a>
-                    <a href="{{ route('company.register') }}" class="text-gray-700 hover:text-red-600 font-medium">Cadastrar Empresa</a>
+                <nav class="flex items-center space-x-3 sm:space-x-6">
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium text-sm sm:text-base">Início</a>
+                    <a href="{{ route('company.register') }}" class="text-gray-700 hover:text-red-600 font-medium text-sm sm:text-base">Cadastrar Empresa</a>
                 </nav>
             </div>
         </div>
@@ -59,12 +83,12 @@
 
     <!-- Main Content -->
     <main class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-8 md:p-12">
             <div class="text-center mb-8">
                 <div class="mb-6">
                     <i class="fas fa-building text-red-600 text-5xl mb-4"></i>
                 </div>
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Login de Empresa</h1>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Login de Empresa</h1>
                 <p class="text-gray-600">Digite seu e-mail para receber o código de acesso</p>
             </div>
 
@@ -138,7 +162,7 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-4 text-center">
                             Digite o código de 6 dígitos enviado para seu e-mail
                         </label>
-                        <div class="flex justify-center gap-3 mb-4">
+                        <div class="flex justify-center gap-1.5 sm:gap-3 mb-4">
                             <input type="text"
                                    id="code-1"
                                    class="code-input"

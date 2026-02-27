@@ -20,8 +20,19 @@
     <meta property="og:title" content="Vencedores - Melhores do Ano {{ $year }}">
     <meta property="og:description" content="Conheça os vencedores do Melhores do Ano {{ $year }}">
     <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vencedores - Melhores do Ano {{ $year }}">
+    <meta name="twitter:description" content="Conheça os vencedores do Melhores do Ano {{ $year }}">
+    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -56,13 +67,17 @@
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
-                <nav class="flex items-center space-x-6">
+                <!-- Mobile menu button -->
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <nav class="hidden md:flex items-center space-x-6">
                     <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium">Início</a>
                     <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Categorias</a>
                     @if($audience)
@@ -76,15 +91,30 @@
                 </nav>
             </div>
         </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+            <div class="px-4 py-3 space-y-2">
+                <a href="{{ route('home') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Início</a>
+                <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Categorias</a>
+                @if($audience)
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left py-2 text-gray-700 hover:text-red-600 font-medium">Sair</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Login</a>
+                @endif
+            </div>
+        </div>
     </header>
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-red-600 to-red-700 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center animate-fade-in">
-                <img src="{{ asset('img/Logomarca Melhores do Ano Branca.webp') }}" alt="Logo" class="h-32 mx-auto mb-8">
-                <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Melhores empresas de Altamira em {{ $year }}</h1>
-                <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed">
+                <img src="{{ asset('img/Logomarca Melhores do Ano Branca.webp') }}" alt="Logo" class="h-20 sm:h-32 mx-auto mb-6 sm:mb-8">
+                <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">Melhores empresas de Altamira em {{ $year }}</h1>
+                <p class="text-base sm:text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed">
                     Após um processo de votação popular, transparente e gratuito, a população de Altamira escolheu as empresas que mais se destacaram em seus segmentos ao longo de {{ $year }}.
                 </p>
             </div>
@@ -94,18 +124,18 @@
     <!-- Statistics Section -->
     <section class="bg-white py-12 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 text-center">
                 <div class="animate-slide-up">
-                    <div class="text-4xl md:text-5xl font-bold text-red-600 mb-2">{{ number_format($totalVotes, 0, ',', '.') }}+</div>
-                    <div class="text-gray-600 text-sm md:text-base">votos auditados</div>
+                    <div class="text-2xl sm:text-4xl md:text-5xl font-bold text-red-600 mb-2">{{ number_format($totalVotes, 0, ',', '.') }}+</div>
+                    <div class="text-gray-600 text-xs sm:text-sm md:text-base">votos auditados</div>
                 </div>
                 <div class="animate-slide-up" style="animation-delay: 0.1s;">
-                    <div class="text-4xl md:text-5xl font-bold text-red-600 mb-2">{{ $totalCompanies }}+</div>
-                    <div class="text-gray-600 text-sm md:text-base">empresas participantes</div>
+                    <div class="text-2xl sm:text-4xl md:text-5xl font-bold text-red-600 mb-2">{{ $totalCompanies }}+</div>
+                    <div class="text-gray-600 text-xs sm:text-sm md:text-base">empresas participantes</div>
                 </div>
                 <div class="animate-slide-up" style="animation-delay: 0.2s;">
-                    <div class="text-4xl md:text-5xl font-bold text-red-600 mb-2">{{ $totalCategories }}+</div>
-                    <div class="text-gray-600 text-sm md:text-base">segmentos votados</div>
+                    <div class="text-2xl sm:text-4xl md:text-5xl font-bold text-red-600 mb-2">{{ $totalCategories }}+</div>
+                    <div class="text-gray-600 text-xs sm:text-sm md:text-base">segmentos votados</div>
                 </div>
                 <div class="animate-slide-up" style="animation-delay: 0.3s;">
                     <div class="text-4xl md:text-5xl font-bold text-red-600 mb-2">
@@ -171,13 +201,13 @@
                     </div>
                 </div>
 
-                <div class="flex justify-between items-center">
-                    <button type="submit" class="bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-700 transition-colors">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <button type="submit" class="w-full sm:w-auto bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-700 transition-colors">
                         🔍 Buscar
                     </button>
 
-                    <div class="flex gap-2">
-                        <span class="text-sm text-gray-600 mr-3">Acesso rápido:</span>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-sm text-gray-600 mr-1 sm:mr-3">Acesso rápido:</span>
                         @foreach($availableYears->take(3) as $quickYear)
                             <a href="{{ route('winners', ['year' => $quickYear]) }}"
                                class="px-4 py-2 {{ $year == $quickYear ? 'bg-red-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100' }} border border-gray-300 rounded-lg font-semibold transition-colors">
@@ -340,7 +370,7 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-8">
                 <div>
                     <h3 class="text-lg font-bold mb-4">Melhores do Ano {{ $year }}</h3>
                     <p class="text-gray-400 text-sm">
@@ -379,7 +409,31 @@
                 navigator.share({ title: title, text: text, url: url });
             } else {
                 navigator.clipboard.writeText(url).then(() => {
-                    alert('Link copiado para a área de transferência!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Link copiado!',
+                        text: 'O link dos vencedores foi copiado para a área de transferência.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc2626',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                }).catch(() => {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = url;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Link copiado!',
+                        text: 'O link dos vencedores foi copiado para a área de transferência.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc2626',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
                 });
             }
         }

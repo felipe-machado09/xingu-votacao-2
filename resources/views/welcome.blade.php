@@ -196,15 +196,19 @@
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     @if($sections['hero']->image ?? null)
-                        <img src="{{ asset('storage/' . $sections['hero']->image) }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('storage/' . $sections['hero']->image) }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     @else
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     @endif
                 </div>
-                <nav class="flex items-center space-x-6">
+                <!-- Mobile menu button -->
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <nav class="hidden md:flex items-center space-x-6">
                     @if(session('audience_id'))
                         <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Votar</a>
                         <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
@@ -221,33 +225,51 @@
                 </nav>
             </div>
         </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+            <div class="px-4 py-3 space-y-2">
+                @if(session('audience_id'))
+                    <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Votar</a>
+                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left py-2 text-gray-700 hover:text-red-600 font-medium">Sair</button>
+                    </form>
+                @else
+                    <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Categorias</a>
+                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
+                    <a href="{{ route('login') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="block py-2 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
+                @endif
+            </div>
+        </div>
     </header>
 
     <!-- Countdown -->
     @if($votingEndDate)
     <section class="bg-red-600 text-white py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-center space-x-8">
-                <span class="font-bold text-lg">{{ $sections['countdown']->title ?? 'Encerra em' }}:</span>
-                <div id="countdown" class="flex items-center space-x-4 text-2xl font-bold">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8">
+                <span class="font-bold text-base sm:text-lg">{{ $sections['countdown']->title ?? 'Encerra em' }}:</span>
+                <div id="countdown" class="flex items-center space-x-3 sm:space-x-4 text-xl sm:text-2xl font-bold">
                     <div class="flex flex-col items-center">
-                        <span id="days" class="text-3xl">00</span>
-                        <span class="text-sm">DD</span>
+                        <span id="days" class="text-2xl sm:text-3xl">00</span>
+                        <span class="text-xs sm:text-sm">DD</span>
                     </div>
                     <span>|</span>
                     <div class="flex flex-col items-center">
-                        <span id="hours" class="text-3xl">00</span>
-                        <span class="text-sm">HH</span>
+                        <span id="hours" class="text-2xl sm:text-3xl">00</span>
+                        <span class="text-xs sm:text-sm">HH</span>
                     </div>
                     <span>|</span>
                     <div class="flex flex-col items-center">
-                        <span id="minutes" class="text-3xl">00</span>
-                        <span class="text-sm">MM</span>
+                        <span id="minutes" class="text-2xl sm:text-3xl">00</span>
+                        <span class="text-xs sm:text-sm">MM</span>
                     </div>
                     <span>|</span>
                     <div class="flex flex-col items-center">
-                        <span id="seconds" class="text-3xl">00</span>
-                        <span class="text-sm">SS</span>
+                        <span id="seconds" class="text-2xl sm:text-3xl">00</span>
+                        <span class="text-xs sm:text-sm">SS</span>
                     </div>
                 </div>
             </div>
@@ -256,7 +278,7 @@
     @endif
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-red-50 via-white to-red-50 py-24 md:py-32 overflow-hidden">
+    <section class="relative bg-gradient-to-br from-red-50 via-white to-red-50 py-12 sm:py-24 md:py-32 overflow-hidden">
         <!-- Decorative elements -->
         <div class="absolute inset-0 opacity-5">
             <div class="absolute top-0 left-0 w-96 h-96 bg-red-500 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
@@ -267,22 +289,22 @@
             <div class="text-center">
                 <!-- Logo -->
                 <div class="mb-10 animate-fade-in">
-                    <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-32 md:h-40 mx-auto drop-shadow-lg">
+                    <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 sm:h-32 md:h-40 mx-auto drop-shadow-lg">
                 </div>
 
                 <!-- Headline -->
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight animate-slide-up">
+                <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight animate-slide-up">
                     <span class="block">{{ $sections['hero']->title ?? 'A votação dos Melhores do Ano 2025 de Altamira já começou!' }}</span>
                 </h1>
 
                 <!-- Subtitle -->
-                <p class="text-xl md:text-2xl lg:text-3xl text-gray-700 mb-10 max-w-3xl mx-auto font-medium leading-relaxed animate-slide-up-delay">
+                <p class="text-base sm:text-xl md:text-2xl lg:text-3xl text-gray-700 mb-8 sm:mb-10 max-w-3xl mx-auto font-medium leading-relaxed animate-slide-up-delay">
                     {{ $sections['hero']->content ?? 'Aqui, prêmio não se compra. Se decide no voto.' }}
                 </p>
 
                 <!-- CTA Buttons -->
                 <div class="animate-slide-up-delay-2 flex flex-col sm:flex-row gap-4 items-center justify-center">
-                    <a href="{{ route('register') }}" class="inline-block bg-gradient-to-r from-red-600 to-red-700 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-red-500/50 relative overflow-hidden group">
+                    <a href="{{ route('register') }}" class="inline-block bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 sm:px-10 sm:py-5 rounded-xl text-lg sm:text-xl font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-red-500/50 relative overflow-hidden group">
                         <span class="relative z-10 flex items-center justify-center">
                             <span>Clique pra votar</span>
                             <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,7 +357,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="scroll-slide-left">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                         {{ $sections['about']->title ?? 'Entenda por que este prêmio é diferente.' }}
                     </h2>
                     <div class="prose prose-lg max-w-none text-gray-700 space-y-4">
@@ -402,11 +424,11 @@
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <!-- Text Content -->
                 <div class="scroll-slide-left order-2 md:order-1">
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                    <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
                         Seu voto decide.<br>
                         <span class="text-red-600">E ainda pode virar prêmio.</span>
                     </h2>
-                    <p class="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
+                    <p class="text-base sm:text-xl md:text-2xl text-gray-700 mb-6 sm:mb-8 leading-relaxed">
                         Vote em pelo menos 5 empresas no Melhores do Ano 2025 e participe dos sorteios promovidos pela Vale do Xingu.
                     </p>
 
@@ -472,7 +494,7 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 scroll-slide-up">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Categorias em Votação</h2>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Categorias em Votação</h2>
                 <p class="text-xl text-gray-600">Escolha uma categoria e vote na sua empresa favorita</p>
             </div>
 
@@ -522,7 +544,7 @@
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16 scroll-slide-up">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                <h2 class="text-2xl sm:text-4xl md:text-5xl font-bold mb-4">
                     {{ $sections['stats']->title ?? 'O prêmio que tem credibilidade no mercado' }}
                 </h2>
                 <p class="text-xl md:text-2xl text-red-100">
@@ -530,34 +552,34 @@
                 </p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="0">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-12">
+                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 sm:p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="0">
                     <div class="mb-4 transform transition-transform hover:scale-110">
-                        <svg class="w-16 h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-10 h-10 sm:w-16 sm:h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <div class="text-5xl font-extrabold mb-3 text-white">+18 mil</div>
-                    <div class="text-lg font-semibold text-red-100">votos auditados</div>
+                    <div class="text-3xl sm:text-3xl sm:text-5xl font-extrabold mb-3 text-white">+18 mil</div>
+                    <div class="text-sm sm:text-lg font-semibold text-red-100">votos auditados</div>
                 </div>
 
-                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="100">
+                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 sm:p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="100">
                     <div class="mb-4 transform transition-transform hover:scale-110">
-                        <svg class="w-16 h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-10 h-10 sm:w-16 sm:h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H9m10 0v-5.372a2.25 2.25 0 00-.488-1.398l-4.5-5.25a2.25 2.25 0 00-1.024-.786H10.5a2.25 2.25 0 00-2.25 2.25v5.372"></path>
                         </svg>
                     </div>
-                    <div class="text-5xl font-extrabold mb-3 text-white">+200</div>
-                    <div class="text-lg font-semibold text-red-100">empresas participantes</div>
+                    <div class="text-3xl sm:text-5xl font-extrabold mb-3 text-white">+200</div>
+                    <div class="text-sm sm:text-lg font-semibold text-red-100">empresas participantes</div>
                 </div>
 
-                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="200">
+                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 sm:p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 shadow-xl scroll-scale" data-delay="200">
                     <div class="mb-4 transform transition-transform hover:scale-110">
-                        <svg class="w-16 h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-10 h-10 sm:w-16 sm:h-16 mx-auto text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                         </svg>
                     </div>
-                    <div class="text-5xl font-extrabold mb-3 text-white">+50</div>
+                    <div class="text-3xl sm:text-5xl font-extrabold mb-3 text-white">+50</div>
                     <div class="text-lg font-semibold text-red-100">segmentos votados</div>
                 </div>
 
@@ -593,7 +615,7 @@
             </div>
 
             @if($winners->count() > 0)
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-12">
                 @foreach($winners as $index => $winner)
                 <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 scroll-scale" data-delay="{{ $index * 100 }}">
                     @if($winner->image)
@@ -624,7 +646,7 @@
                 @endforeach
             </div>
             @else
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-12">
                 @for($i = 0; $i < 8; $i++)
                 <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md">
                     <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
@@ -728,7 +750,7 @@
     <!-- Footer -->
     <footer class="bg-gradient-to-b from-gray-50 to-white border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12">
                 <!-- Logo -->
                 <div class="md:col-span-1">
                     <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 mb-6">

@@ -13,6 +13,23 @@
     <title>Entrar - Melhores do Ano 2025</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Entrar - Melhores do Ano 2025">
+    <meta property="og:description" content="Faça login para votar nas melhores empresas do Vale do Xingu e concorra a prêmios!">
+    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Entrar - Melhores do Ano 2025">
+    <meta name="twitter:description" content="Faça login para votar nas melhores empresas do Vale do Xingu e concorra a prêmios!">
+    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
@@ -45,15 +62,15 @@
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
-                <nav class="flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium">Voltar</a>
-                    <a href="{{ route('register') }}" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
+                <nav class="flex items-center space-x-3 sm:space-x-6">
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium text-sm sm:text-base">Voltar</a>
+                    <a href="{{ route('register') }}" class="bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-red-700 font-medium text-sm sm:text-base">Cadastrar-se</a>
                 </nav>
             </div>
         </div>
@@ -66,7 +83,7 @@
                 <!-- Logo -->
                 <div class="text-center mb-8">
                     <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 mx-auto mb-6">
-                    <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Entrar</h1>
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Entrar</h1>
                     <p class="text-gray-600">Digite seu e-mail e enviaremos um link de acesso</p>
                 </div>
 

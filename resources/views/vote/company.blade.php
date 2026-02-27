@@ -21,7 +21,13 @@
     <meta property="og:description" content="Estamos participando do Melhores do Ano 2025! Vote em {{ $company->legal_name }} e nos ajude a ganhar!">
     @if($company->logo_path)
         <meta property="og:image" content="{{ asset('storage/' . $company->logo_path) }}">
+    @else
+        <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
     @endif
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Melhores do Ano - Vale do Xingu">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -30,9 +36,12 @@
     <meta name="twitter:description" content="Estamos participando do Melhores do Ano 2025! Vote em {{ $company->legal_name }} e nos ajude a ganhar!">
     @if($company->logo_path)
         <meta name="twitter:image" content="{{ asset('storage/' . $company->logo_path) }}">
+    @else
+        <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
     @endif
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @keyframes fadeIn {
@@ -86,13 +95,17 @@
     <!-- Header -->
     <header class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-14">
+                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-14">
                     </a>
                 </div>
-                <nav class="flex items-center space-x-6">
+                <!-- Mobile menu button -->
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <nav class="hidden md:flex items-center space-x-6">
                     <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium transition-colors">Categorias</a>
                     @if($audience)
                         <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -106,6 +119,21 @@
                 </nav>
             </div>
         </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+            <div class="px-4 py-3 space-y-2">
+                <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Categorias</a>
+                @if($audience)
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left py-2 text-gray-700 hover:text-red-600 font-medium">Sair</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="block py-2 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
+                @endif
+            </div>
+        </div>
     </header>
 
     <!-- Hero Section -->
@@ -113,23 +141,23 @@
         <div class="absolute inset-0 opacity-10">
             <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
         </div>
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
             <div class="text-center animate-fade-in">
                 @if($company->logo_path)
-                    <div class="mb-8 animate-scale-in">
-                        <div class="inline-block bg-white rounded-2xl p-6 shadow-2xl transform hover:scale-105 transition-transform duration-300">
-                            <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->legal_name }}" class="h-32 md:h-40 object-contain">
+                    <div class="mb-6 sm:mb-8 animate-scale-in">
+                        <div class="inline-block bg-white rounded-2xl p-4 sm:p-6 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                            <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->legal_name }}" class="h-20 sm:h-32 md:h-40 object-contain">
                         </div>
                     </div>
                 @endif
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 animate-slide-up">
+                <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 animate-slide-up">
                     {{ $company->legal_name }}
                 </h1>
-                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6 animate-slide-up">
+                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-6 animate-slide-up">
                     <i class="fas fa-trophy text-yellow-300"></i>
-                    <p class="text-lg md:text-xl font-semibold">Participante do Melhores do Ano 2025</p>
+                    <p class="text-sm sm:text-lg md:text-xl font-semibold">Participante do Melhores do Ano 2025</p>
                 </div>
-                <p class="text-xl md:text-2xl text-red-100 max-w-3xl mx-auto animate-slide-up">
+                <p class="text-base sm:text-xl md:text-2xl text-red-100 max-w-3xl mx-auto animate-slide-up">
                     Ajude-nos a ganhar! Vote em {{ $company->legal_name }} nas categorias em que participamos.
                 </p>
             </div>
@@ -384,12 +412,28 @@
                 // Fallback: copiar para área de transferência
                 setTimeout(() => {
                     copyToClipboard(instagramText);
-                    showNotification('Link copiado! Cole no Instagram Stories ou Feed', 'info');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Link copiado!',
+                        text: 'Cole no Instagram Stories ou Feed.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc2626',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
                 }, 500);
             } else {
                 // Desktop: copiar e instruir
                 copyToClipboard(instagramText);
-                showNotification('Link copiado! Abra o Instagram e cole no seu Stories ou Feed', 'info');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Link copiado!',
+                    text: 'Abra o Instagram e cole no seu Stories ou Feed.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#dc2626',
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
             }
         }
 
@@ -407,28 +451,15 @@
 
         function copyLink() {
             copyToClipboard(url);
-            showNotification('Link copiado para a área de transferência!', 'success');
-        }
-
-        function showNotification(message, type = 'success') {
-            const colors = {
-                success: 'bg-green-600',
-                info: 'bg-blue-600',
-                warning: 'bg-yellow-600'
-            };
-
-            const notification = document.createElement('div');
-            notification.className = `fixed top-24 right-4 ${colors[type] || colors.success} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2 animate-slide-up`;
-            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i><span>${message}</span>`;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 4000);
+            Swal.fire({
+                icon: 'success',
+                title: 'Link copiado!',
+                text: 'O link foi copiado para a área de transferência.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#dc2626',
+                timer: 3000,
+                timerProgressBar: true,
+            });
         }
     </script>
 </body>

@@ -3,23 +3,26 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Company;
+use App\Models\Vote;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\DB;
 
 class TopCompaniesTable extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 7;
 
     protected int | string | array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
         return $table
-            ->heading('Top 10 Empresas Mais Votadas')
+            ->heading('🏆 Top 10 Empresas Mais Votadas')
             ->query(
                 Company::query()
                     ->withCount('votes')
+                    ->withCount('categories')
                     ->orderByDesc('votes_count')
                     ->limit(10)
             )
@@ -39,31 +42,45 @@ class TopCompaniesTable extends BaseWidget
                     ->color(fn (string $state): string => match ($state) {
                         '1' => 'warning',
                         '2' => 'gray',
-                        '3' => 'orange',
+                        '3' => 'danger',
                         default => 'primary',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        '1' => '🥇 1º',
+                        '2' => '🥈 2º',
+                        '3' => '🥉 3º',
+                        default => $state . 'º',
                     }),
-                
+
                 Tables\Columns\ImageColumn::make('logo_path')
                     ->label('Logo')
                     ->disk('public')
-                    ->circular(),
-                
+                    ->circular()
+                    ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->legal_name) . '&background=ef4444&color=fff&size=40'),
+
                 Tables\Columns\TextColumn::make('legal_name')
                     ->label('Empresa')
                     ->searchable()
-                    ->weight('bold'),
-                
+                    ->weight('bold')
+                    ->description(fn ($record) => $record->address_city ? "{$record->address_city}/{$record->address_state}" : null),
+
                 Tables\Columns\TextColumn::make('votes_count')
                     ->label('Total de Votos')
                     ->badge()
                     ->color('success')
-                    ->sortable(),
-                
+                    ->sortable()
+                    ->formatStateUsing(fn ($state) => number_format($state, 0, ',', '.')),
+
+                Tables\Columns\TextColumn::make('today_votes')
+                    ->label('Hoje')
+                    ->state(fn ($record) => Vote::where('company_id', $record->id)->whereDate('created_at', today())->count())
+                    ->badge()
+                    ->color(fn ($state) => $state > 0 ? 'info' : 'gray'),
+
                 Tables\Columns\TextColumn::make('categories_count')
-                    ->counts('categories')
                     ->label('Categorias')
                     ->badge()
-                    ->color('info'),
+                    ->color('warning'),
             ])
             ->paginated(false);
     }

@@ -56,13 +56,7 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                \App\Filament\Widgets\StatsOverview::class,
-                \App\Filament\Widgets\VotesByCategoryChart::class,
-                \App\Filament\Widgets\VotesOverTimeChart::class,
-                \App\Filament\Widgets\TopCompaniesTable::class,
-                \App\Filament\Widgets\RecentVotesTable::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

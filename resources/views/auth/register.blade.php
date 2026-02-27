@@ -52,6 +52,19 @@
         .animate-slide-up {
             animation: slideUp 0.8s ease-out;
         }
+        /* Fix iOS date input */
+        input[type="date"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            min-height: 48px;
+        }
+        /* Prevent iOS zoom on input focus */
+        @media screen and (max-width: 640px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-50 via-white to-red-50 min-h-screen">
@@ -77,14 +90,14 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full animate-fade-in">
-            <div class="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 md:p-10 animate-slide-up overflow-hidden">
+    <main class="flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-md animate-fade-in">
+            <div class="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 md:p-10 animate-slide-up">
                 <!-- Logo -->
-                <div class="text-center mb-8">
-                    <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 mx-auto mb-6">
-                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Cadastrar-se</h1>
-                    <p class="text-gray-600">Preencha seus dados para começar a votar</p>
+                <div class="text-center mb-6 sm:mb-8">
+                    <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-16 sm:h-20 mx-auto mb-4 sm:mb-6">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Cadastrar-se</h1>
+                    <p class="text-gray-600 text-sm sm:text-base">Preencha seus dados para começar a votar</p>
                 </div>
 
                 @if(session('success'))
@@ -143,41 +156,39 @@
                         @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="birth_date" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Data de Nascimento
-                            </label>
-                            <input
-                                type="date"
-                                id="birth_date"
-                                name="birth_date"
-                                value="{{ old('birth_date') }}"
-                                required
-                                class="w-full min-w-0 max-w-full px-3 sm:px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all box-border"
-                            >
-                            @error('birth_date')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div>
+                        <label for="birth_date" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Data de Nascimento
+                        </label>
+                        <input
+                            type="date"
+                            id="birth_date"
+                            name="birth_date"
+                            value="{{ old('birth_date') }}"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                        >
+                        @error('birth_date')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <div>
-                            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Telefone
-                            </label>
-                            <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                value="{{ old('phone') }}"
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
-                                placeholder="(00) 00000-0000"
-                            >
-                            @error('phone')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Telefone
+                        </label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            value="{{ old('phone') }}"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                            placeholder="(00) 00000-0000"
+                        >
+                        @error('phone')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <button

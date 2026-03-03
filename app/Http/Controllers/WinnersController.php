@@ -18,7 +18,7 @@ class WinnersController extends Controller
         $audience = $audienceId ? Audience::find($audienceId) : null;
 
         // Filtros
-        $year = $request->get('year', date('Y'));
+        $year = $request->get('year', 2025);
         $categoryId = $request->get('category');
         $search = $request->get('search');
 

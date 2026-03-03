@@ -1,3 +1,7 @@
+@php
+    $countdownSection = \App\Models\LandingPageSection::getByKey('countdown');
+    $endDate = $countdownSection?->metadata['end_date'] ?? '2026-03-15T23:59:59';
+@endphp
 <div class="min-h-[80px] sm:min-h-[100px]">
     <div class="bg-gradient-to-r from-red-600 to-red-700 shadow-2xl text-white text-center flex items-center justify-center h-full px-2 sm:px-4 py-3 sm:py-4">
         <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 justify-center">
@@ -29,7 +33,7 @@
 <script>
 (function() {
     function updateCountdown() {
-        const endDate = new Date('2026-03-15T23:59:59').getTime();
+        const endDate = new Date('{{ $endDate }}').getTime();
         const now = new Date().getTime();
         const distance = endDate - now;
 

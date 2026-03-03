@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BiDashboardController;
 use App\Http\Controllers\CompanyLoginController;
 use App\Http\Controllers\CompanyRegisterController;
 use App\Http\Controllers\HomeController;
@@ -14,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home.old');
 Route::get('/vencedores', [WinnersController::class, 'index'])->name('winners');
+
+// BI Dashboard para TV
+Route::get('/bi', [BiDashboardController::class, 'index'])->name('bi.dashboard');
+Route::get('/bi/data', [BiDashboardController::class, 'data'])->name('bi.data');
+Route::post('/bi/request-code', [BiDashboardController::class, 'requestCode'])->name('bi.request-code');
+Route::get('/bi/check-auth', [BiDashboardController::class, 'checkAuth'])->name('bi.check-auth');
 
 Route::middleware('throttle:5,1')->group(function () {
     Route::get('/register', [RegisterController::class, 'show'])->name('register');

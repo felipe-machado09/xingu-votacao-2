@@ -56,11 +56,17 @@ class LandingPageSectionResource extends Resource
                     ->label('URL do Vídeo')
                     ->url()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('metadata.end_date')
+                Forms\Components\DateTimePicker::make('countdown_end_date')
                     ->label('Data de Encerramento da Votação')
                     ->helperText('Data e hora em que a votação será encerrada (exibida no countdown)')
                     ->seconds(false)
-                    ->visible(fn ($record) => $record?->key === 'countdown'),
+                    ->visible(fn ($record) => $record?->key === 'countdown')
+                    ->afterStateHydrated(function ($component, $record) {
+                        if ($record && $record->key === 'countdown') {
+                            $component->state($record->metadata['end_date'] ?? null);
+                        }
+                    })
+                    ->dehydrated(false),
                 Forms\Components\KeyValue::make('metadata')
                     ->label('Metadados')
                     ->keyLabel('Chave')

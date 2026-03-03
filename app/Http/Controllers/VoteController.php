@@ -39,15 +39,34 @@ class VoteController extends Controller
         $audience = $audienceId ? Audience::find($audienceId) : null;
 
         $userVote = null;
+        $nextCategory = null;
+        $totalCategories = 0;
+        $votedCount = 0;
+
         if ($audience) {
             $userVote = Vote::where('audience_id', $audience->id)
                 ->where('category_id', $category->id)
+                ->first();
+
+            // Progresso de votação
+            $votedCategoryIds = $audience->votes()->pluck('category_id')->toArray();
+            $openCategories = Category::open()->orderBy('name')->get();
+            $totalCategories = $openCategories->count();
+            $votedCount = $openCategories->whereIn('id', $votedCategoryIds)->count();
+
+            // Próxima categoria não votada
+            $nextCategory = $openCategories
+                ->whereNotIn('id', $votedCategoryIds)
+                ->where('id', '!=', $category->id)
                 ->first();
         }
 
         $highlightCompanyId = $request->query('ref');
 
-        return view('vote.show', compact('category', 'audience', 'userVote', 'highlightCompanyId'));
+        return view('vote.show', compact(
+            'category', 'audience', 'userVote', 'highlightCompanyId',
+            'nextCategory', 'totalCategories', 'votedCount'
+        ));
     }
 
     public function store(VoteRequest $request, Category $category, Company $company)
@@ -61,6 +80,21 @@ class VoteController extends Controller
             'ip_hash' => hash('sha256', $request->ip()),
             'user_agent' => $request->userAgent(),
         ]);
+
+        // Buscar próxima categoria ainda não votada
+        $votedCategoryIds = Vote::where('audience_id', $audienceId)
+            ->pluck('category_id')
+            ->toArray();
+
+        $nextCategory = Category::open()
+            ->whereNotIn('id', $votedCategoryIds)
+            ->orderBy('name')
+            ->first();
+
+        if ($nextCategory) {
+            return redirect()->route('vote.show', $nextCategory)
+                ->with('success', 'Voto registrado em "' . $category->name . '"! Agora vote nesta categoria.');
+        }
 
         return redirect()->route('vote.show', $category)
             ->with('success', 'Seu voto foi registrado com sucesso!');

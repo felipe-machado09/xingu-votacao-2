@@ -196,6 +196,21 @@
         <div class="text-center mb-12 animate-fade-in">
             <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Vote nas Categorias</h1>
             <p class="text-xl text-gray-600">Escolha uma categoria e vote na sua empresa favorita</p>
+
+            {{-- Botão para votar em sequência --}}
+            @if($audience)
+                @php
+                    $firstUnvoted = $categories->whereNotIn('id', $votedCategoryIds)->first();
+                    $remaining = $categories->count() - count($votedCategoryIds);
+                @endphp
+                @if($firstUnvoted)
+                    <a href="{{ route('vote.show', $firstUnvoted) }}"
+                       class="inline-flex items-center mt-6 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-xl font-bold hover:from-red-700 hover:to-red-800 transition-all transform hover:scale-105 shadow-lg text-lg">
+                        🗳️ Votar em sequência
+                        <span class="ml-3 bg-white/20 px-3 py-1 rounded-full text-sm">{{ $remaining }} restantes</span>
+                    </a>
+                @endif
+            @endif
         </div>
 
         <!-- Seção de Prêmios Escalonados -->

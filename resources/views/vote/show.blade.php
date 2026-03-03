@@ -113,6 +113,26 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        {{-- Barra de progresso de votação --}}
+        @if($audience && $totalCategories > 0)
+            <div class="max-w-3xl mx-auto mb-6 animate-fade-in">
+                <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-gray-600 font-medium">Progresso de votação</span>
+                    <span class="font-bold {{ $votedCount >= $totalCategories ? 'text-green-600' : 'text-red-600' }}">
+                        {{ $votedCount }}/{{ $totalCategories }} categorias
+                    </span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div class="h-3 rounded-full transition-all duration-500 {{ $votedCount >= $totalCategories ? 'bg-green-500' : 'bg-gradient-to-r from-red-500 to-red-600' }}"
+                         style="width: {{ $totalCategories > 0 ? round(($votedCount / $totalCategories) * 100) : 0 }}%"></div>
+                </div>
+                @if($votedCount >= $totalCategories)
+                    <p class="text-center text-green-600 font-semibold text-sm mt-2">🎉 Parabéns! Você votou em todas as categorias!</p>
+                @endif
+            </div>
+        @endif
+
         <!-- Category Header -->
         <div class="text-center mb-12 animate-fade-in">
             <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">{{ $category->name }}</h1>
@@ -147,7 +167,7 @@
         @endif
 
         @if($userVote)
-            <div class="max-w-3xl mx-auto mb-8 bg-green-50 border-l-4 border-green-400 p-6 rounded-lg animate-slide-up">
+            <div class="max-w-3xl mx-auto mb-4 bg-green-50 border-l-4 border-green-400 p-6 rounded-lg animate-slide-up">
                 <div class="flex items-center">
                     <svg class="w-6 h-6 text-green-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
@@ -158,6 +178,34 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Botão próxima categoria --}}
+            @if($nextCategory)
+                <div class="max-w-3xl mx-auto mb-8 animate-slide-up">
+                    <a href="{{ route('vote.show', $nextCategory) }}"
+                       class="flex items-center justify-between w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-4 rounded-xl font-bold hover:from-red-700 hover:to-red-800 transition-all transform hover:scale-[1.02] shadow-lg group">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">👉</span>
+                            <div>
+                                <span class="text-sm opacity-80 block">Próxima categoria</span>
+                                <span class="text-lg">{{ $nextCategory->name }}</span>
+                            </div>
+                        </div>
+                        <svg class="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                </div>
+            @elseif($votedCount >= $totalCategories && $totalCategories > 0)
+                <div class="max-w-3xl mx-auto mb-8 bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6 rounded-xl shadow-lg animate-slide-up text-center">
+                    <span class="text-3xl block mb-2">🎉</span>
+                    <h3 class="text-xl font-bold mb-1">Você votou em todas as categorias!</h3>
+                    <p class="opacity-90">Obrigado pela sua participação. Boa sorte nos sorteios!</p>
+                    <a href="{{ route('vote.index') }}" class="inline-block mt-4 bg-white text-green-700 px-6 py-2 rounded-lg font-bold hover:bg-green-50 transition">
+                        Ver todas as categorias
+                    </a>
+                </div>
+            @endif
         @endif
 
         @if(!$audience)
@@ -324,12 +372,25 @@
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Voto Registrado!',
+            title: 'Voto Registrado! ✅',
             text: '{{ session('success') }}',
-            confirmButtonText: 'OK',
+            @if($nextCategory)
+                confirmButtonText: 'Votar na próxima ➜',
+                showCancelButton: true,
+                cancelButtonText: 'Ficar aqui',
+                cancelButtonColor: '#6b7280',
+            @else
+                confirmButtonText: 'OK',
+            @endif
             confirmButtonColor: '#dc2626',
-            timer: 3000,
+            timer: 5000,
             timerProgressBar: true,
+        }).then((result) => {
+            @if($nextCategory)
+                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                    window.location.href = '{{ route('vote.show', $nextCategory) }}';
+                }
+            @endif
         });
     </script>
     @endif

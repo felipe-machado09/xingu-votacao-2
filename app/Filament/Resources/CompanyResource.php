@@ -59,6 +59,12 @@ class CompanyResource extends Resource
                     ->dehydrateStateUsing(fn ($state) => preg_replace('/\D/', '', $state))
                     ->rules([new \App\Rules\ValidCNPJ()])
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('email')
+                    ->label('E-mail')
+                    ->email()
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('responsible_name')
                     ->label('Nome do Responsável')
                     ->required()

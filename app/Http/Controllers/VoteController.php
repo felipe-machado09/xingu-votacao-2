@@ -93,7 +93,7 @@ class VoteController extends Controller
 
         if ($nextCategory) {
             return redirect()->route('vote.show', $nextCategory)
-                ->with('success', 'Voto registrado em "' . $category->name . '"! Agora vote nesta categoria.');
+                ->with('success', 'Voto registrado em ' . $category->name . '! Agora vote nesta categoria.');
         }
 
         return redirect()->route('vote.show', $category)

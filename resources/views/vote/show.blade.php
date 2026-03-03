@@ -373,7 +373,7 @@
         Swal.fire({
             icon: 'success',
             title: 'Voto Registrado! ✅',
-            text: '{{ session('success') }}',
+            text: '{!! str_replace("'", "\\'", session('success')) !!}',
             @if($nextCategory)
                 confirmButtonText: 'Votar na próxima ➜',
                 showCancelButton: true,

@@ -65,8 +65,7 @@ class LandingPageSectionResource extends Resource
                         if ($record && $record->key === 'countdown') {
                             $component->state($record->metadata['end_date'] ?? null);
                         }
-                    })
-                    ->dehydrated(false),
+                    }),
                 Forms\Components\KeyValue::make('metadata')
                     ->label('Metadados')
                     ->keyLabel('Chave')

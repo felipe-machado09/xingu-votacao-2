@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BiDashboardController;
+use App\Http\Controllers\BiPublicController;
 use App\Http\Controllers\CompanyLoginController;
 use App\Http\Controllers\CompanyRegisterController;
 use App\Http\Controllers\HomeController;
@@ -21,6 +22,12 @@ Route::get('/bi', [BiDashboardController::class, 'index'])->name('bi.dashboard')
 Route::get('/bi/data', [BiDashboardController::class, 'data'])->name('bi.data');
 Route::post('/bi/request-code', [BiDashboardController::class, 'requestCode'])->name('bi.request-code');
 Route::get('/bi/check-auth', [BiDashboardController::class, 'checkAuth'])->name('bi.check-auth');
+
+// BI Público (dados globais, sem empresas)
+Route::get('/bi-publico', [BiPublicController::class, 'index'])->name('bi.public');
+Route::get('/bi-publico/data', [BiPublicController::class, 'data'])->name('bi.public.data');
+Route::post('/bi-publico/request-code', [BiPublicController::class, 'requestCode'])->name('bi.public.request-code');
+Route::get('/bi-publico/check-auth', [BiPublicController::class, 'checkAuth'])->name('bi.public.check-auth');
 
 Route::middleware('throttle:5,1')->group(function () {
     Route::get('/register', [RegisterController::class, 'show'])->name('register');

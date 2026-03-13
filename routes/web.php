@@ -11,11 +11,18 @@ use App\Http\Controllers\MagicLinkController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WinnersController;
+use App\Http\Controllers\AwardDrawController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home.old');
 Route::get('/vencedores', [WinnersController::class, 'index'])->name('winners');
+
+// Tela de Sorteio para TV (somente admin logado)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/sorteio', [AwardDrawController::class, 'index'])->name('sorteio.index');
+    Route::post('/sorteio/{award}/sortear', [AwardDrawController::class, 'draw'])->name('sorteio.draw');
+});
 
 // BI Dashboard para TV
 Route::get('/bi', [BiDashboardController::class, 'index'])->name('bi.dashboard');

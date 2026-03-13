@@ -11,10 +11,12 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class WeeklyDraw extends Page implements HasForms, HasTable
 {
@@ -38,14 +40,35 @@ class WeeklyDraw extends Page implements HasForms, HasTable
             ->query(AwardDraw::query()->with(['award', 'audience'])->where('status', 'completed')->latest())
             ->columns([
                 TextColumn::make('award.name')
-                    ->label('Prêmio'),
+                    ->label('Prêmio')
+                    ->badge()
+                    ->color('success'),
                 TextColumn::make('audience.name')
-                    ->label('Ganhador'),
+                    ->label('Ganhador')
+                    ->weight('bold'),
+                TextColumn::make('audience.phone')
+                    ->label('Telefone')
+                    ->formatStateUsing(function ($state) {
+                        if (!$state || strlen($state) < 10) return $state ?? '-';
+                        // (XX) XXXXX-XXXX
+                        return '(' . substr($state, 0, 2) . ') ' . substr($state, 2, 5) . '-' . substr($state, 7);
+                    }),
                 TextColumn::make('audience.email')
                     ->label('E-mail'),
+                TextColumn::make('audience.birth_date')
+                    ->label('Idade')
+                    ->badge()
+                    ->color('gray')
+                    ->formatStateUsing(fn ($state) => $state ? Carbon::parse($state)->age . ' anos' : '-'),
                 TextColumn::make('drawn_at')
                     ->dateTime('d/m/Y H:i:s')
                     ->label('Data do Sorteio'),
+                ToggleColumn::make('collected')
+                    ->label('Coletou?')
+                    ->getStateUsing(fn ($record) => $record->collected_at !== null)
+                    ->updateStateUsing(function ($record, $state) {
+                        $record->update(['collected_at' => $state ? now() : null]);
+                    }),
             ])
             ->paginated([10, 25, 50]);
     }

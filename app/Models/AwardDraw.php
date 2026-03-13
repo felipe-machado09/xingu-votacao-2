@@ -15,11 +15,13 @@ class AwardDraw extends Model
         'audience_id',
         'status',
         'drawn_at',
+        'collected_at',
         'meta',
     ];
 
     protected $casts = [
         'drawn_at' => 'datetime',
+        'collected_at' => 'datetime',
         'meta' => 'array',
     ];
 

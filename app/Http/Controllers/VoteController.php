@@ -18,7 +18,7 @@ class VoteController extends Controller
         $audienceId = session('audience_id');
         $audience = $audienceId ? Audience::find($audienceId) : null;
 
-        $categories = Category::open()->with('companies')->get();
+        $categories = Category::open()->with('companies')->withCount('votes')->orderBy('votes_count', 'asc')->get();
         $awards = Award::where('is_active', true)->get();
         $sponsors = Sponsor::active()->ordered()->get();
 
@@ -50,7 +50,7 @@ class VoteController extends Controller
 
             // Progresso de votação
             $votedCategoryIds = $audience->votes()->pluck('category_id')->toArray();
-            $openCategories = Category::open()->orderBy('name')->get();
+            $openCategories = Category::open()->withCount('votes')->orderBy('votes_count', 'asc')->get();
             $totalCategories = $openCategories->count();
             $votedCount = $openCategories->whereIn('id', $votedCategoryIds)->count();
 
@@ -88,7 +88,8 @@ class VoteController extends Controller
 
         $nextCategory = Category::open()
             ->whereNotIn('id', $votedCategoryIds)
-            ->orderBy('name')
+            ->withCount('votes')
+            ->orderBy('votes_count', 'asc')
             ->first();
 
         if ($nextCategory) {

@@ -208,7 +208,7 @@
             @endif
         @endif
 
-        @if(!$audience)
+        @if(!$audience && $category->isOpen())
             <div class="max-w-3xl mx-auto mb-8 bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg animate-slide-up">
                 <div class="flex items-start">
                     <svg class="w-6 h-6 text-blue-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">

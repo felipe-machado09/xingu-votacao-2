@@ -5,7 +5,7 @@
 <div class="min-h-[80px] sm:min-h-[100px]">
     <div class="bg-gradient-to-r from-red-600 to-red-700 shadow-2xl text-white text-center flex items-center justify-center h-full px-2 sm:px-4 py-3 sm:py-4">
         <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 justify-center">
-            <h2 class="text-sm sm:text-lg md:text-xl font-bold">ENCERRA EM</h2>
+
             <div class="countdown-timer flex gap-1.5 sm:gap-3 md:gap-4">
                 <div class="bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl p-1.5 sm:p-2 min-w-[48px] sm:min-w-[60px]">
                     <div class="text-lg sm:text-2xl md:text-3xl font-bold countdown-days">00</div>

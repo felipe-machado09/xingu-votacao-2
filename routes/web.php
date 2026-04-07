@@ -14,7 +14,7 @@ use App\Http\Controllers\WinnersController;
 use App\Http\Controllers\AwardDrawController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [WinnersController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home.old');
 Route::get('/vencedores', [WinnersController::class, 'index'])->name('winners');
 

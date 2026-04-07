@@ -10,15 +10,15 @@
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vencedores - Melhores do Ano {{ $year }}</title>
+    <title>Vencedores - Melhores do Ano 2025</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ route('winners') }}">
-    <meta property="og:title" content="Vencedores - Melhores do Ano {{ $year }}">
-    <meta property="og:description" content="Conheça os vencedores do Melhores do Ano {{ $year }}">
+    <meta property="og:title" content="Vencedores - Melhores do Ano 2025">
+    <meta property="og:description" content="Conheça os vencedores do Melhores do Ano 2025">
     <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -27,8 +27,8 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Vencedores - Melhores do Ano {{ $year }}">
-    <meta name="twitter:description" content="Conheça os vencedores do Melhores do Ano {{ $year }}">
+    <meta name="twitter:title" content="Vencedores - Melhores do Ano 2025">
+    <meta name="twitter:description" content="Conheça os vencedores do Melhores do Ano 2025">
     <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -113,9 +113,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center animate-fade-in">
                 <img src="{{ asset('img/Logomarca Melhores do Ano Branca.webp') }}" alt="Logo" class="h-20 sm:h-32 mx-auto mb-6 sm:mb-8">
-                <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">Melhores empresas de Altamira em {{ $year }}</h1>
+                <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">Melhores empresas de Altamira em 2025</h1>
                 <p class="text-base sm:text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed">
-                    Após um processo de votação popular, transparente e gratuito, a população de Altamira escolheu as empresas que mais se destacaram em seus segmentos ao longo de {{ $year }}.
+                    Após um processo de votação popular, transparente e gratuito, a população de Altamira escolheu as empresas que mais se destacaram em seus segmentos ao longo de 2025.
                 </p>
             </div>
         </div>
@@ -169,6 +169,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Edição (ano)</label>
                         <select name="year" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                            <option value="">Todos os vencedores</option>
                             @foreach($availableYears as $availableYear)
                                 <option value="{{ $availableYear }}" {{ $year == $availableYear ? 'selected' : '' }}>
                                     {{ $availableYear }}
@@ -284,7 +285,7 @@
                             <!-- Winner Badge -->
                             <div class="text-center">
                                 <span class="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-bold">
-                                    🏆 VENCEDOR {{ $year }}
+                                    🏆 VENCEDOR 2025
                                 </span>
                             </div>
                         </div>
@@ -300,7 +301,7 @@
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Entrega dos troféus</h2>
                 <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-                    A entrega dos troféus às empresas vencedoras do Melhores do Ano {{ $year }} foi realizada ao vivo no SBT Altamira, com cobertura jornalística.
+                    A entrega dos troféus às empresas vencedoras do Melhores do Ano 2025 foi realizada ao vivo no SBT Altamira, com cobertura jornalística.
                 </p>
             </div>
 
@@ -332,6 +333,53 @@
             </div>
         </div>
     </section>
+
+    <!-- Ganhadores dos Eletrodomésticos -->
+    @if($awardDraws && $awardDraws->count() > 0)
+    <section class="bg-gradient-to-r from-yellow-50 to-yellow-100 py-16 border-t border-yellow-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">🎉 Ganhadores dos Eletrodomésticos</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Confira os sorteados que ganharam eletrodomésticos por participarem da votação do Melhores do Ano 2025!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($awardDraws as $draw)
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
+                        @if($draw->award->image_path)
+                            <div class="h-48 bg-gray-100 flex items-center justify-center p-4">
+                                <img src="{{ asset('storage/' . $draw->award->image_path) }}"
+                                     alt="{{ $draw->award->name }}"
+                                     class="max-h-full max-w-full object-contain">
+                            </div>
+                        @endif
+                        @if($draw->meta && isset($draw->meta['photo']))
+                            <div class="h-48 bg-gray-100 flex items-center justify-center">
+                                <img src="{{ asset('storage/' . $draw->meta['photo']) }}"
+                                     alt="Foto do ganhador"
+                                     class="w-full h-full object-cover">
+                            </div>
+                        @endif
+                        <div class="p-6 text-center">
+                            <div class="bg-yellow-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ $draw->audience->name ?? 'Ganhador' }}</h3>
+                            <p class="text-red-600 font-semibold text-lg mb-2">{{ $draw->award->name }}</p>
+                            @if($draw->drawn_at)
+                                <p class="text-sm text-gray-500">Sorteado em {{ $draw->drawn_at->format('d/m/Y') }}</p>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
 
     <!-- Sponsors Section -->
     @if($sponsors && $sponsors->count() > 0)
@@ -372,7 +420,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Melhores do Ano {{ $year }}</h3>
+                    <h3 class="text-lg font-bold mb-4">Melhores do Ano 2025</h3>
                     <p class="text-gray-400 text-sm">
                         Votação popular, transparente e gratuita das melhores empresas de Altamira.
                     </p>
@@ -394,7 +442,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-                <p>&copy; {{ $year }} Melhores do Ano - Vale do Xingu. Todos os direitos reservados.</p>
+                <p>&copy; 2025 Melhores do Ano - Vale do Xingu. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
@@ -402,8 +450,8 @@
     <script>
         function shareWinners() {
             const url = '{{ route('winners') }}';
-            const title = 'Vencedores - Melhores do Ano {{ $year }}';
-            const text = 'Confira os vencedores do Melhores do Ano {{ $year }}!';
+            const title = 'Vencedores - Melhores do Ano 2025';
+            const text = 'Confira os vencedores do Melhores do Ano 2025!';
 
             if (navigator.share) {
                 navigator.share({ title: title, text: text, url: url });

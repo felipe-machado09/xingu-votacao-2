@@ -8,6 +8,7 @@ use App\Models\CategoryWinner;
 use App\Models\Company;
 use App\Models\Sponsor;
 use App\Models\Vote;
+use App\Models\AwardDraw;
 use Illuminate\Http\Request;
 
 class WinnersController extends Controller
@@ -18,16 +19,19 @@ class WinnersController extends Controller
         $audience = $audienceId ? Audience::find($audienceId) : null;
 
         // Filtros
-        $year = $request->get('year', 2025);
+        $year = $request->get('year');
         $categoryId = $request->get('category');
         $search = $request->get('search');
 
         // Buscar vencedores com filtros
         $query = CategoryWinner::with(['category', 'company'])
-            ->where('year', $year)
             ->whereHas('category', function ($q) {
                 $q->where('is_active', true);
             });
+
+        if ($year) {
+            $query->where('year', $year);
+        }
 
         if ($categoryId) {
             $query->where('category_id', $categoryId);
@@ -40,7 +44,7 @@ class WinnersController extends Controller
             });
         }
 
-        $categoriesWithWinners = $query->get();
+        $categoriesWithWinners = $query->get()->sortBy(fn ($w) => mb_strtolower($w->company->legal_name));
 
         // Se houver informação de votos, adicionar ao resultado
         foreach ($categoriesWithWinners as $winner) {
@@ -50,7 +54,7 @@ class WinnersController extends Controller
         }
 
         // Estatísticas
-        $totalVotes = Vote::whereYear('created_at', $year)->count();
+        $totalVotes = $year ? Vote::whereYear('created_at', $year)->count() : Vote::count();
         $totalCompanies = Company::count();
         $totalCategories = Category::where('is_active', true)->count();
 
@@ -67,6 +71,12 @@ class WinnersController extends Controller
         // Patrocinadores
         $sponsors = Sponsor::active()->ordered()->get();
 
+        // Ganhadores dos eletrodomésticos (sorteios concluídos)
+        $awardDraws = AwardDraw::with(['award', 'audience'])
+            ->where('status', 'completed')
+            ->orderBy('drawn_at', 'desc')
+            ->get();
+
         $winners = $categoriesWithWinners;
 
         return view('winners', compact(
@@ -79,6 +89,7 @@ class WinnersController extends Controller
             'availableYears',
             'categories',
             'sponsors',
+            'awardDraws',
             'year',
             'categoryId',
             'search'

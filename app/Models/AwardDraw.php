@@ -16,12 +16,14 @@ class AwardDraw extends Model
         'status',
         'drawn_at',
         'collected_at',
+        'show_on_home',
         'meta',
     ];
 
     protected $casts = [
         'drawn_at' => 'datetime',
         'collected_at' => 'datetime',
+        'show_on_home' => 'boolean',
         'meta' => 'array',
     ];
 

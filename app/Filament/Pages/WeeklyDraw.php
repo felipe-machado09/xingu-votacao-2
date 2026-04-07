@@ -69,6 +69,8 @@ class WeeklyDraw extends Page implements HasForms, HasTable
                     ->updateStateUsing(function ($record, $state) {
                         $record->update(['collected_at' => $state ? now() : null]);
                     }),
+                ToggleColumn::make('show_on_home')
+                    ->label('Exibir na Home'),
             ])
             ->paginated([10, 25, 50]);
     }

@@ -46,11 +46,15 @@ class WinnersController extends Controller
 
         $categoriesWithWinners = $query->get()->sortBy(fn ($w) => mb_strtolower($w->company->legal_name));
 
-        // Se houver informação de votos, adicionar ao resultado
+        // Calcular porcentagem de votos por categoria
         foreach ($categoriesWithWinners as $winner) {
-            $winner->votes_count = $winner->company->votes()
+            $winnerVotes = $winner->company->votes()
                 ->where('category_id', $winner->category_id)
                 ->count();
+            $totalCategoryVotes = Vote::where('category_id', $winner->category_id)->count();
+            $winner->votes_percentage = $totalCategoryVotes > 0
+                ? round(($winnerVotes / $totalCategoryVotes) * 100, 1)
+                : 0;
         }
 
         // Estatísticas
@@ -71,9 +75,10 @@ class WinnersController extends Controller
         // Patrocinadores
         $sponsors = Sponsor::active()->ordered()->get();
 
-        // Ganhadores dos eletrodomésticos (sorteios concluídos)
+        // Ganhadores dos eletrodomésticos (sorteios concluídos e marcados para exibição)
         $awardDraws = AwardDraw::with(['award', 'audience'])
             ->where('status', 'completed')
+            ->where('show_on_home', true)
             ->orderBy('drawn_at', 'desc')
             ->get();
 

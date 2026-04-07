@@ -271,14 +271,14 @@
                                 </p>
                             @endif
 
-                            <!-- Votes Count -->
-                            @if($categoryWinner->votes_count)
+                            <!-- Votes Percentage -->
+                            @if($categoryWinner->votes_percentage)
                                 <div class="flex items-center justify-center text-red-600 mb-3">
                                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
                                     </svg>
-                                    <span class="font-bold">{{ number_format($categoryWinner->votes_count, 0, ',', '.') }}</span>
-                                    <span class="ml-1">votos</span>
+                                    <span class="font-bold">{{ $categoryWinner->votes_percentage }}%</span>
+                                    <span class="ml-1">dos votos</span>
                                 </div>
                             @endif
 

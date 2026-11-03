@@ -9,6 +9,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class RecentVotesTable extends BaseWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected static ?int $sort = 8;
 
     protected int | string | array $columnSpan = 'full';
@@ -18,7 +20,7 @@ class RecentVotesTable extends BaseWidget
         return $table
             ->heading('🗳️ Últimos 20 Votos Registrados')
             ->query(
-                Vote::query()
+                Vote::forYear($this->reportYear())
                     ->with(['audience', 'category', 'company'])
                     ->latest('created_at')
                     ->limit(20)

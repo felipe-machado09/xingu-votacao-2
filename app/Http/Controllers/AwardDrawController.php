@@ -13,7 +13,7 @@ class AwardDrawController extends Controller
 {
     public function index()
     {
-        $awards = Award::where('is_active', true)
+        $awards = Award::currentYear()->where('is_active', true)
             ->withCount(['draws as completed_draws_count' => function ($query) {
                 $query->where('status', 'completed');
             }])
@@ -26,7 +26,7 @@ class AwardDrawController extends Controller
 
     public function draw(Award $award): JsonResponse
     {
-        if (!$award->is_active || !$award->hasRemainingQuantity()) {
+        if (!$award->is_active || $award->year !== \App\Models\LandingPageSection::campaignYear() || !$award->hasRemainingQuantity()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Este prêmio não está disponível para sorteio.',
@@ -38,10 +38,15 @@ class AwardDrawController extends Controller
             ->pluck('audience_id')
             ->toArray();
 
-        $eligibleIds = \DB::table('votes')
+        $requiredVotes = $award->requiredVotes();
+        if ($requiredVotes < 1) {
+            return response()->json(['success' => false, 'message' => 'Não há categorias ativas para este prêmio.'], 422);
+        }
+
+        $eligibleIds = $award->qualifyingVotes()
             ->select('audience_id')
             ->groupBy('audience_id')
-            ->havingRaw('COUNT(DISTINCT category_id) >= ?', [$award->min_votes])
+            ->havingRaw('COUNT(DISTINCT category_id) >= ?', [$requiredVotes])
             ->when(count($alreadyDrawnIds) > 0, function ($query) use ($alreadyDrawnIds) {
                 $query->whereNotIn('audience_id', $alreadyDrawnIds);
             })
@@ -65,7 +70,7 @@ class AwardDrawController extends Controller
             'drawn_at' => now(),
             'meta' => [
                 'total_eligible' => $eligible->count(),
-                'min_votes_required' => $award->min_votes,
+                'min_votes_required' => $requiredVotes,
             ],
         ]);
 

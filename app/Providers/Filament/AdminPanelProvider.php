@@ -28,8 +28,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandLogo(asset('img/logo.webp'))
-            ->darkModeBrandLogo(asset('img/Logomarca Melhores do Ano Branca.webp'))
+            ->brandLogo(fn () => \App\Models\LandingPageSection::logoUrl())
+            ->darkModeBrandLogo(fn () => \App\Models\LandingPageSection::logoUrl())
             ->brandLogoHeight('7rem')
             ->favicon(asset('logo_icon.ico'))
             ->loginRouteSlug('login')
@@ -53,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([])

@@ -16,12 +16,21 @@ class Audience extends Model
         'birth_date',
         'phone',
         'email_verified_at',
+        'year',
     ];
 
     protected $casts = [
         'birth_date' => 'date',
         'email_verified_at' => 'datetime',
+        'year' => 'integer',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Audience $audience) {
+            $audience->year ??= LandingPageSection::campaignYear();
+        });
+    }
 
     public function votes(): HasMany
     {
@@ -35,7 +44,7 @@ class Audience extends Model
 
     public function hasVotedInCategory(int $categoryId): bool
     {
-        return $this->votes()->where('category_id', $categoryId)->exists();
+        return $this->votes()->forYear(LandingPageSection::campaignYear())->where('category_id', $categoryId)->exists();
     }
 
     public function markEmailAsVerified(): void

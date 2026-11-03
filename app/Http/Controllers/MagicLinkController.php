@@ -20,6 +20,12 @@ class MagicLinkController extends Controller
             'audience_name' => $audience->name,
         ]);
 
+        $category = \App\Models\Category::where('slug', $request->query('category'))
+            ->where('is_active', true)->first();
+        if ($category) {
+            return redirect()->route('vote.show', $category)->with('success', 'Bem-vindo de volta!');
+        }
+
         return redirect()->route('vote.index')->with('success', 'Bem-vindo de volta!');
     }
 }

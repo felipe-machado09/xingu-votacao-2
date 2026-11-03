@@ -10,13 +10,11 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MagicLinkController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\VoteController;
-use App\Http\Controllers\WinnersController;
 use App\Http\Controllers\AwardDrawController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [WinnersController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index'])->name('home.old');
-Route::get('/vencedores', [WinnersController::class, 'index'])->name('winners');
 
 // Tela de Sorteio para TV (somente admin logado)
 Route::middleware(['auth'])->group(function () {
@@ -27,12 +25,14 @@ Route::middleware(['auth'])->group(function () {
 // BI Dashboard para TV
 Route::get('/bi', [BiDashboardController::class, 'index'])->name('bi.dashboard');
 Route::get('/bi/data', [BiDashboardController::class, 'data'])->name('bi.data');
+Route::get('/bi/export', [BiDashboardController::class, 'export'])->middleware('auth')->name('bi.export');
 Route::post('/bi/request-code', [BiDashboardController::class, 'requestCode'])->name('bi.request-code');
 Route::get('/bi/check-auth', [BiDashboardController::class, 'checkAuth'])->name('bi.check-auth');
 
 // BI Público (dados globais, sem empresas)
 Route::get('/bi-publico', [BiPublicController::class, 'index'])->name('bi.public');
 Route::get('/bi-publico/data', [BiPublicController::class, 'data'])->name('bi.public.data');
+Route::get('/bi-publico/export', [BiPublicController::class, 'export'])->name('bi.public.export');
 Route::post('/bi-publico/request-code', [BiPublicController::class, 'requestCode'])->name('bi.public.request-code');
 Route::get('/bi-publico/check-auth', [BiPublicController::class, 'checkAuth'])->name('bi.public.check-auth');
 
@@ -50,12 +50,11 @@ Route::post('/logout', LogoutController::class)->name('logout');
 
 Route::get('/vote', [VoteController::class, 'index'])->name('vote.index');
 Route::get('/vote/{category:slug}', [VoteController::class, 'show'])->name('vote.show');
+Route::get('/votacao/{category:slug}', [VoteController::class, 'show'])->name('vote.category');
 
-// DESABILITADO - Cadastro de Empresa
-// Route::middleware('throttle:5,1')->group(function () {
-//     Route::get('/empresa/cadastro', [CompanyRegisterController::class, 'show'])->name('company.register');
-//     Route::post('/empresa/cadastro', [CompanyRegisterController::class, 'store'])->name('company.register.store');
-// });
+Route::get('/empresa/cadastro', [CompanyRegisterController::class, 'show'])->name('company.register');
+Route::post('/empresa/cadastro', [CompanyRegisterController::class, 'store'])
+    ->middleware('throttle:5,1')->name('company.register.store');
 
 // DESABILITADO - Página Individual de Empresa
 // Route::get('/empresa/{company:slug}', [VoteController::class, 'company'])->name('vote.company');
@@ -90,13 +89,6 @@ Route::get('/sitemap.xml', function () {
     $content .= '<loc>https://melhores.valedoxingu.com.br/vote</loc>';
     $content .= '<changefreq>daily</changefreq>';
     $content .= '<priority>0.9</priority>';
-    $content .= '</url>';
-
-    // Página de vencedores
-    $content .= '<url>';
-    $content .= '<loc>https://melhores.valedoxingu.com.br/vencedores</loc>';
-    $content .= '<changefreq>weekly</changefreq>';
-    $content .= '<priority>0.8</priority>';
     $content .= '</url>';
 
     // Categorias

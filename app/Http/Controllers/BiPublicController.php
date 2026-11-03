@@ -17,7 +17,13 @@ class BiPublicController extends Controller
      */
     public function index()
     {
-        return view('bi.public');
+        return view('bi.public', ['year' => \App\Services\ReportYear::fromRequest()]);
+    }
+
+    public function export(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        return \App\Services\ExcelExport::download('bi-publico-'.\App\Services\ReportYear::fromRequest().'.xlsx',
+            ['Indicador', 'Valor'], \App\Services\ExcelExport::metrics($this->data()->getData(true)));
     }
 
     /**
@@ -66,11 +72,12 @@ class BiPublicController extends Controller
      */
     public function data(): JsonResponse
     {
+        $year = \App\Services\ReportYear::fromRequest();
         // Total geral de votos
-        $totalVotes = Vote::count();
+        $totalVotes = Vote::forYear($year)->count();
 
         // Total de eleitores (audiência que votou)
-        $totalVoters = Vote::distinct('audience_id')->count('audience_id');
+        $totalVoters = Vote::forYear($year)->distinct('audience_id')->count('audience_id');
 
         // Total de categorias ativas
         $totalCategories = Category::where('is_active', true)->count();
@@ -81,7 +88,7 @@ class BiPublicController extends Controller
         })->count();
 
         // Votos por hora (últimas 24h)
-        $votesPerHour = Vote::where('created_at', '>=', now()->subHours(24))
+        $votesPerHour = Vote::forYear($year)->where('created_at', '>=', now()->subHours(24))
             ->select(
                 DB::raw("DATE_FORMAT(created_at, '%H:00') as hour"),
                 DB::raw('COUNT(*) as total')
@@ -101,7 +108,7 @@ class BiPublicController extends Controller
 
         // TODAS as categorias ativas com votos (ranking completo)
         $allCategories = Category::where('is_active', true)
-            ->withCount('votes')
+            ->withCount(['votes' => fn ($query) => $query->forYear($year)])
             ->orderByDesc('votes_count')
             ->get()
             ->map(fn($c) => [
@@ -112,7 +119,7 @@ class BiPublicController extends Controller
 
         // Votos por grupo de categoria
         $votesByGroup = Category::where('is_active', true)
-            ->withCount('votes')
+            ->withCount(['votes' => fn ($query) => $query->forYear($year)])
             ->get()
             ->groupBy('category_group')
             ->map(fn($cats) => $cats->sum('votes_count'))
@@ -131,7 +138,7 @@ class BiPublicController extends Controller
             ]);
 
         // Votos por faixa etária
-        $votesByAge = Vote::join('audiences', 'votes.audience_id', '=', 'audiences.id')
+        $votesByAge = Vote::forYear($year)->join('audiences', 'votes.audience_id', '=', 'audiences.id')
             ->whereNotNull('audiences.birth_date')
             ->select(DB::raw("
                 CASE
@@ -150,38 +157,38 @@ class BiPublicController extends Controller
             ->toArray();
 
         // Votos nos últimos 10 segundos (indicador de atividade)
-        $recentVotes = Vote::where('created_at', '>=', now()->subSeconds(10))->count();
+        $recentVotes = Vote::forYear($year)->where('created_at', '>=', now()->subSeconds(10))->count();
 
         // Votos hoje
-        $votesToday = Vote::whereDate('created_at', today())->count();
+        $votesToday = Vote::forYear($year)->whereDate('created_at', today())->count();
 
         // Votos ontem
-        $votesYesterday = Vote::whereDate('created_at', today()->subDay())->count();
+        $votesYesterday = Vote::forYear($year)->whereDate('created_at', today()->subDay())->count();
 
         // Votos na última hora
-        $votesLastHour = Vote::where('created_at', '>=', now()->subHour())->count();
+        $votesLastHour = Vote::forYear($year)->where('created_at', '>=', now()->subHour())->count();
 
         // Votos semana atual
         $startOfWeek = now()->startOfWeek();
-        $votesThisWeek = Vote::where('created_at', '>=', $startOfWeek)->count();
+        $votesThisWeek = Vote::forYear($year)->where('created_at', '>=', $startOfWeek)->count();
 
         // Votos semana passada
         $startOfLastWeek = now()->subWeek()->startOfWeek();
         $endOfLastWeek = now()->subWeek()->endOfWeek();
-        $votesLastWeek = Vote::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->count();
+        $votesLastWeek = Vote::forYear($year)->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->count();
 
         // Votos semana passada até o mesmo dia (comparativo justo)
         $dayOfWeek = now()->dayOfWeekIso;
         $sameDayLastWeek = $startOfLastWeek->copy()->addDays($dayOfWeek - 1)->endOfDay();
-        $votesLastWeekSameDay = Vote::whereBetween('created_at', [$startOfLastWeek, $sameDayLastWeek])->count();
+        $votesLastWeekSameDay = Vote::forYear($year)->whereBetween('created_at', [$startOfLastWeek, $sameDayLastWeek])->count();
 
         // Eleitores hoje vs ontem
-        $votersToday = Vote::whereDate('created_at', today())->distinct('audience_id')->count('audience_id');
-        $votersYesterday = Vote::whereDate('created_at', today()->subDay())->distinct('audience_id')->count('audience_id');
+        $votersToday = Vote::forYear($year)->whereDate('created_at', today())->distinct('audience_id')->count('audience_id');
+        $votersYesterday = Vote::forYear($year)->whereDate('created_at', today()->subDay())->distinct('audience_id')->count('audience_id');
 
         // Eleitores semana atual vs semana passada
-        $votersThisWeek = Vote::where('created_at', '>=', $startOfWeek)->distinct('audience_id')->count('audience_id');
-        $votersLastWeek = Vote::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->distinct('audience_id')->count('audience_id');
+        $votersThisWeek = Vote::forYear($year)->where('created_at', '>=', $startOfWeek)->distinct('audience_id')->count('audience_id');
+        $votersLastWeek = Vote::forYear($year)->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->distinct('audience_id')->count('audience_id');
 
         // Média de votos por hora hoje vs ontem
         $hoursToday = max(now()->hour, 1);
@@ -193,7 +200,7 @@ class BiPublicController extends Controller
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
             $dayLabel = $date->translatedFormat('D d/m');
-            $votesPerDay[$dayLabel] = Vote::whereDate('created_at', $date->toDateString())->count();
+            $votesPerDay[$dayLabel] = Vote::forYear($year)->whereDate('created_at', $date->toDateString())->count();
         }
 
         // Média de votos por categoria
@@ -213,14 +220,17 @@ class BiPublicController extends Controller
         $avgVotesPerVoter = $totalVoters > 0 ? round($totalVotes / $totalVoters, 1) : 0;
 
         // Total de audiência cadastrada (incluindo quem não votou)
-        $totalAudience = Audience::count();
+        $totalAudience = Audience::where(function ($query) use ($year) {
+            $query->where('year', $year)
+                ->orWhereHas('votes', fn ($votes) => $votes->forYear($year));
+        })->count();
 
         // Taxa de participação (% da audiência que votou)
         $participationRate = $totalAudience > 0 ? round(($totalVoters / $totalAudience) * 100, 1) : 0;
 
         // Média de categorias votadas por eleitor
         $avgCategoriesPerVoter = $totalVoters > 0
-            ? round(Vote::select('audience_id')
+            ? round(Vote::forYear($year)->select('audience_id')
                 ->selectRaw('COUNT(DISTINCT category_id) as cat_count')
                 ->groupBy('audience_id')
                 ->get()
@@ -237,14 +247,14 @@ class BiPublicController extends Controller
 
         // Categoria mais votada
         $mostVotedCategory = Category::where('is_active', true)
-            ->withCount('votes')
+            ->withCount(['votes' => fn ($query) => $query->forYear($year)])
             ->orderByDesc('votes_count')
             ->first();
         $mostVotedName = $mostVotedCategory ? $mostVotedCategory->name : '—';
         $mostVotedCount = $mostVotedCategory ? $mostVotedCategory->votes_count : 0;
 
         // Dias desde o início da votação
-        $firstVote = Vote::orderBy('created_at')->first();
+        $firstVote = Vote::forYear($year)->orderBy('created_at')->first();
         $daysActive = $firstVote ? (int) $firstVote->created_at->diffInDays(now()) : 0;
 
         // Média de votos por dia (desde o início)
@@ -255,6 +265,7 @@ class BiPublicController extends Controller
 
         // Cadastros por hora (últimas 24h)
         $registrationsPerHour = Audience::where('created_at', '>=', now()->subHours(24))
+            ->where('year', $year)
             ->select(DB::raw("DATE_FORMAT(created_at, '%H:00') as hour"), DB::raw('COUNT(*) as total'))
             ->groupBy('hour')
             ->pluck('total', 'hour')

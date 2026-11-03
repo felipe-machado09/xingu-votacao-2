@@ -35,8 +35,11 @@ class CategoryResults extends Page implements HasTable
 
     public ?int $selectedCategoryId = null;
 
+    public int $year;
+
     public function mount(): void
     {
+        $this->year = \App\Services\ReportYear::latest();
         $this->selectedCategoryId = request()->get('category_id');
     }
 
@@ -50,8 +53,7 @@ class CategoryResults extends Page implements HasTable
         return $table
             ->query(
                 Category::query()
-                    ->where('is_active', true)
-                    ->withCount('votes')
+                    ->withCount(['votes' => fn ($query) => $query->forYear($this->year)])
                     ->orderBy('category_group')
                     ->orderBy('name')
             )
@@ -78,11 +80,12 @@ class CategoryResults extends Page implements HasTable
                     ->label('Vencedor Atual')
                     ->getStateUsing(function (Category $record) {
                         $winner = CategoryWinner::where('category_id', $record->id)
+                            ->where('year', $this->year)
                             ->with('company')
                             ->first();
-                        return $winner ? $winner->company->legal_name : 'Não definido';
+                        return $winner ? $winner->company->display_name : 'Não definido';
                     })
-                    ->icon(fn (Category $record) => CategoryWinner::where('category_id', $record->id)->exists() ? 'heroicon-o-trophy' : null)
+                    ->icon(fn (Category $record) => CategoryWinner::where('category_id', $record->id)->where('year', $this->year)->exists() ? 'heroicon-o-trophy' : null)
                     ->iconColor('warning'),
             ])
             ->actions([
@@ -104,6 +107,7 @@ class CategoryResults extends Page implements HasTable
         }
 
         return Vote::where('category_id', $this->selectedCategoryId)
+            ->forYear($this->year)
             ->select('company_id', DB::raw('COUNT(*) as votes'))
             ->groupBy('company_id')
             ->orderByDesc('votes')
@@ -113,7 +117,7 @@ class CategoryResults extends Page implements HasTable
                 $company = Company::find($vote->company_id);
                 return [
                     'company_id' => $vote->company_id,
-                    'company_name' => $company ? $company->legal_name : 'N/A',
+                    'company_name' => $company ? $company->display_name : 'N/A',
                     'votes' => $vote->votes,
                 ];
             })
@@ -127,6 +131,7 @@ class CategoryResults extends Page implements HasTable
         }
 
         return CategoryWinner::with('company')
+            ->where('year', $this->year)
             ->where('category_id', $this->selectedCategoryId)
             ->first();
     }
@@ -151,8 +156,13 @@ class CategoryResults extends Page implements HasTable
             return;
         }
 
+        if (! Vote::forYear($this->year)->where('category_id', $this->selectedCategoryId)->where('company_id', $companyId)->exists()) {
+            Notification::make()->title('Esta empresa não possui votos nesta categoria e edição.')->danger()->send();
+            return;
+        }
+
         CategoryWinner::updateOrCreate(
-            ['category_id' => $this->selectedCategoryId],
+            ['category_id' => $this->selectedCategoryId, 'year' => $this->year],
             [
                 'company_id' => $companyId,
                 'chosen_at' => now(),
@@ -170,5 +180,20 @@ class CategoryResults extends Page implements HasTable
     public function closeResults(): void
     {
         $this->selectedCategoryId = null;
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('exportExcel')->label('Extrair Excel')
+                ->action(fn () => \App\Services\ExcelExport::download(
+                    'resultados-'.$this->year.'.xlsx',
+                    ['Ano', 'Categoria', 'Empresa', 'Votos'],
+                    Vote::forYear($this->year)->select('category_id', 'company_id', DB::raw('COUNT(*) as total'))
+                        ->groupBy('category_id', 'company_id')->orderBy('category_id')->orderByDesc('total')
+                        ->with(['category', 'company'])->get()
+                        ->map(fn ($vote) => [$this->year, $vote->category->name, $vote->company->display_name, $vote->total])
+                )),
+        ];
     }
 }

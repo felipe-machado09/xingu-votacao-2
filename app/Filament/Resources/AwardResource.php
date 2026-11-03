@@ -35,6 +35,13 @@ class AwardResource extends Resource
                     ->label('Nome')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('year')
+                    ->label('Ano do Prêmio')
+                    ->required()
+                    ->integer()
+                    ->minValue(2000)
+                    ->maxValue(2100)
+                    ->default(fn () => \App\Models\LandingPageSection::campaignYear()),
                 Forms\Components\Textarea::make('description')
                     ->label('Descrição')
                     ->rows(3),
@@ -49,32 +56,25 @@ class AwardResource extends Resource
                     ->label('Nível do Prêmio')
                     ->required()
                     ->options([
-                        1 => 'Nível 1 - Básico (5 votos)',
-                        2 => 'Nível 2 - Intermediário (15 votos)',
+                        1 => 'Nível 1 - Básico',
+                        2 => 'Nível 2 - Intermediário',
                         3 => 'Nível 3 - Máximo (Todos os votos)',
                     ])
                     ->default(1)
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        $minVotes = match ($state) {
-                            1 => 5,
-                            2 => 15,
-                            3 => 999,
-                            default => 5,
-                        };
-                        $set('min_votes', $minVotes);
-                    }),
+                    ->live(),
                 Forms\Components\TextInput::make('min_votes')
                     ->label('Mínimo de Votos Necessários')
                     ->required()
                     ->numeric()
+                    ->integer()
                     ->default(5)
                     ->minValue(1)
-                    ->helperText('Número mínimo de votos que o participante precisa ter para concorrer a este prêmio'),
+                    ->helperText('Nos níveis 1 e 2, configure o mínimo por prêmio. No nível 3, vale votar em todas as categorias ativas, independentemente deste campo.'),
                 Forms\Components\TextInput::make('quantity')
                     ->label('Quantidade')
                     ->required()
                     ->numeric()
+                    ->integer()
                     ->default(1)
                     ->minValue(1),
                 Forms\Components\Toggle::make('is_active')
@@ -96,6 +96,7 @@ class AwardResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
+                Tables\Columns\TextColumn::make('year')->label('Ano')->sortable(),
                 Tables\Columns\TextColumn::make('tier')
                     ->label('Nível')
                     ->badge()
@@ -113,7 +114,7 @@ class AwardResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('min_votes')
                     ->label('Min. Votos')
-                    ->numeric()
+                    ->formatStateUsing(fn (Award $record) => $record->requirementLabel())
                     ->sortable(),
                 Tables\Columns\TextColumn::make('quantity')
                     ->label('Quantidade')
@@ -135,6 +136,10 @@ class AwardResource extends Resource
                     ->boolean(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('year')
+                    ->label('Ano')
+                    ->options(fn () => Award::query()->distinct()->orderByDesc('year')->pluck('year', 'year')->all())
+                    ->default(fn () => Award::max('year') ?? \App\Models\LandingPageSection::campaignYear()),
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Ativo'),
                 Tables\Filters\SelectFilter::make('tier')
@@ -146,6 +151,12 @@ class AwardResource extends Resource
                     ]),
             ])
             ->actions([
+                Actions\Action::make('toggleActive')
+                    ->authorize(fn (Award $record) => static::canEdit($record))
+                    ->label(fn (Award $record) => $record->is_active ? 'Desativar' : 'Ativar')
+                    ->icon(fn (Award $record) => $record->is_active ? 'heroicon-o-pause' : 'heroicon-o-play')
+                    ->requiresConfirmation()
+                    ->action(fn (Award $record) => $record->update(['is_active' => ! $record->is_active])),
                 Actions\EditAction::make(),
                 Actions\DeleteAction::make(),
             ])

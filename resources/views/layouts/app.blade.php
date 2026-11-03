@@ -13,7 +13,7 @@
     <title>@yield('title', 'Plataforma de Votação')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
+    <link rel="apple-touch-icon" href="{{ \App\Models\LandingPageSection::logoUrl() }}">
     @stack('head')
     @yield('meta')
     <script src="https://cdn.tailwindcss.com"></script>
@@ -32,7 +32,7 @@
                     <a href="{{ route('home') }}" class="text-lg sm:text-xl font-bold text-gray-900">Plataforma de Votação</a>
                 </div>
                 <!-- Mobile menu button -->
-                <button onclick="document.getElementById('app-mobile-menu').classList.toggle('hidden')" class="md:hidden flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                <button type="button" aria-label="Abrir menu de navegação" aria-controls="app-mobile-menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', !document.getElementById('app-mobile-menu').classList.toggle('hidden'))" class="md:hidden flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <div class="hidden md:flex items-center space-x-4">
@@ -93,6 +93,7 @@
     </main>
 
     <footer class="bg-white mt-12 py-6 border-t">
+        <x-regulation-link />
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
             <p>&copy; {{ date('Y') }} Plataforma de Votação. Todos os direitos reservados.</p>
         </div>

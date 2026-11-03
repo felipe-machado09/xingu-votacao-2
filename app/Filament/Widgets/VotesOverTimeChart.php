@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class VotesOverTimeChart extends ChartWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected ?string $heading = 'Evolução de Votos (Últimos 30 dias)';
 
     protected static ?int $sort = 2;
@@ -18,7 +20,7 @@ class VotesOverTimeChart extends ChartWidget
 
     protected function getData(): array
     {
-        $votes = Vote::query()
+        $votes = Vote::forYear($this->reportYear())
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
             ->where('created_at', '>=', now()->subDays(30))
             ->groupBy('date')

@@ -37,9 +37,11 @@ class LandingPageSectionResource extends Resource
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255)
-                    ->helperText('Identificador único da seção (ex: hero, about, stats)'),
+                    ->rules(['not_in:campaign,logo,countdown,regulation'])
+                    ->helperText('Identificador da seção (ex: hero, about, stats). Logo, prazo e regulamento ficam em Configurações da Edição.'),
                 Forms\Components\TextInput::make('title')
                     ->label('Título')
+                    ->helperText('Use {ano} para inserir automaticamente o ano da edição configurado no painel.')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('content')
                     ->label('Conteúdo')
@@ -56,16 +58,6 @@ class LandingPageSectionResource extends Resource
                     ->label('URL do Vídeo')
                     ->url()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('countdown_end_date')
-                    ->label('Data de Encerramento da Votação')
-                    ->helperText('Data e hora em que a votação será encerrada (exibida no countdown)')
-                    ->seconds(false)
-                    ->visible(fn ($record) => $record?->key === 'countdown')
-                    ->afterStateHydrated(function ($component, $record) {
-                        if ($record && $record->key === 'countdown') {
-                            $component->state($record->metadata['end_date'] ?? null);
-                        }
-                    }),
                 Forms\Components\KeyValue::make('metadata')
                     ->label('Metadados')
                     ->keyLabel('Chave')
@@ -129,6 +121,11 @@ class LandingPageSectionResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->whereNotIn('key', ['campaign', 'logo', 'countdown', 'regulation']);
     }
 
     public static function getPages(): array

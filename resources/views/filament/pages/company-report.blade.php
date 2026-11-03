@@ -1,4 +1,5 @@
 <x-filament-panels::page>
+    <x-report-year />
     <style>
         :root {
             --rpt-bg: #ffffff;
@@ -150,10 +151,10 @@
                 @if($this->record->logo_path)
                     <img src="{{ asset('storage/' . $this->record->logo_path) }}" alt="Logo" class="rpt-logo">
                 @else
-                    <div class="rpt-avatar">{{ substr($this->record->legal_name, 0, 1) }}</div>
+                    <div class="rpt-avatar">{{ substr($this->record->display_name, 0, 1) }}</div>
                 @endif
                 <div>
-                    <h2 class="rpt-company-name">{{ $this->record->legal_name }}</h2>
+                    <h2 class="rpt-company-name">{{ $this->record->display_name }}</h2>
                     <p class="rpt-cnpj">CNPJ: {{ preg_replace('/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/', '$1.$2.$3/$4-$5', $this->record->cnpj ?? '') }}</p>
                 </div>
             </div>

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class AgeDistributionChart extends ChartWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected ?string $heading = 'Faixa Etária dos Votantes';
 
     protected static ?int $sort = 5;
@@ -18,7 +20,7 @@ class AgeDistributionChart extends ChartWidget
 
     protected function getData(): array
     {
-        $ages = Audience::query()
+        $ages = Audience::whereHas('votes', fn ($query) => $query->forYear($this->reportYear()))
             ->whereNotNull('birth_date')
             ->select(DB::raw("
                 CASE

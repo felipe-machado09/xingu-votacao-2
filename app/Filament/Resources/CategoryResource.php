@@ -9,6 +9,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Actions;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
@@ -36,7 +37,7 @@ class CategoryResource extends Resource
                     ->label('Nome')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) =>
+                    ->afterStateUpdated(fn (string $operation, $state, Set $set) =>
                         $operation === 'create' ? $set('slug', Str::slug($state)) : null
                     )
                     ->maxLength(255),
@@ -71,6 +72,12 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('voting_url')
+                    ->label('Link de votação')
+                    ->state(fn (Category $record) => route('vote.category', $record))
+                    ->copyable()
+                    ->url(fn (Category $record) => route('vote.category', $record))
+                    ->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nome')
                     ->searchable()
@@ -96,7 +103,7 @@ class CategoryResource extends Resource
                     ->badge()
                     ->color('info'),
                 Tables\Columns\TextColumn::make('votes_count')
-                    ->counts('votes')
+                    ->counts(fn ($livewire) => ['votes' => fn ($query) => $query->forYear((int) ($livewire->getTableFilterState('year')['value'] ?? \App\Services\ReportYear::latest()))])
                     ->label('Votos')
                     ->badge()
                     ->color('success'),
@@ -110,6 +117,10 @@ class CategoryResource extends Resource
                     ->sortable(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('year')->label('Ano dos votos')
+                    ->options(fn () => \App\Services\ReportYear::options())
+                    ->default(fn () => \App\Services\ReportYear::latest())
+                    ->query(fn ($query) => $query),
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Ativo'),
                 Tables\Filters\SelectFilter::make('category_group')
@@ -121,6 +132,14 @@ class CategoryResource extends Resource
                             ->pluck('category_group', 'category_group')
                             ->toArray();
                     }),
+            ])
+            ->headerActions([
+                Actions\Action::make('exportExcel')->label('Extrair Excel')
+                    ->action(fn ($livewire) => \App\Services\ExcelExport::download('categorias.xlsx',
+                        ['Categoria', 'Link de votação', 'Votos na edição'],
+                        $livewire->getFilteredSortedTableQuery()->get()->map(fn (Category $category) => [
+                            $category->name, route('vote.category', $category), $category->votes_count,
+                        ]))),
             ])
             ->actions([
                 Actions\EditAction::make(),

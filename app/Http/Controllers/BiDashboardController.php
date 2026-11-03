@@ -18,7 +18,13 @@ class BiDashboardController extends Controller
      */
     public function index()
     {
-        return view('bi.dashboard');
+        return view('bi.dashboard', ['year' => \App\Services\ReportYear::fromRequest()]);
+    }
+
+    public function export(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        return \App\Services\ExcelExport::download('bi-'.\App\Services\ReportYear::fromRequest().'.xlsx',
+            ['Indicador', 'Valor'], \App\Services\ExcelExport::metrics($this->data()->getData(true)));
     }
 
     /**
@@ -67,11 +73,12 @@ class BiDashboardController extends Controller
      */
     public function data(): JsonResponse
     {
+        $year = \App\Services\ReportYear::fromRequest();
         // Total geral de votos
-        $totalVotes = Vote::count();
+        $totalVotes = Vote::forYear($year)->count();
 
         // Total de eleitores (audiência que votou)
-        $totalVoters = Vote::distinct('audience_id')->count('audience_id');
+        $totalVoters = Vote::forYear($year)->distinct('audience_id')->count('audience_id');
 
         // Total de categorias ativas
         $totalCategories = Category::where('is_active', true)->count();
@@ -82,7 +89,7 @@ class BiDashboardController extends Controller
         })->count();
 
         // Votos por hora (últimas 24h)
-        $votesPerHour = Vote::where('created_at', '>=', now()->subHours(24))
+        $votesPerHour = Vote::forYear($year)->where('created_at', '>=', now()->subHours(24))
             ->select(
                 DB::raw("DATE_FORMAT(created_at, '%H:00') as hour"),
                 DB::raw('COUNT(*) as total')
@@ -102,7 +109,7 @@ class BiDashboardController extends Controller
 
         // Top 10 categorias com mais votos
         $topCategories = Category::where('is_active', true)
-            ->withCount('votes')
+            ->withCount(['votes' => fn ($query) => $query->forYear($year)])
             ->orderByDesc('votes_count')
             ->limit(10)
             ->get()
@@ -113,18 +120,18 @@ class BiDashboardController extends Controller
             ]);
 
         // Top 10 empresas mais votadas (geral)
-        $topCompanies = Company::withCount('votes')
+        $topCompanies = Company::withCount(['votes' => fn ($query) => $query->forYear($year)])
             ->orderByDesc('votes_count')
             ->limit(10)
             ->get()
             ->map(fn($c) => [
-                'name' => $c->legal_name,
+                'name' => $c->display_name,
                 'votes' => $c->votes_count,
                 'logo' => $c->logo_path ? asset('storage/' . $c->logo_path) : null,
             ]);
 
         // Votos por faixa etária
-        $votesByAge = Vote::join('audiences', 'votes.audience_id', '=', 'audiences.id')
+        $votesByAge = Vote::forYear($year)->join('audiences', 'votes.audience_id', '=', 'audiences.id')
             ->whereNotNull('audiences.birth_date')
             ->select(DB::raw("
                 CASE
@@ -143,38 +150,38 @@ class BiDashboardController extends Controller
             ->toArray();
 
         // Votos nos últimos 5 segundos (indicador de atividade)
-        $recentVotes = Vote::where('created_at', '>=', now()->subSeconds(10))->count();
+        $recentVotes = Vote::forYear($year)->where('created_at', '>=', now()->subSeconds(10))->count();
 
         // Votos hoje
-        $votesToday = Vote::whereDate('created_at', today())->count();
+        $votesToday = Vote::forYear($year)->whereDate('created_at', today())->count();
 
         // Votos ontem
-        $votesYesterday = Vote::whereDate('created_at', today()->subDay())->count();
+        $votesYesterday = Vote::forYear($year)->whereDate('created_at', today()->subDay())->count();
 
         // Votos na última hora
-        $votesLastHour = Vote::where('created_at', '>=', now()->subHour())->count();
+        $votesLastHour = Vote::forYear($year)->where('created_at', '>=', now()->subHour())->count();
 
         // Votos semana atual (segunda a hoje)
         $startOfWeek = now()->startOfWeek();
-        $votesThisWeek = Vote::where('created_at', '>=', $startOfWeek)->count();
+        $votesThisWeek = Vote::forYear($year)->where('created_at', '>=', $startOfWeek)->count();
 
         // Votos semana passada (segunda a domingo)
         $startOfLastWeek = now()->subWeek()->startOfWeek();
         $endOfLastWeek = now()->subWeek()->endOfWeek();
-        $votesLastWeek = Vote::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->count();
+        $votesLastWeek = Vote::forYear($year)->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->count();
 
         // Votos semana passada até o mesmo dia da semana (comparativo justo)
         $dayOfWeek = now()->dayOfWeekIso; // 1=seg ... 7=dom
         $sameDayLastWeek = $startOfLastWeek->copy()->addDays($dayOfWeek - 1)->endOfDay();
-        $votesLastWeekSameDay = Vote::whereBetween('created_at', [$startOfLastWeek, $sameDayLastWeek])->count();
+        $votesLastWeekSameDay = Vote::forYear($year)->whereBetween('created_at', [$startOfLastWeek, $sameDayLastWeek])->count();
 
         // Eleitores hoje vs ontem
-        $votersToday = Vote::whereDate('created_at', today())->distinct('audience_id')->count('audience_id');
-        $votersYesterday = Vote::whereDate('created_at', today()->subDay())->distinct('audience_id')->count('audience_id');
+        $votersToday = Vote::forYear($year)->whereDate('created_at', today())->distinct('audience_id')->count('audience_id');
+        $votersYesterday = Vote::forYear($year)->whereDate('created_at', today()->subDay())->distinct('audience_id')->count('audience_id');
 
         // Eleitores semana atual vs semana passada
-        $votersThisWeek = Vote::where('created_at', '>=', $startOfWeek)->distinct('audience_id')->count('audience_id');
-        $votersLastWeek = Vote::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->distinct('audience_id')->count('audience_id');
+        $votersThisWeek = Vote::forYear($year)->where('created_at', '>=', $startOfWeek)->distinct('audience_id')->count('audience_id');
+        $votersLastWeek = Vote::forYear($year)->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->distinct('audience_id')->count('audience_id');
 
         // Média de votos por hora hoje vs ontem
         $hoursToday = max(now()->hour, 1);
@@ -186,21 +193,21 @@ class BiDashboardController extends Controller
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
             $dayLabel = $date->translatedFormat('D d/m');
-            $votesPerDay[$dayLabel] = Vote::whereDate('created_at', $date->toDateString())->count();
+            $votesPerDay[$dayLabel] = Vote::forYear($year)->whereDate('created_at', $date->toDateString())->count();
         }
 
         // Ranking por categoria (top empresa de cada categoria)
         $categoryLeaders = Category::where('is_active', true)
-            ->with(['votes' => function ($q) {
-                $q->select('category_id', 'company_id', DB::raw('COUNT(*) as total'))
+            ->with(['votes' => function ($q) use ($year) {
+                $q->forYear($year)->select('category_id', 'company_id', DB::raw('COUNT(*) as total'))
                     ->groupBy('category_id', 'company_id');
             }])
-            ->withCount('votes')
+            ->withCount(['votes' => fn ($query) => $query->forYear($year)])
             ->orderByDesc('votes_count')
             ->limit(15)
             ->get()
-            ->map(function ($category) {
-                $topCompany = Vote::where('category_id', $category->id)
+            ->map(function ($category) use ($year) {
+                $topCompany = Vote::forYear($year)->where('category_id', $category->id)
                     ->select('company_id', DB::raw('COUNT(*) as total'))
                     ->groupBy('company_id')
                     ->orderByDesc('total')
@@ -212,7 +219,7 @@ class BiDashboardController extends Controller
                     'category' => $category->name,
                     'group' => $category->category_group,
                     'total_votes' => $category->votes_count,
-                    'leader' => $company ? $company->legal_name : '—',
+                    'leader' => $company ? $company->display_name : '—',
                     'leader_votes' => $topCompany ? $topCompany->total : 0,
                 ];
             });

@@ -48,7 +48,8 @@ class ManageTvSessions extends Page implements HasTable
                         ->required()
                         ->minLength(6)
                         ->maxLength(6)
-                        ->numeric(),
+                        ->inputMode('numeric')
+                        ->rules(['regex:/^[0-9]{6}$/']),
                     TextInput::make('tvName')
                         ->label('Nome da TV (opcional)')
                         ->placeholder('Ex: TV Recepção'),

@@ -11,6 +11,8 @@ use Filament\Actions;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class CompanyResource extends Resource
 {
@@ -32,9 +34,14 @@ class CompanyResource extends Resource
     {
         return $schema
             ->schema([
+                Forms\Components\TextInput::make('trade_name')
+                    ->label('Nome Fantasia')
+                    ->formatStateUsing(fn ($state, ?Company $record) => $state ?: $record?->legal_name)
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('legal_name')
                     ->label('Razão Social')
-                    ->required()
                     ->maxLength(255)
                     ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, \Filament\Schemas\Components\Utilities\Set $set) {
@@ -43,10 +50,9 @@ class CompanyResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('slug')
                     ->label('Slug (URL)')
-                    ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255)
-                    ->helperText('Usado na URL da página da empresa (ex: /empresa/halvorson-llc)')
+                    ->helperText('Identificador da empresa. Os links públicos de votação ficam no cadastro de categorias.')
                     ->formatStateUsing(fn ($state) => $state ?? '')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('cnpj')
@@ -55,6 +61,7 @@ class CompanyResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->maxLength(18)
                     ->mask('99.999.999/9999-99')
+                    ->stripCharacters(['.', '/', '-'])
                     ->placeholder('00.000.000/0000-00')
                     ->dehydrateStateUsing(fn ($state) => preg_replace('/\D/', '', $state))
                     ->rules([new \App\Rules\ValidCNPJ()])
@@ -67,26 +74,37 @@ class CompanyResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('responsible_name')
                     ->label('Nome do Responsável')
-                    ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('responsible_phone')
                     ->label('Telefone do Responsável')
                     ->tel()
-                    ->required()
                     ->mask('(99) 99999-9999')
                     ->placeholder('(00) 00000-0000')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('whatsapp_number')
+                    ->label('WhatsApp')
+                    ->tel()
+                    ->required()
+                    ->rules([new \App\Rules\ValidPhone])
+                    ->dehydrateStateUsing(fn ($state) => preg_replace('/\D/', '', $state))
+                    ->maxLength(20),
+                Forms\Components\TextInput::make('instagram_url')
+                    ->label('Link do Instagram')
+                    ->url()
                     ->maxLength(255),
                 Forms\Components\Select::make('categories')
                     ->label('Categorias')
                     ->relationship('categories', 'name')
                     ->multiple()
+                    ->required()
                     ->preload()
                     ->searchable(),
                 Section::make('Imagens da Empresa')
                     ->schema([
                         Forms\Components\FileUpload::make('logo_path')
-                            ->label('Logo')
+                            ->label('Logomarca')
+                            ->required()
                             ->image()
                             ->directory('company-logos')
                             ->disk('public')
@@ -132,10 +150,11 @@ class CompanyResource extends Resource
                     ->label('Logo')
                     ->disk('public')
                     ->circular(),
-                Tables\Columns\TextColumn::make('legal_name')
-                    ->label('Razão Social')
-                    ->searchable()
-                    ->sortable()
+                Tables\Columns\TextColumn::make('trade_name')
+                    ->label('Nome Fantasia')
+                    ->getStateUsing(fn (Company $record) => $record->display_name)
+                    ->searchable(['trade_name', 'legal_name'])
+                    ->sortable(query: fn (Builder $query, string $direction) => $query->orderBy(DB::raw("COALESCE(NULLIF(trade_name, ''), legal_name)"), $direction))
                     ->weight('bold'),
                 Tables\Columns\TextColumn::make('cnpj')
                     ->label('CNPJ')
@@ -154,13 +173,24 @@ class CompanyResource extends Resource
                     ->badge()
                     ->color('info'),
                 Tables\Columns\TextColumn::make('votes_count')
-                    ->counts('votes')
+                    ->counts(fn ($livewire) => ['votes' => fn ($query) => $query->forYear((int) ($livewire->getTableFilterState('year')['value'] ?? \App\Services\ReportYear::latest()))])
                     ->label('Votos')
                     ->badge()
                     ->color('success'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('year')->label('Ano dos votos')
+                    ->options(fn () => \App\Services\ReportYear::options())
+                    ->default(fn () => \App\Services\ReportYear::latest())
+                    ->query(fn ($query) => $query),
+            ])
+            ->headerActions([
+                Actions\Action::make('exportExcel')->label('Extrair Excel')
+                    ->action(fn ($livewire) => \App\Services\ExcelExport::download('empresas.xlsx',
+                        ['Nome fantasia', 'CNPJ', 'WhatsApp', 'Instagram', 'Votos na edição'],
+                        $livewire->getFilteredSortedTableQuery()->get()->map(fn (Company $company) => [
+                            $company->display_name, $company->cnpj, $company->whatsapp_number, $company->instagram_url, $company->votes_count,
+                        ]))),
             ])
             ->actions([
                 Actions\Action::make('report')

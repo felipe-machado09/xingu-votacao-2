@@ -18,39 +18,52 @@ class VoteController extends Controller
         $audienceId = session('audience_id');
         $audience = $audienceId ? Audience::find($audienceId) : null;
 
-        $categories = Category::open()->with('companies')->withCount('votes')->orderBy('votes_count', 'asc')->get();
-        $awards = Award::where('is_active', true)->get();
+        $categories = Category::open()->with('companies')->withCount(['votes' => fn ($query) => $query->forYear(\App\Models\LandingPageSection::campaignYear())])->orderBy('votes_count', 'asc')->get();
+        $awards = Award::currentYear()->where('is_active', true)->get();
+        $awards = $awards->filter(fn (Award $award) => $award->hasRemainingQuantity() && $award->requiredVotes() > 0);
+        $minimumPrizeVotes = $awards->min(fn (Award $award) => $award->requiredVotes());
+        $prizeProgress = $awards->mapWithKeys(fn (Award $award) => [
+            $award->id => $audience ? $award->qualifyingVotes()->where('audience_id', $audience->id)->distinct()->count('category_id') : 0,
+        ]);
         $sponsors = Sponsor::active()->ordered()->get();
 
         if ($audience) {
-            $votedCategoryIds = $audience->votes()->pluck('category_id')->toArray();
+            $votedCategoryIds = $audience->votes()->forYear(\App\Models\LandingPageSection::campaignYear())->pluck('category_id')->toArray();
         } else {
             $votedCategoryIds = [];
         }
 
-        return view('vote.index', compact('categories', 'votedCategoryIds', 'audience', 'awards', 'sponsors'));
+        return view('vote.index', compact('categories', 'votedCategoryIds', 'audience', 'awards', 'sponsors', 'minimumPrizeVotes', 'prizeProgress'));
     }
 
     public function show(Request $request, Category $category)
     {
-        $category->load('companies', 'winner.company');
+        abort_unless($category->is_active, 404);
+        $category->load(['companies' => fn ($query) => $query
+            ->when(\App\Models\LandingPageSection::campaignOption('randomize_companies'),
+                fn ($query) => $query->inRandomOrder(),
+                fn ($query) => $query->orderBy('trade_name')->orderBy('legal_name'))]);
 
         $audienceId = session('audience_id');
         $audience = $audienceId ? Audience::find($audienceId) : null;
 
         $userVote = null;
+        if (! $audience) {
+            session(['voting_category_slug' => $category->slug]);
+        }
         $nextCategory = null;
         $totalCategories = 0;
         $votedCount = 0;
 
         if ($audience) {
             $userVote = Vote::where('audience_id', $audience->id)
+                ->forYear(\App\Models\LandingPageSection::campaignYear())
                 ->where('category_id', $category->id)
                 ->first();
 
             // Progresso de votação
-            $votedCategoryIds = $audience->votes()->pluck('category_id')->toArray();
-            $openCategories = Category::open()->withCount('votes')->orderBy('votes_count', 'asc')->get();
+            $votedCategoryIds = $audience->votes()->forYear(\App\Models\LandingPageSection::campaignYear())->pluck('category_id')->toArray();
+            $openCategories = Category::open()->withCount(['votes' => fn ($query) => $query->forYear(\App\Models\LandingPageSection::campaignYear())])->orderBy('votes_count', 'asc')->get();
             $totalCategories = $openCategories->count();
             $votedCount = $openCategories->whereIn('id', $votedCategoryIds)->count();
 
@@ -83,12 +96,13 @@ class VoteController extends Controller
 
         // Buscar próxima categoria ainda não votada
         $votedCategoryIds = Vote::where('audience_id', $audienceId)
+            ->forYear(\App\Models\LandingPageSection::campaignYear())
             ->pluck('category_id')
             ->toArray();
 
         $nextCategory = Category::open()
             ->whereNotIn('id', $votedCategoryIds)
-            ->withCount('votes')
+            ->withCount(['votes' => fn ($query) => $query->forYear(\App\Models\LandingPageSection::campaignYear())])
             ->orderBy('votes_count', 'asc')
             ->first();
 

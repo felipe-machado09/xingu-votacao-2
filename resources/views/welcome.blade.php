@@ -10,10 +10,10 @@
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melhores do Ano 2025 - Vale do Xingu | Vote nas melhores empresas</title>
+    <title>Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }} - Vale do Xingu | Vote nas melhores empresas</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região e ajude a escolher os vencedores de 2025. Concorra a prêmios exclusivos!">
+    <meta name="description" content="Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região e ajude a escolher os vencedores de {{ \App\Models\LandingPageSection::campaignYear() }}. Concorra a prêmios exclusivos!">
     <meta name="keywords" content="melhores do ano, vale do xingu, votação, prêmio, empresas, altamira, pará, amazônia">
     <meta name="author" content="Vale do Xingu">
     <meta name="robots" content="index, follow">
@@ -22,9 +22,9 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://melhores.valedoxingu.com.br">
-    <meta property="og:title" content="Melhores do Ano 2025 - Vale do Xingu">
+    <meta property="og:title" content="Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }} - Vale do Xingu">
     <meta property="og:description" content="Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região e concorra a prêmios exclusivos!">
-    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
@@ -33,21 +33,21 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://melhores.valedoxingu.com.br">
-    <meta name="twitter:title" content="Melhores do Ano 2025 - Vale do Xingu">
+    <meta name="twitter:title" content="Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }} - Vale do Xingu">
     <meta name="twitter:description" content="Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região e concorra a prêmios exclusivos!">
-    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta name="twitter:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
+    <link rel="apple-touch-icon" href="{{ \App\Models\LandingPageSection::logoUrl() }}">
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
         "@@type": "Event",
-        "name": "Melhores do Ano 2025 - Vale do Xingu",
+        "name": "Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }} - Vale do Xingu",
         "description": "Vote nas melhores empresas do Vale do Xingu! Participe da maior premiação da região.",
         "url": "https://melhores.valedoxingu.com.br",
         "eventStatus": "https://schema.org/EventScheduled",
@@ -61,7 +61,7 @@
             "name": "Vale do Xingu",
             "url": "https://valedoxingu.com.br"
         },
-        "image": "{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}"
+        "image": "{{ \App\Models\LandingPageSection::logoUrl() }}"
     }
     </script>
 
@@ -198,27 +198,24 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
-                    @if($sections['hero']->image ?? null)
-                        <img src="{{ asset('storage/' . $sections['hero']->image) }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
-                    @else
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
-                    @endif
+                    <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                 </div>
                 <!-- Mobile menu button -->
-                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                <button type="button" aria-label="Abrir menu de navegação" aria-controls="mobile-menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', !document.getElementById('mobile-menu').classList.toggle('hidden'))" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <nav class="hidden md:flex items-center space-x-6">
+                    @if(\App\Models\LandingPageSection::campaignOption('company_registration_enabled'))
+                        <a href="{{ route('company.register') }}" class="text-gray-700 hover:text-red-600 font-medium">Cadastre sua empresa</a>
+                    @endif
                     @if(session('audience_id'))
                         <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Votar</a>
-                        <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Sair</button>
                         </form>
                     @else
                         <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Categorias</a>
-                        <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 font-medium">Login</a>
                         <a href="{{ route('register') }}" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
                     @endif
@@ -228,16 +225,17 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
             <div class="px-4 py-3 space-y-2">
+                @if(\App\Models\LandingPageSection::campaignOption('company_registration_enabled'))
+                    <a href="{{ route('company.register') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Cadastre sua empresa</a>
+                @endif
                 @if(session('audience_id'))
                     <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Votar</a>
-                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="block w-full text-left py-2 text-gray-700 hover:text-red-600 font-medium">Sair</button>
                     </form>
                 @else
                     <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Categorias</a>
-                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                     <a href="{{ route('login') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Login</a>
                     <a href="{{ route('register') }}" class="block py-2 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
                 @endif
@@ -289,12 +287,12 @@
             <div class="text-center">
                 <!-- Logo -->
                 <div class="mb-10 animate-fade-in">
-                    <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 sm:h-32 md:h-40 mx-auto drop-shadow-lg">
+                    <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logomarca Melhores do Ano" class="h-20 sm:h-32 md:h-40 mx-auto drop-shadow-lg">
                 </div>
 
                 <!-- Headline -->
                 <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight animate-slide-up">
-                    <span class="block">{{ $sections['hero']->title ?? 'A votação dos Melhores do Ano 2025 de Altamira já começou!' }}</span>
+                    <span class="block">{{ $sections['hero']->title ?? 'A votação dos Melhores do Ano '.\App\Models\LandingPageSection::campaignYear().' de Altamira já começou!' }}</span>
                 </h1>
 
                 <!-- Subtitle -->
@@ -419,6 +417,7 @@
     </section>
 
     <!-- Prize Promotion Section -->
+    @if($minimumPrizeVotes)
     <section class="py-20 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12 items-center">
@@ -429,7 +428,7 @@
                         <span class="text-red-600">E ainda pode virar prêmio.</span>
                     </h2>
                     <p class="text-base sm:text-xl md:text-2xl text-gray-700 mb-6 sm:mb-8 leading-relaxed">
-                        Vote em pelo menos 5 empresas no Melhores do Ano 2025 e participe dos sorteios promovidos pela Vale do Xingu.
+                        Os prêmios do Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }} exigem a partir de {{ $minimumPrizeVotes }} votos. Confira os requisitos de cada prêmio e o regulamento para participar dos sorteios.
                     </p>
 
                     <div class="space-y-4 mb-8">
@@ -447,8 +446,8 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                             </svg>
                             <div>
-                                <p class="text-lg font-semibold text-gray-900">Participe automaticamente</p>
-                                <p class="text-gray-600">Ao votar em 5+ empresas, você já está concorrendo</p>
+                                <p class="text-lg font-semibold text-gray-900">Acompanhe sua participação</p>
+                                <p class="text-gray-600">Veja seu progresso e o mínimo de votos de cada prêmio na página de votação.</p>
                             </div>
                         </div>
                         <div class="flex items-start">
@@ -489,6 +488,7 @@
         </div>
     </section>
 
+    @endif
     <!-- Categories Section -->
     @if($categories->count() > 0)
     <section class="py-20 bg-white">
@@ -602,67 +602,6 @@
         </div>
     </section>
 
-    <!-- Winners Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="scroll-slide-up">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
-                    {{ $sections['winners']->title ?? 'Melhores do Ano 2024' }}
-                </h2>
-                <p class="text-xl text-center text-gray-700 mb-12">
-                    {{ $sections['winners']->content ?? 'Aqui, o resultado é público, auditável e legítimo.' }}
-                </p>
-            </div>
-
-            @if($winners->count() > 0)
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-12">
-                @foreach($winners as $index => $winner)
-                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 scroll-scale" data-delay="{{ $index * 100 }}">
-                    @if($winner->image)
-                        @php
-                            $imagePath = $winner->image;
-                            // Garante que o caminho está correto para o storage
-                            if (!str_starts_with($imagePath, 'winners/')) {
-                                $imagePath = 'winners/' . basename($imagePath);
-                            }
-                            $imageUrl = asset('storage/' . $imagePath);
-                        @endphp
-                        <img src="{{ $imageUrl }}" alt="{{ $winner->name }}" class="w-full h-48 object-cover" onerror="this.parentElement.innerHTML='<div class=\'w-full h-48 bg-gray-200 flex items-center justify-center\'><span class=\'text-gray-400\'>Imagem não encontrada</span></div>';">
-                    @else
-                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                            <span class="text-gray-400">Sem imagem</span>
-                        </div>
-                    @endif
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">{{ $winner->name }}</h3>
-                        @if($winner->category)
-                            <p class="text-sm text-gray-600 mb-1">{{ $winner->category }}</p>
-                        @endif
-                        @if($winner->company_name)
-                            <p class="text-sm font-medium text-red-600">{{ $winner->company_name }}</p>
-                        @endif
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            @else
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-12">
-                @for($i = 0; $i < 8; $i++)
-                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md">
-                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-400">Foto</span>
-                    </div>
-                </div>
-                @endfor
-            </div>
-            @endif
-
-            <p class="text-sm text-gray-600 text-center italic">
-                {{ $sections['winners_note']->content ?? 'Obs: As marcas reconhecidas nesta premiação não foram indicadas por jurados, influenciadores ou campanhas pagas. Elas foram escolhidas pela própria população de Altamira.' }}
-            </p>
-        </div>
-    </section>
-
     <!-- Sponsors Section -->
     <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -732,7 +671,7 @@
                 @endphp
                 @foreach($faqs as $index => $faq)
                 <div class="border border-gray-200 rounded-lg overflow-hidden scroll-slide-up transition-all duration-300 hover:shadow-lg" data-delay="{{ $index * 50 }}">
-                    <button onclick="toggleFaq({{ $index }})" class="w-full px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50 flex justify-between items-center transition-colors">
+                    <button type="button" id="faq-{{ $index }}" aria-controls="answer-{{ $index }}" aria-expanded="false" onclick="toggleFaq({{ $index }})" class="w-full px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50 flex justify-between items-center transition-colors">
                         <span>{{ $faq['question'] }}</span>
                         <svg id="icon-{{ $index }}" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -753,7 +692,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12">
                 <!-- Logo -->
                 <div class="md:col-span-1">
-                    <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 mb-6">
+                    <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logomarca Melhores do Ano" class="h-20 mb-6">
                     <p class="text-sm text-gray-600 leading-relaxed">
                         O prêmio que reconhece os melhores de Altamira através do voto popular.
                     </p>
@@ -782,12 +721,7 @@
                             </svg>
                             Termos de uso / Política de privacidade
                         </a>
-                        <a href="{{ $sections['footer']->metadata['regulation_url'] ?? '#' }}" target="_blank" class="block text-sm text-gray-600 hover:text-red-600 transition-colors flex items-center group">
-                            <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Regulamento
-                        </a>
+                        <x-regulation-link />
                         <a href="{{ $sections['footer']->metadata['lgpd_url'] ?? '#' }}" target="_blank" class="block text-sm text-gray-600 hover:text-red-600 transition-colors flex items-center group">
                             <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
@@ -838,6 +772,7 @@
             const answer = document.getElementById('answer-' + index);
             const icon = document.getElementById('icon-' + index);
             const isHidden = answer.classList.contains('hidden');
+            document.getElementById('faq-' + index).setAttribute('aria-expanded', isHidden);
 
             if (isHidden) {
                 answer.classList.remove('hidden');

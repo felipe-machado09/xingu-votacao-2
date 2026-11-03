@@ -39,6 +39,7 @@ class WeeklyDraw extends Page implements HasForms, HasTable
         return $table
             ->query(AwardDraw::query()->with(['award', 'audience'])->where('status', 'completed')->latest())
             ->columns([
+                TextColumn::make('award.year')->label('Ano')->sortable(),
                 TextColumn::make('award.name')
                     ->label('Prêmio')
                     ->badge()
@@ -72,6 +73,21 @@ class WeeklyDraw extends Page implements HasForms, HasTable
                 ToggleColumn::make('show_on_home')
                     ->label('Exibir na Home'),
             ])
+            ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('year')->label('Ano')
+                    ->options(fn () => Award::distinct()->orderByDesc('year')->pluck('year', 'year')->all())
+                    ->default(fn () => Award::max('year') ?? \App\Models\LandingPageSection::campaignYear())
+                    ->query(fn ($query, array $data) => $query->whereHas('award',
+                        fn ($awards) => $awards->where('year', (int) ($data['value'] ?: \App\Models\LandingPageSection::campaignYear())))),
+            ])
+            ->headerActions([
+                \Filament\Actions\Action::make('exportExcel')->label('Extrair Excel')
+                    ->action(fn () => \App\Services\ExcelExport::download('sorteios.xlsx',
+                        ['Ano', 'Prêmio', 'Ganhador', 'Data do sorteio'],
+                        $this->getFilteredSortedTableQuery()->get()->map(fn ($draw) => [
+                            $draw->award->year, $draw->award->name, $draw->audience->name, $draw->drawn_at?->format('d/m/Y H:i'),
+                        ]))),
+            ])
             ->paginated([10, 25, 50]);
     }
 
@@ -81,13 +97,10 @@ class WeeklyDraw extends Page implements HasForms, HasTable
 
         try {
             // Buscar prêmio disponível (ordenado por tier, do menor para o maior)
-            $award = Award::where('is_active', true)
-                ->whereHas('draws', function ($query) {
-                    $query->where('status', 'completed');
-                }, '<', DB::raw('quantity'))
-                ->orWhereDoesntHave('draws')
+            $award = Award::currentYear()->where('is_active', true)
                 ->orderBy('tier', 'asc')
-                ->first();
+                ->get()
+                ->first(fn (Award $award) => $award->hasRemainingQuantity());
 
             if (!$award || !$award->hasRemainingQuantity()) {
                 Notification::make()
@@ -99,6 +112,7 @@ class WeeklyDraw extends Page implements HasForms, HasTable
             }
 
             $lastCompletedDraw = AwardDraw::where('status', 'completed')
+                ->whereHas('award', fn ($query) => $query->where('year', $award->year))
                 ->latest('drawn_at')
                 ->first();
 
@@ -106,27 +120,19 @@ class WeeklyDraw extends Page implements HasForms, HasTable
                 ? $lastCompletedDraw->drawn_at
                 : now()->subDays(7);
 
-            // Buscar IDs de audiências elegíveis com base no min_votes do prêmio
-            $minVotesRequired = $award->min_votes ?? 5;
-
-            // Para tier 3 (todos os votos), precisamos verificar se votou em TODAS as categorias
-            if ($award->tier == 3) {
-                $totalCategories = \App\Models\Category::count();
-                $eligibleAudienceIds = Vote::where('created_at', '>=', $cutoffDate)
-                    ->select('audience_id')
-                    ->groupBy('audience_id')
-                    ->havingRaw('COUNT(DISTINCT category_id) >= ?', [$totalCategories])
-                    ->pluck('audience_id')
-                    ->toArray();
-            } else {
-                // Para tier 1 e 2, verificar se tem o número mínimo de votos
-                $eligibleAudienceIds = Vote::where('created_at', '>=', $cutoffDate)
-                    ->select('audience_id')
-                    ->groupBy('audience_id')
-                    ->havingRaw('COUNT(DISTINCT category_id) >= ?', [$minVotesRequired])
-                    ->pluck('audience_id')
-                    ->toArray();
+            $minVotesRequired = $award->requiredVotes();
+            if ($minVotesRequired < 1) {
+                Notification::make()->title('Não há categorias ativas para este prêmio.')->warning()->send();
+                DB::rollBack();
+                return;
             }
+
+            $eligibleAudienceIds = $award->qualifyingVotes()->where('created_at', '>=', $cutoffDate)
+                ->select('audience_id')
+                ->groupBy('audience_id')
+                ->havingRaw('COUNT(DISTINCT category_id) >= ?', [$minVotesRequired])
+                ->pluck('audience_id')
+                ->toArray();
 
             if (empty($eligibleAudienceIds)) {
                 Notification::make()
@@ -173,7 +179,7 @@ class WeeklyDraw extends Page implements HasForms, HasTable
 
     public function getAvailableAwards(): array
     {
-        return Award::where('is_active', true)
+        return Award::currentYear()->where('is_active', true)
             ->get()
             ->filter(fn (Award $award) => $award->hasRemainingQuantity())
             ->map(fn (Award $award) => [

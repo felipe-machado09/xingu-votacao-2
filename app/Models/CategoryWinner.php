@@ -19,6 +19,7 @@ class CategoryWinner extends Model
 
     protected $casts = [
         'chosen_at' => 'datetime',
+        'year' => 'integer',
     ];
 
     public function category(): BelongsTo

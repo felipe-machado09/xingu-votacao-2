@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('title', 'Melhores do Ano 2025')</title>
+    <title>@yield('title', 'Melhores do Ano '.\App\Models\LandingPageSection::campaignYear())</title>
     <!--[if mso]>
     <noscript>
         <xml>
@@ -26,8 +26,8 @@
                     {{-- HEADER com Logo --}}
                     <tr>
                         <td align="center" style="padding: 40px 30px 20px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 16px 16px 0 0;">
-                            <img src="{{ url('img/logo-melhores-do-ano-branca.png') }}"
-                                 alt="Melhores do Ano 2025"
+                            <img src="{{ \App\Models\LandingPageSection::logoUrl() }}"
+                                 alt="Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}"
                                  width="220"
                                  style="display: block; max-width: 220px; height: auto;">
                             <div style="margin-top: 16px; width: 60px; height: 3px; background: linear-gradient(90deg, #c9a84c, #f1d98a, #c9a84c); border-radius: 2px;"></div>
@@ -49,7 +49,7 @@
                                     <td align="center">
                                         <div style="width: 40px; height: 2px; background: linear-gradient(90deg, #c9a84c, #f1d98a, #c9a84c); border-radius: 2px; margin-bottom: 18px;"></div>
                                         <p style="margin: 0 0 6px; font-size: 13px; color: #c9a84c; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">
-                                            Melhores do Ano 2025
+                                            Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}
                                         </p>
                                         <p style="margin: 0 0 4px; font-size: 12px; color: #8888a4;">
                                             Vale do Xingu

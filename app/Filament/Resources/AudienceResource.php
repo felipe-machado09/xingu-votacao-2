@@ -86,7 +86,7 @@ class AudienceResource extends Resource
                     ->trueIcon('heroicon-o-check-badge')
                     ->falseIcon('heroicon-o-x-circle'),
                 Tables\Columns\TextColumn::make('votes_count')
-                    ->counts('votes')
+                    ->counts(fn ($livewire) => ['votes' => fn ($query) => $query->forYear((int) ($livewire->getTableFilterState('year')['value'] ?? \App\Services\ReportYear::latest()))])
                     ->label('Votos')
                     ->badge()
                     ->color('success'),
@@ -94,11 +94,29 @@ class AudienceResource extends Resource
                     ->label('Cadastro')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('year')->label('Edição do cadastro')->sortable(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('year')->label('Ano')
+                    ->options(fn () => \App\Services\ReportYear::options())
+                    ->default(fn () => \App\Services\ReportYear::latest())
+                    ->query(function ($query, array $data) {
+                        $year = (int) ($data['value'] ?: \App\Services\ReportYear::latest());
+
+                        return $query->where(fn ($query) => $query->where('year', $year)
+                            ->orWhereHas('votes', fn ($query) => $query->forYear($year)));
+                    }),
                 Tables\Filters\Filter::make('verified')
                     ->label('Verificado')
                     ->query(fn ($query) => $query->whereNotNull('email_verified_at')),
+            ])
+            ->headerActions([
+                Actions\Action::make('exportExcel')->label('Extrair Excel')
+                    ->action(fn ($livewire) => \App\Services\ExcelExport::download('participantes.xlsx',
+                        ['Nome', 'E-mail', 'Telefone', 'Votos na edição'],
+                        $livewire->getFilteredSortedTableQuery()->get()->map(fn (Audience $audience) => [
+                            $audience->name, $audience->email, $audience->phone, $audience->votes_count,
+                        ]))),
             ])
             ->actions([
                 Actions\ViewAction::make(),

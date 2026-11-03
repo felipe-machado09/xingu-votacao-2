@@ -59,8 +59,14 @@ class VoteResource extends Resource
                     ->sortable()
                     ->badge()
                     ->color('success'),
+                Tables\Columns\TextColumn::make('year')->label('Edição')->sortable(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('year')
+                    ->label('Ano')
+                    ->options(fn () => \App\Services\ReportYear::options())
+                    ->default(fn () => \App\Services\ReportYear::latest())
+                    ->query(fn ($query, array $data) => $query->forYear((int) ($data['value'] ?: \App\Services\ReportYear::latest()))),
                 Tables\Filters\SelectFilter::make('category')
                     ->label('Categoria')
                     ->relationship('category', 'name'),
@@ -70,6 +76,15 @@ class VoteResource extends Resource
             ])
             ->actions([
                 Actions\ViewAction::make(),
+            ])
+            ->headerActions([
+                Actions\Action::make('exportExcel')->label('Extrair Excel')->icon('heroicon-o-arrow-down-tray')
+                    ->action(fn ($livewire) => \App\Services\ExcelExport::download(
+                        'votos.xlsx',
+                        ['Edição', 'Participante', 'Categoria', 'Empresa', 'Data do voto'],
+                        $livewire->getFilteredSortedTableQuery()->with(['audience', 'category', 'company'])->lazy()
+                            ->map(fn (Vote $vote) => [$vote->year, $vote->audience->name, $vote->category->name, $vote->company->display_name, $vote->created_at->format('d/m/Y H:i')])
+                    )),
             ])
             ->bulkActions([])
             ->defaultSort('created_at', 'desc');

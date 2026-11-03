@@ -20,7 +20,7 @@ class CompanyCodeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Seu código de acesso - Melhores do Ano 2025',
+            subject: 'Seu código de acesso - Melhores do Ano '.\App\Models\LandingPageSection::campaignYear(),
         );
     }
 

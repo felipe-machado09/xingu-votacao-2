@@ -21,10 +21,26 @@ class CompanyReport extends ResourcePage
     protected static ?string $title = 'Relatório de Votação';
 
     public ?string $period = '30'; // days
+    public int $year;
 
     public function mount(int | string $record): void
     {
+        $this->year = \App\Services\ReportYear::latest();
         $this->record = $this->resolveRecord($record);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('exportExcel')->label('Extrair Excel')
+                ->action(fn () => \App\Services\ExcelExport::download(
+                    'empresa-'.$this->record->id.'-'.$this->year.'.xlsx',
+                    ['Ano', 'Categoria', 'Votos', 'Total da categoria', 'Posição', 'Percentual'],
+                    collect($this->getCategoryRankings())->map(fn ($row) => [
+                        $this->year, $row['category'], $row['votes'], $row['total_votes'], $row['position'], $row['percentage'],
+                    ])
+                )),
+        ];
     }
 
     public function updatedPeriod(): void
@@ -36,33 +52,33 @@ class CompanyReport extends ResourcePage
 
     public function getTotalVotesProperty(): int
     {
-        return $this->record->votes()->count();
+        return $this->record->votes()->forYear($this->year)->count();
     }
 
     public function getPeriodVotesProperty(): int
     {
-        return $this->record->votes()
+        return $this->record->votes()->forYear($this->year)
             ->where('created_at', '>=', now()->subDays((int) $this->period))
             ->count();
     }
 
     public function getTodayVotesProperty(): int
     {
-        return $this->record->votes()
+        return $this->record->votes()->forYear($this->year)
             ->whereDate('created_at', today())
             ->count();
     }
 
     public function getWeekVotesProperty(): int
     {
-        return $this->record->votes()
+        return $this->record->votes()->forYear($this->year)
             ->where('created_at', '>=', now()->startOfWeek())
             ->count();
     }
 
     public function getMonthVotesProperty(): int
     {
-        return $this->record->votes()
+        return $this->record->votes()->forYear($this->year)
             ->where('created_at', '>=', now()->startOfMonth())
             ->count();
     }
@@ -74,14 +90,14 @@ class CompanyReport extends ResourcePage
 
     public function getUniqueVotersProperty(): int
     {
-        return $this->record->votes()
+        return $this->record->votes()->forYear($this->year)
             ->distinct('audience_id')
             ->count('audience_id');
     }
 
     public function getAverageVotesPerDayProperty(): float
     {
-        $firstVote = $this->record->votes()->min('created_at');
+        $firstVote = $this->record->votes()->forYear($this->year)->min('created_at');
         if (!$firstVote) return 0;
 
         $days = Carbon::parse($firstVote)->diffInDays(now()) + 1;
@@ -93,7 +109,7 @@ class CompanyReport extends ResourcePage
     public function getVotesPerDayChart(): array
     {
         $days = (int) $this->period;
-        $votes = $this->record->votes()
+        $votes = $this->record->votes()->forYear($this->year)
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
             ->where('created_at', '>=', now()->subDays($days))
             ->groupBy('date')
@@ -114,7 +130,7 @@ class CompanyReport extends ResourcePage
 
     public function getVotesPerWeekChart(): array
     {
-        $votes = $this->record->votes()
+        $votes = $this->record->votes()->forYear($this->year)
             ->select(
                 DB::raw('YEARWEEK(created_at, 1) as week'),
                 DB::raw('MIN(DATE(created_at)) as week_start'),
@@ -133,7 +149,7 @@ class CompanyReport extends ResourcePage
 
     public function getVotesPerMonthChart(): array
     {
-        $votes = $this->record->votes()
+        $votes = $this->record->votes()->forYear($this->year)
             ->select(
                 DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
                 DB::raw('COUNT(*) as count')
@@ -159,7 +175,7 @@ class CompanyReport extends ResourcePage
 
     public function getVotesByHourChart(): array
     {
-        $votes = $this->record->votes()
+        $votes = $this->record->votes()->forYear($this->year)
             ->select(DB::raw('HOUR(created_at) as hour'), DB::raw('COUNT(*) as count'))
             ->groupBy('hour')
             ->orderBy('hour')
@@ -178,7 +194,7 @@ class CompanyReport extends ResourcePage
 
     public function getVotesByCategoryChart(): array
     {
-        $votes = $this->record->votes()
+        $votes = $this->record->votes()->forYear($this->year)
             ->join('categories', 'votes.category_id', '=', 'categories.id')
             ->select('categories.name', DB::raw('COUNT(*) as count'))
             ->groupBy('categories.name')
@@ -195,7 +211,7 @@ class CompanyReport extends ResourcePage
 
     public function getAgeDistribution(): array
     {
-        $voters = $this->record->votes()
+        $voters = $this->record->votes()->forYear($this->year)
             ->join('audiences', 'votes.audience_id', '=', 'audiences.id')
             ->whereNotNull('audiences.birth_date')
             ->select('audiences.birth_date')
@@ -235,14 +251,14 @@ class CompanyReport extends ResourcePage
         $rankings = [];
 
         foreach ($categories as $category) {
-            $companyVotes = Vote::where('category_id', $category->id)
+            $companyVotes = Vote::forYear($this->year)->where('category_id', $category->id)
                 ->where('company_id', $this->record->id)
                 ->count();
 
-            $totalCategoryVotes = Vote::where('category_id', $category->id)->count();
+            $totalCategoryVotes = Vote::forYear($this->year)->where('category_id', $category->id)->count();
 
             // Get position
-            $position = Vote::where('category_id', $category->id)
+            $position = Vote::forYear($this->year)->where('category_id', $category->id)
                 ->select('company_id', DB::raw('COUNT(*) as votes'))
                 ->groupBy('company_id')
                 ->orderByDesc('votes')
@@ -267,7 +283,7 @@ class CompanyReport extends ResourcePage
 
     public function getRecentVotes(): \Illuminate\Support\Collection
     {
-        return $this->record->votes()
+        return $this->record->votes()->forYear($this->year)
             ->with(['audience', 'category'])
             ->latest('created_at')
             ->limit(20)
@@ -278,7 +294,7 @@ class CompanyReport extends ResourcePage
 
     public function getWeekdayDistribution(): array
     {
-        $votes = $this->record->votes()
+        $votes = $this->record->votes()->forYear($this->year)
             ->select(DB::raw('DAYOFWEEK(created_at) as dow'), DB::raw('COUNT(*) as count'))
             ->groupBy('dow')
             ->orderBy('dow')

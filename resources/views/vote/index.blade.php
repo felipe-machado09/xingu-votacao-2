@@ -10,17 +10,17 @@
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorias - Melhores do Ano 2025</title>
+    <title>Categorias - Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
+    <link rel="apple-touch-icon" href="{{ \App\Models\LandingPageSection::logoUrl() }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ route('vote.index') }}">
-    <meta property="og:title" content="Vote nas Melhores Empresas - Melhores do Ano 2025">
+    <meta property="og:title" content="Vote nas Melhores Empresas - Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}">
     <meta property="og:description" content="Escolha suas empresas favoritas do Vale do Xingu! Vote agora e concorra a prêmios exclusivos.">
-    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
@@ -28,9 +28,9 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Vote nas Melhores Empresas - Melhores do Ano 2025">
+    <meta name="twitter:title" content="Vote nas Melhores Empresas - Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}">
     <meta name="twitter:description" content="Escolha suas empresas favoritas do Vale do Xingu! Vote agora e concorra a prêmios exclusivos.">
-    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta name="twitter:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -70,24 +70,22 @@
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
+                        <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
                 <!-- Mobile menu button -->
-                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                <button type="button" aria-label="Abrir menu de navegação" aria-controls="mobile-menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', !document.getElementById('mobile-menu').classList.toggle('hidden'))" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <nav class="hidden md:flex items-center space-x-6">
                     @if($audience)
                         <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Votar</a>
-                        <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit" class="text-gray-700 hover:text-red-600 font-medium">Sair</button>
                         </form>
                     @else
                         <a href="{{ route('home') }}" class="text-gray-700 hover:text-red-600 font-medium">Início</a>
-                        <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 font-medium">Login</a>
                         <a href="{{ route('register') }}" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
                     @endif
@@ -99,14 +97,12 @@
             <div class="px-4 py-3 space-y-2">
                 @if($audience)
                     <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Votar</a>
-                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="block w-full text-left py-2 text-gray-700 hover:text-red-600 font-medium">Sair</button>
                     </form>
                 @else
                     <a href="{{ route('home') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Início</a>
-                    <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                     <a href="{{ route('login') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Login</a>
                     <a href="{{ route('register') }}" class="block py-2 bg-red-600 text-white text-center rounded-lg hover:bg-red-700 font-medium">Cadastrar-se</a>
                 @endif
@@ -160,6 +156,7 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Prize Highlight Banner -->
+        @if($minimumPrizeVotes)
         <div class="mb-8">
             <div class="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 rounded-2xl shadow-2xl overflow-hidden">
                 <div class="grid md:grid-cols-2 gap-6 p-6 md:p-8 items-center">
@@ -169,17 +166,13 @@
                             E ainda pode virar prêmio! 🎁
                         </h2>
                         <p class="text-sm sm:text-lg md:text-xl mb-4 text-white/90">
-                            Vote em pelo menos 5 empresas e concorra a prêmios incríveis da Vale do Xingu.
+                            Os prêmios disponíveis exigem a partir de {{ $minimumPrizeVotes }} votos. Confira os requisitos de cada prêmio abaixo.
                         </p>
                         @if($audience && isset($votedCategoryIds))
                             <div class="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-4 inline-block">
                                 <p class="text-sm font-semibold mb-1">Seus votos:</p>
-                                <p class="text-4xl font-bold">{{ count($votedCategoryIds) }} / 5</p>
-                                @if(count($votedCategoryIds) >= 5)
-                                    <p class="text-sm mt-2">✅ Você está participando!</p>
-                                @else
-                                    <p class="text-sm mt-2">Faltam {{ 5 - count($votedCategoryIds) }} votos</p>
-                                @endif
+                                <p class="text-4xl font-bold">{{ count($votedCategoryIds) }}</p>
+                                <p class="text-sm mt-2">Confira seu progresso em cada prêmio abaixo.</p>
                             </div>
                         @endif
                     </div>
@@ -193,6 +186,7 @@
             </div>
         </div>
 
+        @endif
         <div class="text-center mb-12 animate-fade-in">
             <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Vote nas Categorias</h1>
             <p class="text-xl text-gray-600">Escolha uma categoria e vote na sua empresa favorita</p>
@@ -213,176 +207,8 @@
             @endif
         </div>
 
-        <!-- Seção de Prêmios Escalonados -->
-        @if(isset($awards) && $awards->count() > 0)
-        @php
-            $totalCategories = $categories->count();
-            $userVotes = $audience ? count($votedCategoryIds) : 0;
-
-            // Agrupar prêmios por tier
-            $awardsByTier = $awards->where('is_active', true)
-                ->filter(fn($a) => $a->hasRemainingQuantity())
-                ->groupBy('tier')
-                ->sortKeys();
-        @endphp
-
-        <div class="mb-12">
-            <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl shadow-xl p-6 md:p-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">🎁 Concorra aos Prêmios!</h2>
-                    <p class="text-base md:text-lg text-gray-700">Quanto mais você vota, mais prêmios você pode ganhar!</p>
-                </div>
-
-                @if($audience)
-                    <div class="mb-8 text-center">
-                        <div class="inline-flex items-center bg-white rounded-xl px-8 py-4 shadow-lg">
-                            <svg class="w-8 h-8 text-red-600 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <div class="text-left">
-                                <p class="text-sm text-gray-600">Seus votos:</p>
-                                <p class="text-3xl font-bold text-gray-900">{{ $userVotes }} <span class="text-xl text-gray-500">/ {{ $totalCategories }}</span></p>
-                            </div>
-                        </div>
-
-                        @if($userVotes >= $totalCategories)
-                            <p class="mt-4 text-xl text-green-700 font-bold">🏆 Parabéns! Você concorre a TODOS os prêmios!</p>
-                        @elseif($userVotes >= 15)
-                            <p class="mt-4 text-lg text-green-700 font-semibold">✓ Você está participando do sorteio dos Prêmios Nível 1 e 2!</p>
-                            <p class="text-sm text-orange-600 mt-1">Vote em {{ $totalCategories - $userVotes }} categorias para concorrer ao Prêmio Máximo!</p>
-                        @elseif($userVotes >= 5)
-                            <p class="mt-4 text-lg text-green-700 font-semibold">✓ Você está participando do sorteio dos Prêmios Nível 1!</p>
-                            <p class="text-sm text-orange-600 mt-1">Vote em mais {{ 15 - $userVotes }} categorias para desbloquear Prêmios Nível 2!</p>
-                        @else
-                            <p class="mt-4 text-lg text-orange-700 font-semibold">Faltam {{ 5 - $userVotes }} votos para participar do sorteio</p>
-                        @endif
-                    </div>
-                @endif
-
-                <!-- Tier 1: 5 votos -->
-                @if(isset($awardsByTier[1]))
-                <div class="mb-8 @if($audience && $userVotes < 5) opacity-60 @endif">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 bg-blue-100 rounded-xl px-4 sm:px-6 py-3">
-                        <div>
-                            <h3 class="text-xl font-bold text-blue-900">🥉 Nível 1 - Prêmios Básicos</h3>
-                            <p class="text-sm text-blue-700">Vote em <strong>5 empresas</strong> para concorrer</p>
-                        </div>
-                        @if($audience)
-                            @if($userVotes >= 5)
-                                <span class="bg-green-500 text-white px-4 py-2 rounded-full font-bold text-sm">✓ DESBLOQUEADO</span>
-                            @else
-                                <span class="bg-gray-400 text-white px-4 py-2 rounded-full font-bold text-sm">🔒 Faltam {{ 5 - $userVotes }}</span>
-                            @endif
-                        @endif
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @foreach($awardsByTier[1] as $award)
-                        <div class="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all @if($audience && $userVotes >= 5) ring-2 ring-green-400 @endif">
-                            @if($award->image_path)
-                                <div class="mb-3 h-24 flex items-center justify-center bg-gray-50 rounded-lg">
-                                    <img src="{{ asset('storage/' . $award->image_path) }}" alt="{{ $award->name }}" class="max-h-full max-w-full object-contain">
-                                </div>
-                            @else
-                                <div class="mb-3 h-24 flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg">
-                                    <span class="text-4xl">🎁</span>
-                                </div>
-                            @endif
-                            <h4 class="text-lg font-bold text-gray-900 mb-1">{{ $award->name }}</h4>
-                            @if($award->description)
-                                <p class="text-gray-600 text-xs mb-2 line-clamp-2">{{ $award->description }}</p>
-                            @endif
-                            <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-semibold">
-                                {{ $award->remainingQuantity() }} disponíveis
-                            </span>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-
-                <!-- Tier 2: 15 votos -->
-                @if(isset($awardsByTier[2]))
-                <div class="mb-8 @if($audience && $userVotes < 15) opacity-60 @endif">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 bg-orange-100 rounded-xl px-4 sm:px-6 py-3">
-                        <div>
-                            <h3 class="text-xl font-bold text-orange-900">🥈 Nível 2 - Prêmios Intermediários</h3>
-                            <p class="text-sm text-orange-700">Vote em <strong>15 empresas</strong> para concorrer</p>
-                        </div>
-                        @if($audience)
-                            @if($userVotes >= 15)
-                                <span class="bg-green-500 text-white px-4 py-2 rounded-full font-bold text-sm">✓ DESBLOQUEADO</span>
-                            @else
-                                <span class="bg-gray-400 text-white px-4 py-2 rounded-full font-bold text-sm">🔒 Faltam {{ max(0, 15 - $userVotes) }}</span>
-                            @endif
-                        @endif
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @foreach($awardsByTier[2] as $award)
-                        <div class="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all @if($audience && $userVotes >= 15) ring-2 ring-green-400 @endif">
-                            @if($award->image_path)
-                                <div class="mb-3 h-24 flex items-center justify-center bg-gray-50 rounded-lg">
-                                    <img src="{{ asset('storage/' . $award->image_path) }}" alt="{{ $award->name }}" class="max-h-full max-w-full object-contain">
-                                </div>
-                            @else
-                                <div class="mb-3 h-24 flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg">
-                                    <span class="text-4xl">🎁</span>
-                                </div>
-                            @endif
-                            <h4 class="text-lg font-bold text-gray-900 mb-1">{{ $award->name }}</h4>
-                            @if($award->description)
-                                <p class="text-gray-600 text-xs mb-2 line-clamp-2">{{ $award->description }}</p>
-                            @endif
-                            <span class="inline-block bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-semibold">
-                                {{ $award->remainingQuantity() }} disponíveis
-                            </span>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-
-                <!-- Tier 3: Todos os votos -->
-                @if(isset($awardsByTier[3]))
-                <div class="@if($audience && $userVotes < $totalCategories) opacity-60 @endif">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4 bg-gradient-to-r from-yellow-100 via-yellow-200 to-yellow-100 rounded-xl px-4 sm:px-6 py-3 shadow-lg">
-                        <div>
-                            <h3 class="text-xl font-bold text-yellow-900">🥇 Nível 3 - Prêmio Máximo</h3>
-                            <p class="text-sm text-yellow-700">Vote em <strong>TODAS as categorias</strong> para concorrer</p>
-                        </div>
-                        @if($audience)
-                            @if($userVotes >= $totalCategories)
-                                <span class="bg-green-500 text-white px-4 py-2 rounded-full font-bold text-sm animate-pulse">✓ DESBLOQUEADO</span>
-                            @else
-                                <span class="bg-gray-400 text-white px-4 py-2 rounded-full font-bold text-sm">🔒 Faltam {{ $totalCategories - $userVotes }}</span>
-                            @endif
-                        @endif
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @foreach($awardsByTier[3] as $award)
-                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow-lg p-4 hover:shadow-xl transition-all border-2 border-yellow-300 @if($audience && $userVotes >= $totalCategories) ring-4 ring-green-400 @endif">
-                            @if($award->image_path)
-                                <div class="mb-3 h-32 flex items-center justify-center bg-white rounded-lg">
-                                    <img src="{{ asset('storage/' . $award->image_path) }}" alt="{{ $award->name }}" class="max-h-full max-w-full object-contain">
-                                </div>
-                            @else
-                                <div class="mb-3 h-32 flex items-center justify-center bg-gradient-to-br from-yellow-200 to-yellow-300 rounded-lg">
-                                    <span class="text-6xl">🏆</span>
-                                </div>
-                            @endif
-                            <h4 class="text-xl font-bold text-yellow-900 mb-1">{{ $award->name }}</h4>
-                            @if($award->description)
-                                <p class="text-gray-700 text-sm mb-2">{{ $award->description }}</p>
-                            @endif
-                            <span class="inline-block bg-yellow-200 text-yellow-900 px-3 py-1 rounded-full text-sm font-bold">
-                                {{ $award->remainingQuantity() }} disponíveis
-                            </span>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-            </div>
-        </div>
+        @if($awards->isNotEmpty())
+            @include('components.award-progress')
         @endif
 
         @if(!$audience)
@@ -459,7 +285,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Melhores do Ano 2025</h3>
+                    <h3 class="text-lg font-bold mb-4">Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}</h3>
                     <p class="text-gray-400 text-sm">
                         Votação popular, transparente e gratuita das melhores empresas de Altamira.
                     </p>
@@ -469,7 +295,6 @@
                     <ul class="space-y-2 text-sm text-gray-400">
                         <li><a href="{{ route('home') }}" class="hover:text-white transition">Início</a></li>
                         <li><a href="{{ route('vote.index') }}" class="hover:text-white transition">Votação</a></li>
-                        <li><a href="{{ route('winners') }}" class="hover:text-white transition">Vencedores</a></li>
                     </ul>
                 </div>
                 <div>
@@ -484,6 +309,7 @@
                 <p>&copy; {{ date('Y') }} Melhores do Ano - Vale do Xingu. Todos os direitos reservados.</p>
             </div>
         </div>
+        <x-regulation-link />
     </footer>
 
     <script>

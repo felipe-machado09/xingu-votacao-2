@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class WeekdayDistributionChart extends ChartWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected ?string $heading = 'Votos por Dia da Semana';
 
     protected static ?int $sort = 6;
@@ -18,7 +20,7 @@ class WeekdayDistributionChart extends ChartWidget
 
     protected function getData(): array
     {
-        $votes = Vote::query()
+        $votes = Vote::forYear($this->reportYear())
             ->select(DB::raw('DAYOFWEEK(created_at) as weekday'), DB::raw('count(*) as count'))
             ->groupBy('weekday')
             ->orderBy('weekday')

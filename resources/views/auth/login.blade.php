@@ -10,15 +10,15 @@
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrar - Melhores do Ano 2025</title>
+    <title>Entrar - Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Entrar - Melhores do Ano 2025">
+    <meta property="og:title" content="Entrar - Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}">
     <meta property="og:description" content="Faça login para votar nas melhores empresas do Vale do Xingu e concorra a prêmios!">
-    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
@@ -26,9 +26,9 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Entrar - Melhores do Ano 2025">
+    <meta name="twitter:title" content="Entrar - Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}">
     <meta name="twitter:description" content="Faça login para votar nas melhores empresas do Vale do Xingu e concorra a prêmios!">
-    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta name="twitter:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -65,7 +65,7 @@
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
+                        <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
                 <nav class="flex items-center space-x-3 sm:space-x-6">
@@ -82,7 +82,7 @@
             <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 animate-slide-up">
                 <!-- Logo -->
                 <div class="text-center mb-8">
-                    <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-20 mx-auto mb-6">
+                    <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logomarca Melhores do Ano" class="h-20 mx-auto mb-6">
                     <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Entrar</h1>
                     <p class="text-gray-600">Digite seu e-mail e enviaremos um link de acesso</p>
                 </div>
@@ -164,5 +164,6 @@
             </div>
         </div>
     </main>
+    <footer><x-regulation-link /></footer>
 </body>
 </html>

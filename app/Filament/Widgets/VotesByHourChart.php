@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class VotesByHourChart extends ChartWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected ?string $heading = 'Horários de Pico (Votos por Hora)';
 
     protected static ?int $sort = 4;
@@ -18,7 +20,7 @@ class VotesByHourChart extends ChartWidget
 
     protected function getData(): array
     {
-        $votes = Vote::query()
+        $votes = Vote::forYear($this->reportYear())
             ->select(DB::raw('HOUR(created_at) as hour'), DB::raw('count(*) as count'))
             ->groupBy('hour')
             ->orderBy('hour')

@@ -1,6 +1,6 @@
 @extends('emails.layout')
 
-@section('title', 'Seu Link de Acesso - Melhores do Ano 2025')
+@section('title', 'Seu Link de Acesso - Melhores do Ano '.\App\Models\LandingPageSection::campaignYear())
 
 @section('content')
     {{-- Saudação --}}
@@ -13,7 +13,7 @@
 
     <p style="margin: 0 0 32px; font-size: 15px; color: #a0a0bc; line-height: 1.7;">
         Clique no botão abaixo para acessar sua conta na plataforma
-        <strong style="color: #c9a84c;">Melhores do Ano 2025</strong>.
+        <strong style="color: #c9a84c;">Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}</strong>.
     </p>
 
     {{-- Botão de acesso --}}

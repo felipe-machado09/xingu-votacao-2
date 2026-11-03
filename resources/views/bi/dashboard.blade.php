@@ -187,6 +187,7 @@
     </style>
 </head>
 <body>
+    @include('components.bi-year')
 
     <!-- ============================================ -->
     <!--  TELA DE CÓDIGO (antes da liberação)         -->
@@ -195,7 +196,7 @@
         <div class="text-center">
             <!-- Logo -->
             <div class="mb-8">
-                <img src="{{ asset('img/logo-melhores-do-ano-branca.png') }}" alt="Melhores do Vale do Xingu" class="mx-auto mb-6" style="max-height: 120px; filter: drop-shadow(0 0 30px rgba(99,102,241,0.3));">
+                <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Melhores do Vale do Xingu" class="mx-auto mb-6" style="max-height: 120px; filter: drop-shadow(0 0 30px rgba(99,102,241,0.3));">
                 <h1 class="text-2xl font-bold text-white mb-1">Painel de Votação</h1>
                 <p class="text-slate-400 text-sm">Melhores do Vale do Xingu</p>
             </div>
@@ -234,7 +235,7 @@
         <!-- HEADER -->
         <header class="flex items-center justify-between px-4 py-2 rounded-xl" style="background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(99,102,241,0.2);">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('img/logo-melhores-do-ano-branca.png') }}" alt="Logo" style="max-height: 36px; filter: drop-shadow(0 0 10px rgba(99,102,241,0.3));">
+                <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logo" style="max-height: 36px; filter: drop-shadow(0 0 10px rgba(99,102,241,0.3));">
                 <div>
                     <h1 class="text-lg font-bold text-white tracking-tight">Painel de Votação</h1>
                     <p class="text-[10px] text-slate-400 -mt-0.5">Melhores do Vale do Xingu</p>
@@ -434,7 +435,7 @@
         // ============================================
         const REFRESH_INTERVAL = 5000; // 5 segundos
         const AUTH_CHECK_INTERVAL = 3000; // verificar autorização a cada 3s
-        const API_URL = '/bi/data';
+        const API_URL = @json(route('bi.data', ['year' => $year]));
         let cycleCount = 0;
         let hourlyChart = null;
         let groupsChart = null;

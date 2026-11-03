@@ -1,80 +1,64 @@
 <x-filament-panels::page>
-    <div class="space-y-6">
+    <x-report-year />
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem;">
         @if($this->selectedCategoryId)
             <x-filament::section>
                 <x-slot name="heading">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span>🏆</span>
-                            <span>Top 10 - {{ $this->getSelectedCategory()?->name }}</span>
-                        </div>
-                        <button
-                            wire:click="closeResults"
-                            class="text-gray-400 hover:text-gray-600 transition"
-                        >
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    Top 10 - {{ $this->getSelectedCategory()?->name }}
+                </x-slot>
+                <x-slot name="afterHeader">
+                    <x-filament::button color="gray" size="sm" icon="heroicon-m-x-mark"
+                        aria-label="Fechar ranking da categoria" wire:click="closeResults">
+                        Fechar ranking
+                    </x-filament::button>
                 </x-slot>
 
-                <div class="space-y-4">
+                <div style="display: grid; gap: 1.5rem;">
                     @if($this->getCurrentWinner())
-                        <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border-2 border-yellow-400">
-                            <div>
-                                <div class="text-sm font-medium text-yellow-700 mb-1">Vencedor Atual</div>
-                                <div class="text-lg font-bold text-yellow-900">
-                                    {{ $this->getCurrentWinner()->company->legal_name }}
-                                </div>
-                                <div class="text-sm text-yellow-700 mt-1">
-                                    Definido em {{ $this->getCurrentWinner()->chosen_at->format('d/m/Y H:i') }}
-                                </div>
-                            </div>
-                            <div class="text-4xl">🏆</div>
-                        </div>
+                        <x-filament::section heading="Vencedor atual" compact>
+                            <p style="font-weight: 600;">{{ $this->getCurrentWinner()->company->display_name }}</p>
+                            <p class="fi-section-header-description">
+                                Definido em {{ $this->getCurrentWinner()->chosen_at->format('d/m/Y H:i') }}
+                            </p>
+                        </x-filament::section>
                     @endif
 
                     <div>
-                        <h3 class="text-sm font-medium text-gray-700 mb-3">Ranking de Votos</h3>
-                        <div class="space-y-2">
+                        <h3 style="font-weight: 600; margin-bottom: 1rem;">Ranking de votos</h3>
+                        <div style="display: grid; gap: 0.75rem;">
                             @forelse($this->getTopCompanies() as $index => $company)
-                                <div class="flex items-center justify-between p-3 rounded-lg border {{ $index === 0 ? 'bg-yellow-50 border-yellow-300' : 'bg-gray-50 border-gray-200' }}">
-                                    <div class="flex items-center gap-3 flex-1">
-                                        <div class="flex items-center justify-center w-8 h-8 rounded-full {{ $index === 0 ? 'bg-yellow-400 text-yellow-900' : ($index === 1 ? 'bg-gray-300 text-gray-700' : ($index === 2 ? 'bg-orange-300 text-orange-900' : 'bg-gray-200 text-gray-600')) }} font-bold text-sm">
+                                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(128, 128, 128, 0.25);">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1 1 12rem;">
+                                        <x-filament::badge :color="$index === 0 ? 'warning' : 'gray'">
                                             {{ $index + 1 }}º
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-medium {{ $index === 0 ? 'text-yellow-900' : 'text-gray-900' }}">
-                                                {{ $company['company_name'] }}
-                                            </div>
-                                        </div>
+                                        </x-filament::badge>
+                                        <span style="font-weight: 500; overflow-wrap: anywhere;">{{ $company['company_name'] }}</span>
                                     </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;">
+                                        <x-filament::badge color="success">
                                             {{ $company['votes'] }} {{ $company['votes'] === 1 ? 'voto' : 'votos' }}
-                                        </span>
+                                        </x-filament::badge>
                                         @if(!$this->getCurrentWinner() || $this->getCurrentWinner()->company_id !== $company['company_id'])
-                                            <button
+                                            <x-filament::button
+                                                color="warning"
+                                                size="sm"
+                                                icon="heroicon-m-check"
                                                 wire:click="setWinner({{ $company['company_id'] }})"
-                                                class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-500 text-white hover:bg-yellow-600 transition"
+                                                wire:confirm="Definir esta empresa como vencedora da categoria nesta edição?"
                                             >
-                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
                                                 Definir Vencedor
-                                            </button>
+                                            </x-filament::button>
                                         @else
-                                            <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            <x-filament::badge color="warning">
                                                 ✓ Vencedor
-                                            </span>
+                                            </x-filament::badge>
                                         @endif
                                     </div>
                                 </div>
                             @empty
-                                <div class="text-center py-8 text-gray-500">
+                                <p class="fi-section-header-description">
                                     Nenhum voto registrado para esta categoria ainda.
-                                </div>
+                                </p>
                             @endforelse
                         </div>
                     </div>
@@ -87,8 +71,8 @@
                 Categorias
             </x-slot>
 
-            <div class="mb-4">
-                <p class="text-sm text-gray-600">Clique em "Ver Top 10" para visualizar o ranking de cada categoria e definir vencedores.</p>
+            <div style="margin-bottom: 1rem;">
+                <p class="fi-section-header-description">Clique em "Ver Top 10" para visualizar o ranking de cada categoria e definir vencedores.</p>
             </div>
 
             {{ $this->table }}

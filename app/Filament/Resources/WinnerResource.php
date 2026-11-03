@@ -56,7 +56,10 @@ class WinnerResource extends Resource
                 Forms\Components\TextInput::make('year')
                     ->label('Ano')
                     ->numeric()
-                    ->default(2024)
+                    ->integer()
+                    ->minValue(2000)
+                    ->maxValue(2100)
+                    ->default(fn () => \App\Models\LandingPageSection::campaignYear())
                     ->required(),
                 Forms\Components\TextInput::make('order')
                     ->label('Ordem')

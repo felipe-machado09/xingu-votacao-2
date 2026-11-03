@@ -264,7 +264,7 @@
             <!-- ESTADO 1: Seleção do Prêmio -->
             <div id="state-select" class="w-full max-w-6xl">
                 <div class="text-center mb-6">
-                    <img src="{{ asset('img/logo-melhores-do-ano-branca.png') }}" alt="Melhores do Ano" style="height: 200px; filter: drop-shadow(0 0 20px rgba(99,102,241,0.4));" class="mx-auto">
+                    <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Melhores do Ano" style="height: 200px; filter: drop-shadow(0 0 20px rgba(99,102,241,0.4));" class="mx-auto">
                 </div>
                 <h1 class="text-4xl font-extrabold text-center mb-2 shimmer-text">SORTEIO DE PRÊMIOS</h1>
                 <p class="text-gray-400 text-center mb-10 text-lg">Selecione o prêmio e clique em sortear</p>
@@ -340,7 +340,7 @@
             <div id="state-result" style="display:none;" class="w-full max-w-3xl">
                 <!-- Logo acima do card -->
                 <div class="text-center mb-8">
-                    <img src="{{ asset('img/logo-melhores-do-ano-branca.png') }}" alt="Melhores do Ano" style="height: 100px; filter: drop-shadow(0 0 20px rgba(99,102,241,0.4));" class="mx-auto">
+                    <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Melhores do Ano" style="height: 100px; filter: drop-shadow(0 0 20px rgba(99,102,241,0.4));" class="mx-auto">
                 </div>
                 <div class="winner-card reveal-anim" id="winner-card">
                     <div class="text-center relative z-10">

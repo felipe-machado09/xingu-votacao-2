@@ -18,10 +18,12 @@ class Vote extends Model
         'ip_hash',
         'user_agent',
         'created_at',
+        'year',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
+        'year' => 'integer',
     ];
 
     protected static function boot()
@@ -30,12 +32,18 @@ class Vote extends Model
         
         static::creating(function ($vote) {
             $vote->created_at = now();
+            $vote->year ??= LandingPageSection::campaignYear();
         });
     }
 
     public function audience(): BelongsTo
     {
         return $this->belongsTo(Audience::class);
+    }
+
+    public function scopeForYear($query, int $year)
+    {
+        return $query->where('votes.year', $year);
     }
 
     public function category(): BelongsTo

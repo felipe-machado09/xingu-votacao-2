@@ -15,6 +15,8 @@ class Company extends Model
 
     protected $fillable = [
         'legal_name',
+        'trade_name',
+        'instagram_url',
         'slug',
         'email',
         'password',
@@ -53,8 +55,17 @@ class Company extends Model
         parent::boot();
         
         static::creating(function ($company) {
+            $company->legal_name = $company->legal_name ?: $company->trade_name;
+            $company->responsible_name ??= $company->trade_name ?: $company->legal_name;
+            $company->responsible_phone ??= $company->whatsapp_number;
             if (empty($company->slug)) {
-                $company->slug = Str::slug($company->legal_name);
+                $base = Str::slug($company->trade_name ?: $company->legal_name) ?: 'empresa';
+                $slug = $base;
+                $suffix = 2;
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = $base.'-'.$suffix++;
+                }
+                $company->slug = $slug;
             }
         });
 
@@ -78,6 +89,11 @@ class Company extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->trade_name ?: $this->legal_name;
     }
 
     public function categories(): BelongsToMany

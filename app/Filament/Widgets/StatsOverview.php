@@ -11,20 +11,22 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverview extends BaseWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected static ?int $sort = 1;
 
     protected function getStats(): array
     {
-        $totalVotes = Vote::count();
-        $todayVotes = Vote::whereDate('created_at', today())->count();
-        $yesterdayVotes = Vote::whereDate('created_at', today()->subDay())->count();
-        $weekVotes = Vote::where('created_at', '>=', now()->startOfWeek())->count();
-        $lastWeekVotes = Vote::whereBetween('created_at', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->count();
-        $monthVotes = Vote::where('created_at', '>=', now()->startOfMonth())->count();
+        $totalVotes = Vote::forYear($this->reportYear())->count();
+        $todayVotes = Vote::forYear($this->reportYear())->whereDate('created_at', today())->count();
+        $yesterdayVotes = Vote::forYear($this->reportYear())->whereDate('created_at', today()->subDay())->count();
+        $weekVotes = Vote::forYear($this->reportYear())->where('created_at', '>=', now()->startOfWeek())->count();
+        $lastWeekVotes = Vote::forYear($this->reportYear())->whereBetween('created_at', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()])->count();
+        $monthVotes = Vote::forYear($this->reportYear())->where('created_at', '>=', now()->startOfMonth())->count();
 
         // Sparkline: votos por dia nos últimos 7 dias
         $last7Days = collect(range(6, 0))->map(function ($daysAgo) {
-            return Vote::whereDate('created_at', today()->subDays($daysAgo))->count();
+            return Vote::forYear($this->reportYear())->whereDate('created_at', today()->subDays($daysAgo))->count();
         })->toArray();
 
         // Trends
@@ -36,14 +38,15 @@ class StatsOverview extends BaseWidget
             ? round((($weekVotes - $lastWeekVotes) / $lastWeekVotes) * 100)
             : ($weekVotes > 0 ? 100 : 0);
 
-        $totalAudience = Audience::count();
-        $newAudienceToday = Audience::whereDate('created_at', today())->count();
+        $totalAudience = Audience::where(fn ($query) => $query->where('year', $this->reportYear())
+            ->orWhereHas('votes', fn ($query) => $query->forYear($this->reportYear())))->count();
+        $newAudienceToday = Audience::where('year', $this->reportYear())->whereDate('created_at', today())->count();
 
         $totalCompanies = Company::count();
         $activeCategories = Category::where('is_active', true)->count();
         $totalCategories = Category::count();
 
-        $avgPerDay = round(Vote::where('created_at', '>=', now()->subDays(30))->count() / max(1, 30), 1);
+        $avgPerDay = round(Vote::forYear($this->reportYear())->where('created_at', '>=', now()->subDays(30))->count() / max(1, 30), 1);
 
         return [
             Stat::make('Total de Votos', number_format($totalVotes, 0, ',', '.'))

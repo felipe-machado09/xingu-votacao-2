@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class TopCompaniesTable extends BaseWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected static ?int $sort = 7;
 
     protected int | string | array $columnSpan = 'full';
@@ -21,7 +23,7 @@ class TopCompaniesTable extends BaseWidget
             ->heading('🏆 Top 10 Empresas Mais Votadas')
             ->query(
                 Company::query()
-                    ->withCount('votes')
+                    ->withCount(['votes' => fn ($query) => $query->forYear($this->reportYear())])
                     ->withCount('categories')
                     ->orderByDesc('votes_count')
                     ->limit(10)
@@ -56,9 +58,9 @@ class TopCompaniesTable extends BaseWidget
                     ->label('Logo')
                     ->disk('public')
                     ->circular()
-                    ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->legal_name) . '&background=ef4444&color=fff&size=40'),
+                    ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->display_name) . '&background=ef4444&color=fff&size=40'),
 
-                Tables\Columns\TextColumn::make('legal_name')
+                Tables\Columns\TextColumn::make('trade_name')
                     ->label('Empresa')
                     ->searchable()
                     ->weight('bold')
@@ -73,7 +75,7 @@ class TopCompaniesTable extends BaseWidget
 
                 Tables\Columns\TextColumn::make('today_votes')
                     ->label('Hoje')
-                    ->state(fn ($record) => Vote::where('company_id', $record->id)->whereDate('created_at', today())->count())
+                    ->state(fn ($record) => Vote::forYear($this->reportYear())->where('company_id', $record->id)->whereDate('created_at', today())->count())
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'info' : 'gray'),
 

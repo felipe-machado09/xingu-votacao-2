@@ -3,6 +3,65 @@ You are building a SIMPLE voting platform in Laravel with:
 - Public user-facing screens in Blade (voter registration + voting)
 Keep it pragmatic and shippable. Avoid overengineering.
 
+## Configuração das edições
+
+No painel administrativo, use **Conteúdo → Configurações da Edição** para alterar
+o ano, a logomarca, a data/hora de encerramento, o PDF do regulamento, o cadastro
+público de empresas e o embaralhamento das opções de votação.
+O acesso reutiliza a permissão `Update:LandingPageSection`.
+
+- O ano é uma edição: mudar a edição permite um novo voto por participante e
+  categoria, sem apagar votos anteriores.
+- O encerramento global bloqueia a votação no servidor; os prazos individuais
+  das categorias também continuam valendo. As datas usam o fuso de `config/app.php`.
+- Em **Seções da Landing**, use `{ano}` nos títulos e conteúdos para acompanhar
+  automaticamente o ano configurado. Textos legados com `2025` também são
+  atualizados na exibição.
+- Cadastros de empresas estão em `/empresa/cadastro`: nome fantasia, CNPJ,
+  WhatsApp, logomarca, categorias e Instagram opcional. Dados antigos são preservados.
+  As categorias são selecionadas por caixas de marcação, inclusive no celular.
+  Empresas antigas sem nome fantasia exibem a razão social também na busca,
+  ordenação e edição administrativa.
+- As categorias possuem links compartilháveis `/votacao/{slug}`, disponíveis
+  para copiar na listagem administrativa. Links antigos `/vote/{slug}` continuam
+  funcionando. O link de acesso por e-mail preserva a categoria compartilhada.
+- A página inicial exibe a landing; resultados e vencedores não são publicados.
+- Relatórios, listagens de votos, resultados, empresas, participantes, sorteios,
+  dashboard e BIs têm seleção de ano e exportação `.xlsx`. O padrão é a edição
+  mais recente entre as edições com votos e a edição configurada.
+  A exportação do BI com empresas exige login administrativo.
+- O ranking por categoria usa os componentes visuais do Filament nos modos claro
+  e escuro, mantém a tabela rolável no celular e pede confirmação antes de definir
+  uma empresa vencedora.
+- Contagens de votos são filtradas por edição. Empresas e categorias não têm
+  cadastro anual separado: suas informações cadastrais continuam compartilhadas.
+- Nos prêmios de níveis 1 e 2, o mínimo de votos é configurado individualmente;
+  mudar o nível não sobrescreve esse valor. No nível 3, é necessário votar em
+  todas as categorias ativas, inclusive após o encerramento. Categorias inativas
+  não contam para esse requisito. Homepage e indicadores acompanham esses valores.
+  Prêmios desativados, esgotados ou de outra edição não são anunciados.
+  O indicador público mostra o requisito de votos atingido; o sorteio semanal
+  mantém seu recorte de votos desde o último sorteio (ou últimos sete dias),
+  conforme o regulamento.
+
+Na implantação, faça backup do banco, aplique as migrations com
+`php artisan migrate --force` e configure a edição no painel antes de divulgar
+a votação. A coluna `year` identifica a edição, independentemente da data de
+cadastro: a migração separa todos os participantes, votos, prêmios e vencedores de categoria
+existentes na edição **2025**, preservando suas datas originais. A edição nova
+inicia em **2026** e as próximas são configuradas no painel. O rollback é bloqueado se
+votos/vencedores de várias edições não couberem nas antigas restrições únicas.
+Envie a nova logomarca no painel; os arquivos antigos não são renomeados nem
+editados automaticamente.
+
+Os testes utilizam SQLite em memória por padrão. O teste de dados dos BIs também
+deve ser executado com `DB_CONNECTION=mysql` em banco MariaDB **exclusivo para
+testes**, pois esses painéis usam funções SQL específicas desse banco.
+As suítes `AdminInteractionsTest` e `PublicInteractionsTest` validam os cadastros,
+edições, exclusões, ativação de prêmios e TVs, uploads, login por e-mail e saída
+do participante sem encerrar a sessão administrativa. Não execute esses testes
+contra um banco com dados reais.
+
 TECH BASE
 - Laravel (assume a fresh app). Use Filament v3 for admin.
 - Blade for public UI (no SPA).
@@ -13,7 +72,7 @@ TECH BASE
 CORE RULES
 - Audience (voter) registers with: name, email, birth_date, phone.
 - After registering, they can vote in available categories.
-- Each audience can vote ONLY ONCE per category (enforced at DB unique index).
+- Each audience can vote ONLY ONCE per category and edition (enforced at DB unique index).
 - Companies participate in one or many categories (many-to-many).
 - Each category displays participating companies and lets audience vote for one company.
 - Category voting screen must be shareable by companies on Instagram (a public URL that shows the category and the company list; if user is logged in it shows vote buttons; if not, it shows CTA to register/login).
@@ -31,6 +90,7 @@ AUTH FOR PUBLIC USERS (AUDIENCE)
 DATABASE DESIGN (MIGRATIONS + MODELS + RELATIONSHIPS)
 1) audiences
 - id
+- year (registration edition; participants can return and vote in later editions)
 - name (string)
 - email (string unique)
 - birth_date (date)
@@ -50,7 +110,10 @@ DATABASE DESIGN (MIGRATIONS + MODELS + RELATIONSHIPS)
 
 3) companies
 - id
+- trade_name (nome fantasia; backfilled from legal_name for existing companies)
 - legal_name (razao social) string
+- whatsapp_number
+- instagram_url (nullable)
 - cnpj (string unique, validate format)
 - responsible_name string
 - responsible_phone string
@@ -65,6 +128,7 @@ DATABASE DESIGN (MIGRATIONS + MODELS + RELATIONSHIPS)
 
 5) votes
 - id
+- year (edition configured in admin)
 - audience_id (fk)
 - category_id (fk)
 - company_id (fk)
@@ -72,11 +136,12 @@ DATABASE DESIGN (MIGRATIONS + MODELS + RELATIONSHIPS)
 - user_agent (nullable string)
 - created_at (timestamp)
 Constraints:
-- unique(audience_id, category_id)
+- unique(audience_id, category_id, year)
 - fk company_id must belong to the same category via pivot (validate in request)
 
 6) awards (prizes)
 - id
+- year (edition)
 - name
 - description (nullable)
 - image_path (nullable)
@@ -95,7 +160,8 @@ Constraints:
 
 8) category_winners
 - id
-- category_id (unique fk)
+- category_id (fk, unique together with year)
+- year (edition)
 - company_id (fk)
 - chosen_at (timestamp)
 - created_at/updated_at

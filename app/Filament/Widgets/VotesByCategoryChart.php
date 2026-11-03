@@ -7,6 +7,8 @@ use Filament\Widgets\ChartWidget;
 
 class VotesByCategoryChart extends ChartWidget
 {
+    use \App\Filament\Widgets\Concerns\FiltersVotesByYear;
+
     protected ?string $heading = 'Votos por Categoria';
 
     protected static ?int $sort = 3;
@@ -17,7 +19,7 @@ class VotesByCategoryChart extends ChartWidget
 
     protected function getData(): array
     {
-        $categories = Category::withCount('votes')
+        $categories = Category::withCount(['votes' => fn ($query) => $query->forYear($this->reportYear())])
             ->orderByDesc('votes_count')
             ->limit(12)
             ->get();

@@ -10,17 +10,17 @@
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $category->name }} - Melhores do Ano 2025</title>
+    <title>{{ $category->name }} - Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo_icon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('img/logo.webp') }}">
+    <link rel="apple-touch-icon" href="{{ \App\Models\LandingPageSection::logoUrl() }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ route('vote.show', $category) }}">
     <meta property="og:title" content="{{ $category->name }} - Vote na sua empresa favorita">
     <meta property="og:description" content="{{ $category->description ?? 'Vote na sua empresa favorita nesta categoria' }}">
-    <meta property="og:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta property="og:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
@@ -30,7 +30,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $category->name }} - Vote na sua empresa favorita">
     <meta name="twitter:description" content="{{ $category->description ?? 'Vote na sua empresa favorita nesta categoria' }}">
-    <meta name="twitter:image" content="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}">
+    <meta name="twitter:image" content="{{ \App\Models\LandingPageSection::logoUrl() }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -71,16 +71,15 @@
             <div class="flex justify-between items-center h-16 sm:h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img src="{{ asset('files/Logomarca Melhores do Ano 2025.webp') }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
+                        <img src="{{ \App\Models\LandingPageSection::logoUrl() }}" alt="Logomarca Melhores do Ano" class="h-10 sm:h-16">
                     </a>
                 </div>
                 <!-- Mobile menu button -->
-                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none">
+                <button type="button" aria-label="Abrir menu de navegação" aria-controls="mobile-menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', !document.getElementById('mobile-menu').classList.toggle('hidden'))" class="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <nav class="hidden md:flex items-center space-x-6">
                     <a href="{{ route('vote.index') }}" class="text-gray-700 hover:text-red-600 font-medium">Categorias</a>
-                    <a href="{{ route('winners') }}" class="text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                     @if($audience)
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
@@ -97,7 +96,6 @@
         <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
             <div class="px-4 py-3 space-y-2">
                 <a href="{{ route('vote.index') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Categorias</a>
-                <a href="{{ route('winners') }}" class="block py-2 text-gray-700 hover:text-red-600 font-medium">Vencedores</a>
                 @if($audience)
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -152,19 +150,6 @@
             </div>
         @endif
 
-        @if($category->winner)
-            <div class="max-w-3xl mx-auto mb-8 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-6 rounded-xl shadow-lg animate-slide-up">
-                <div class="flex items-center justify-center">
-                    <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <div>
-                        <h3 class="text-xl font-bold mb-1">🏆 Vencedor</h3>
-                        <p class="text-lg">{{ $category->winner->company->legal_name }}</p>
-                    </div>
-                </div>
-            </div>
-        @endif
 
         @if($userVote)
             <div class="max-w-3xl mx-auto mb-4 bg-green-50 border-l-4 border-green-400 p-6 rounded-lg animate-slide-up">
@@ -243,19 +228,22 @@
                     <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden @if($highlightCompanyId == $company->id) ring-4 ring-red-500 @endif animate-slide-up" style="animation-delay: {{ $index * 0.1 }}s">
                         @if($company->logo_path)
                             <div class="h-48 bg-gray-50 flex items-center justify-center p-4">
-                                <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->legal_name }}" class="max-h-full max-w-full object-contain">
+                                <img src="{{ asset('storage/' . $company->logo_path) }}" alt="{{ $company->display_name }}" class="max-h-full max-w-full object-contain">
                             </div>
                         @else
                             <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                <span class="text-gray-400 text-6xl font-bold">{{ substr($company->legal_name, 0, 1) }}</span>
+                                <span class="text-gray-400 text-6xl font-bold">{{ substr($company->display_name, 0, 1) }}</span>
                             </div>
                         @endif
 
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $company->legal_name }}</h3>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $company->display_name }}</h3>
 
-                            @if($company->responsible_name)
+                            @if($company->responsible_name && $company->responsible_name !== $company->display_name)
                                 <p class="text-sm text-gray-600 mb-4">{{ $company->responsible_name }}</p>
+                            @endif
+                            @if($company->instagram_url)
+                                <a href="{{ $company->instagram_url }}" target="_blank" rel="noopener" class="text-red-600 underline">Instagram</a>
                             @endif
 
                             <div class="flex items-center justify-center mt-4">
@@ -297,7 +285,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mb-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Melhores do Ano 2025</h3>
+                    <h3 class="text-lg font-bold mb-4">Melhores do Ano {{ \App\Models\LandingPageSection::campaignYear() }}</h3>
                     <p class="text-gray-400 text-sm">
                         Votação popular, transparente e gratuita das melhores empresas de Altamira.
                     </p>
@@ -307,7 +295,6 @@
                     <ul class="space-y-2 text-sm text-gray-400">
                         <li><a href="{{ route('home') }}" class="hover:text-white transition">Início</a></li>
                         <li><a href="{{ route('vote.index') }}" class="hover:text-white transition">Votação</a></li>
-                        <li><a href="{{ route('winners') }}" class="hover:text-white transition">Vencedores</a></li>
                     </ul>
                 </div>
                 <div>
@@ -322,47 +309,48 @@
                 <p>&copy; {{ date('Y') }} Melhores do Ano - Vale do Xingu. Todos os direitos reservados.</p>
             </div>
         </div>
+        <x-regulation-link />
     </footer>
 
     <script>
-        function shareCategory() {
-            const url = '{{ route('vote.show', $category) }}';
-            const title = '{{ $category->name }}';
-            const text = 'Vote em {{ $category->name }} - Melhores do Ano 2025';
+        async function shareCategory() {
+            const url = @json(route('vote.category', $category));
+            const title = @json($category->name);
+            const text = @json('Vote em '.$category->name.' - Melhores do Ano '.\App\Models\LandingPageSection::campaignYear());
 
             if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: text,
-                    url: url
+                try {
+                    await navigator.share({ title, text, url });
+                    return;
+                } catch (error) {
+                    if (error.name === 'AbortError') return;
+                    console.warn('Compartilhamento indisponível neste navegador.', error);
+                }
+            }
+
+            try {
+                if (!navigator.clipboard) throw new Error('Área de transferência indisponível.');
+                await navigator.clipboard.writeText(url);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Link copiado!',
+                    text: 'O link da categoria foi copiado para a área de transferência.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#dc2626',
+                    timer: 3000,
+                    timerProgressBar: true,
                 });
-            } else {
-                navigator.clipboard.writeText(url).then(() => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Link copiado!',
-                        text: 'O link da categoria foi copiado para a área de transferência.',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#dc2626',
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
-                }).catch(() => {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = url;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textarea);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Link copiado!',
-                        text: 'O link da categoria foi copiado para a área de transferência.',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#dc2626',
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
+            } catch (error) {
+                console.warn('Não foi possível copiar o link automaticamente.', error);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Copie o link da categoria',
+                    text: 'Seu navegador não permitiu copiar automaticamente. Selecione e copie o endereço abaixo.',
+                    input: 'text',
+                    inputValue: url,
+                    inputAttributes: { readonly: true, 'aria-label': 'Link da categoria' },
+                    confirmButtonText: 'Fechar',
+                    confirmButtonColor: '#dc2626',
                 });
             }
         }

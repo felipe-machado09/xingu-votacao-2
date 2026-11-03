@@ -63,6 +63,10 @@ class Category extends Model
 
         $now = now();
 
+        if (($end = LandingPageSection::votingEndsAt()) && $now->greaterThanOrEqualTo($end)) {
+            return false;
+        }
+
         if ($this->voting_starts_at && $now->isBefore($this->voting_starts_at)) {
             return false;
         }
@@ -76,6 +80,10 @@ class Category extends Model
 
     public function scopeOpen($query)
     {
+        if (($end = LandingPageSection::votingEndsAt()) && now()->greaterThanOrEqualTo($end)) {
+            return $query->whereRaw('1 = 0');
+        }
+
         return $query->where('is_active', true)
             ->where(function ($q) {
                 $q->whereNull('voting_starts_at')

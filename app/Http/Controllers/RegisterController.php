@@ -36,7 +36,7 @@ class RegisterController extends Controller
         $url = URL::temporarySignedRoute(
             'auth.magic',
             now()->addMinutes(30),
-            ['audience' => $audience->id]
+            ['audience' => $audience->id, 'category' => session('voting_category_slug')]
         );
 
         Mail::to($audience->email)->send(new MagicLinkMail($url));
